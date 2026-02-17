@@ -1,12 +1,15 @@
+--test
 USE master
 go
 
+--Create Database
 Create database DiagnoSysBD
 go
 
 USE DiagnoSysBD
 GO
 
+--Creacion de tabla
 Create table Cliente(
 IdCliente Varchar(12) not null primary key,
 NombreCliente Varchar(10) not null,
