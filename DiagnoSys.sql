@@ -9,7 +9,7 @@ go
 USE DiagnoSysBD
 GO
 
---Creacion de tabla
+--Creacion de tabla 
 Create table Cliente(
 IdCliente Varchar(12) not null primary key,
 NombreCliente Varchar(10) not null,
@@ -20,6 +20,7 @@ Direccion Varchar(20)
 )
 go
 
+--Tabla rol
 Create table Rol(
 IdRol int not null primary key,
 NombreRol Varchar(15) not null
