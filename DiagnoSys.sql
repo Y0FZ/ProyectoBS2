@@ -266,4 +266,6 @@ as
 go
 
 --Tabla Rol
---Procedimiento
+--Procedimiento almacenado
+
+--Adicion de datos
