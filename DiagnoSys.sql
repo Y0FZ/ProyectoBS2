@@ -140,6 +140,8 @@ select * from OrdenDiagnostico
 go
 
 --Procedimiento almacenado--
+
+--Tabla clientes
 --Adicion de datos
 
 Create PROCEDURE sp_IngresarCliente (@IdCliente Varchar(12), @NombreCliente Varchar(10),
@@ -262,3 +264,6 @@ as
 				END
 		END	
 go
+
+--Tabla Rol
+--Procedimiento
