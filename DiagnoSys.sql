@@ -362,3 +362,8 @@ go
 --Procedimiento almacenado
 
 --Adicion de datos
+
+--Tabla Tal
+--Procedimiento almacenado
+
+--Adicion de datos
