@@ -1,15 +1,15 @@
---test
 USE master
 go
 
---Create Database
+--Creacion de la BD
 Create database DiagnoSysBD
 go
 
+--Uso de la BD
 USE DiagnoSysBD
 GO
 
---Creacion de tabla 
+--Creacion de tabla Cliente
 Create table Cliente(
 IdCliente Varchar(12) not null primary key,
 NombreCliente Varchar(10) not null,
@@ -20,6 +20,15 @@ Direccion Varchar(20)
 )
 go
 
+/*
+IdCliente: Referencia a la identificacion
+NombreCliente 
+ApellidoCliente
+Telefono 
+Correo 
+Direccion 
+*/
+
 --Tabla rol
 Create table Rol(
 IdRol int not null primary key,
@@ -27,6 +36,12 @@ NombreRol Varchar(15) not null
 )
 go
 
+/*
+IdRol: Numero para relacionar sencillamente el rol
+NombreRol
+*/
+
+--Creacion de la tabla Usuario
 Create table Usuario(
 IdUsuarios Varchar(12) not null primary key,
 NombreUsuario Varchar(20) not null,
@@ -35,12 +50,27 @@ IdRol int not null foreign key references Rol (IdRol)
 )
 go
 
+/*
+IdUsuario: Identificacion del empleado
+NombreUsuario
+Contrasena
+IdRol
+*/
+
+--Creacion de la tabla Prioridad
 Create table Prioridad(
 IdPrioridad int not null primary key,
-NivelPioridad Varchar(10)
+NivelPrioridad Varchar(10)
 )
 go
 
+/*
+IdPrioridad: Numero referencia a:
+NivelPrioridad: Categoria de prioridad
+ej: Urgente, Alta, Media, Baja.
+*/
+
+--Creacion de tabla ArticuloEquipo
 Create table ArticuloEquipo(
 NumeroSerie Varchar(30) not null primary key,
 TipoEquipo Varchar(15) not null,
@@ -49,29 +79,72 @@ Modelo Varchar(15) not null
 )
 go
 
+/*
+NumeroSerie: Numero unico que identifica a un unico articulo
+
+TipoEquipo: Categoria del Equipo:
+ej en informatica: Impresora, PC, Laptop, Consola, Celular...
+ej en Mecanica: Sedan, Wagon, SUV, Moto...
+
+Marca
+Modelo
+*/
+
+--Creacion de Tabla EstadoOrden
 Create table EstadoOrden(
 IdEstado int not null primary key,
 Estado Varchar(15) not Null
 )
 go
 
+/*
+IdEstado: Numero de referencia para:
+Estado
+ej: Recibida, Pendiente, En Revicion...
+*/
+
+--Creacion de tabla OrdenDiagnostico
 Create table OrdenDiagnostico(
 IdOrden int not null primary key,
 FechaCreacion date not null,
 Descripcion Varchar(100),
-EstadoReceocion Varchar(50),
+EstadoRecepcion Varchar(50),
 SerieEquipo Varchar(30) not null references ArticuloEquipo (NumeroSerie),
 IdClienteD Varchar(12) not null references Cliente (IdCliente),
 Prioridad int not null references Prioridad (IdPrioridad)
 )
 go
 
+/*
+IdOrden: Numero de referencia para la orden de trabajo
+FechaCreacion: fecha de recepcion del trabajo
+Descripcion: descripcion del articulo
+ej: color, diseno...
+
+EstadoRecepcion: Descripcion sobre detalles que tenga el articulo
+ej: Golpe en esquina, tapas con separacion anormal...
+
+SerieEquipo: referencia a NumeroSerie de tabla ArticuloEquipo
+
+IdClienteD: referencia a IdCliente de tabla Cliente
+
+Prioridad: referencia a IdPrioridad de tabla Prioridad
+*/
+
+--Creacion de tabla anexos
 Create table Anexos(
 IdAnexos int not null primary key,
 RutaArchivo Nvarchar(max)
 )
 go
 
+/*
+IdAnexos: Numero de guia para los Anexos
+RutaArchivo: Ruta del archivo
+ej: la ruta de una foto o documento referente al caso
+*/
+
+--Creacion de tabla Comentarios
 Create table Comentarios(
 IdComentario int not null primary key,
 Comentario Varchar(100) not null,
@@ -82,6 +155,26 @@ IdDiagnostico int not null references OrdenDiagnostico (IdOrden),
 Anexos int references Anexos (IdAnexos)
 )
 go
+
+/*
+IdComentario: Identificador para los comentarios
+Comentario: espacio para escribir sobre el articulo
+
+FechaComentario: fecha en la que se subio el comentario
+
+IUsuario: Identificacion del Empleado
+-Referencia IdUsuario de tabla Usuarios
+
+Estado: Referencia al; revicion reparado...
+-Referencia IdOrden de tabla EstadoOrden
+
+IdDiagnostico: Numero de referencia para la Orden:
+Guia los comentarios a esta referencia
+-Referencia IdOrden de tabla OrdenDiagnostico
+
+Anexos: Se usa para agregar los archivos
+-Referencia IdAnexos de la tabla Anexos
+*/
 
 --Integracion de datos a tabla
 
