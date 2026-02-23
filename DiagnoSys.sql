@@ -360,38 +360,353 @@ go
 --Procedimiento almacenado
 
 --Adicion de datos
+Create PROCEDURE sp_IgresarRol (@IdRol int, @NombreRol Varchar(15))
+
+as
+	if((@IdRol='') or (@NombreRol='') )
+		BEGIN
+			Print 'INGRESO DE DATOS INCOMPLETO'
+			return
+		END
+	else
+		BEGIN
+			If not exists (select IdRol from Rol where IdRol = @IdRol)
+
+		BEGIN
+			Insert into Rol(IdRol, NombreRol)
+
+			Values(@IdRol, @NombreRol)
+
+			Print 'DATOS INGRESADOS'
+
+		END
+	else
+		BEGIN
+			If exists (select IdRol from Rol where IdRol = @IdRol)
+			BEGIN
+				Print 'DATOS DUPLICADOS'
+			END
+		END
+	END
+GO
 
 --Modificacion de datos
 
+Create PROCEDURE sp_ModificarRol (@IdRol int, @NombreRol Varchar(15))
+
+as
+	if((@IdRol='') or (@NombreRol=''))
+		BEGIN
+			Print 'INGRESO DE DATOS INCOMPLETO'
+			return
+		END
+	else
+		BEGIN
+			If not exists (select IdRol from Rol where IdRol = @IdRol)
+
+			BEGIN
+				PRINT 'DATOS NO REGISTRADOS'
+			END
+		else
+			
+			BEGIN
+				if exists (select IdRol from Rol where IdRol = @IdRol)
+				BEGIN
+					update Rol set NombreRol = @NombreRol
+					
+					Print 'ACTUALIZACION COMPLETA'
+				END
+			END
+		END
+GO
+
 --Borrar datos
+
+Create PROCEDURE sp_BorrarRol (@IdRol int)
+
+as
+	if((@IdRol=''))
+		BEGIN
+			Print 'INGRESO DE DATOS INCOMPLETO'
+			return
+		END
+	else
+		BEGIN
+
+			if not exists (select IdRol from Rol where IdRol = @IdRol)
+				
+				BEGIN
+					Print 'DATOS NO REGISTRADOS'	
+		END
+	else
+		BEGIN
+			If exists (select IdRol from Rol where IdRol = @IdRol)
+			
+			BEGIN
+				delete from Rol where IdRol = @IdRol
+				Print 'DATOS ELIMINADOS'
+			END
+		END
+	END
+GO
+
 
 --Buscar datos
 
+Create PROCEDURE sp_BuscarRol (@IdRol int)
+as
+	if((@IdRol = null))
+	
+		BEGIN
+			Print 'DATOS NO INGRESADOS'
+		END
+
+	else
+		
+		BEGIN
+			If exists (select IdRol from Rol where IdRol = @IdRol)
+				BEGIN
+					Select	IdRol, NombreRol From Rol where IdRol = @IdRol
+				END
+		END	
+go
 
 ------------------------------------------------------------------
 --Tabla Usuario
 --Procedimiento almacenado
 
 --Adicion de datos
+Create PROCEDURE sp_IgresarUsuario (@IdUsuarios varchar(12), @NombreUsuario Varchar(20), @Contrasena varchar(20))
+
+as
+	if((@IdUsuarios='') or (@NombreUsuario='') or (@Contrasena=''))
+		BEGIN
+			Print 'INGRESO DE DATOS INCOMPLETO'
+			return
+		END
+	else
+		BEGIN
+			If not exists (select IdUsuarios from Usuario where IdUsuarios = @IdUsuarios)
+			
+		BEGIN
+			Insert into Usuario(IdUsuarios, NombreUsuario, Contrasena)
+
+			Values(@IdUsuarios, @NombreUsuario,@Contrasena)
+
+			Print 'DATOS INGRESADOS'
+
+		END
+	else
+		BEGIN
+			If exists (select IdUsuarios from Usuario where IdUsuarios = @IdUsuarios)
+			BEGIN
+				Print 'DATOS DUPLICADOS'
+			END
+		END
+	END
+GO
 
 --Modificacion de datos
 
+Create PROCEDURE sp_ModificarUsuarios (@IdUsuarios Varchar(12), @NombreUsuario Varchar(20),
+@Contrasena Varchar(20))
+
+as
+	if((@IdUsuarios='') or (@NombreUsuario='') or (@Contrasena='') )
+		BEGIN
+			Print 'INGRESO DE DATOS INCOMPLETO'
+			return
+		END
+	else
+		BEGIN
+			If not exists (select IdUsuarios from Usuario where IdUsuarios = @IdUsuarios)
+
+			BEGIN
+				PRINT 'DATOS NO REGISTRADOS'
+			END
+		else
+			
+			BEGIN
+				if exists (select IdUsuarios from Usuario where IdUsuarios = @IdUsuarios
+															and NombreUsuario = @NombreUsuario
+															and Contrasena = @Contrasena
+														)
+				BEGIN
+					update Usuario set NombreUsuario = @NombreUsuario,
+										Contrasena = @Contrasena
+										
+					Print 'ACTUALIZACION COMPLETA'
+				END
+			END
+		END
+GO
+
+
 --Borrar datos
 
+Create PROCEDURE sp_BorrarUsuario (@IdUsuarios Varchar(12))
+
+as
+	if((@IdUsuarios=''))
+		BEGIN
+			Print 'INGRESO DE DATOS INCOMPLETO'
+			return
+		END
+	else
+		BEGIN
+
+			if not exists (select IdUsuarios from Usuario where IdUsuarios = @IdUsuarios)
+				
+				BEGIN
+					Print 'DATOS NO REGISTRADOS'	
+		END
+	else
+		BEGIN
+			If exists (select IdUsuarios from Usuario where IdUsuarios = @IdUsuarios)
+			
+			BEGIN
+				delete from Usuario where IdUsuarios = @IdUsuarios
+				Print 'DATOS ELIMINADOS'
+			END
+		END
+	END
+GO
+
 --Buscar datos
+Create PROCEDURE sp_BuscarUsuario (@IdUsuarios Varchar(12))
+as
+	if((@IdUsuarios = null))
+	
+		BEGIN
+			Print 'DATOS NO INGRESADOS'
+		END
+
+	else
+		
+		BEGIN
+			If exists (select IdUsuarios from Usuario where IdUsuarios= @IdUsuarios)
+				BEGIN
+					Select	IdUsuarios, NombreUsuario, Contrasena From Usuario where IdUsuarios = @IdUsuarios
+				END
+		END	
+go
+
 
 -----------------------------------------------------------------
 --Tabla Prioridad 
 --Procedimiento almacenado
 
 --Adicion de datos
+Create PROCEDURE sp_IgresarPrioridad (@IdPrioridad int, @NivelPrioridad Varchar(10))
+
+as
+	if((@IdPrioridad='') or (@NivelPrioridad='') )
+		BEGIN
+			Print 'INGRESO DE DATOS INCOMPLETO'
+			return
+		END
+	else
+		BEGIN
+			If not exists (select IdPrioridad from Prioridad where IdPrioridad = @IdPrioridad)
+
+		BEGIN
+			Insert into Prioridad(IdPrioridad, NivelPrioridad)
+
+			Values(@IdPrioridad, @NivelPrioridad)
+
+			Print 'DATOS INGRESADOS'
+
+		END
+	else
+		BEGIN
+			If exists (select IdPrioridad from Prioridad where IdPrioridad = @IdPrioridad)
+			BEGIN
+				Print 'DATOS DUPLICADOS'
+			END
+		END
+	END
+GO
 
 --Modificacion de datos
 
+Create PROCEDURE sp_ModificarPrioridad (@IdPrioridad int, @NivelPrioridad Varchar(10))
+
+as
+	if((@IdPrioridad='') or (@NivelPrioridad=''))
+		BEGIN
+			Print 'INGRESO DE DATOS INCOMPLETO'
+			return
+		END
+	else
+		BEGIN
+			If not exists (select IdPrioridad from Prioridad where IdPrioridad = @IdPrioridad)
+
+			BEGIN
+				PRINT 'DATOS NO REGISTRADOS'
+			END
+		else
+			
+			BEGIN
+				if exists (select IdPrioridad from Prioridad where IdPrioridad = @IdPrioridad)
+				BEGIN
+					update Prioridad set NivelPrioridad = @NivelPrioridad
+					
+					Print 'ACTUALIZACION COMPLETA'
+				END
+			END
+		END
+GO
+
 --Borrar datos
+
+Create PROCEDURE sp_BorrarPrioridad (@IdPrioridad int)
+
+as
+	if((@IdPrioridad=''))
+		BEGIN
+			Print 'INGRESO DE DATOS INCOMPLETO'
+			return
+		END
+	else
+		BEGIN
+
+			if not exists (select IdPrioridad from Prioridad where IdPrioridad = @IdPrioridad)
+				
+				BEGIN
+					Print 'DATOS NO REGISTRADOS'	
+		END
+	else
+		BEGIN
+			If exists (select IdPrioridad from Prioridad where IdPrioridad = @IdPrioridad)
+			
+			BEGIN
+				delete from Prioridad where IdPrioridad = @IdPrioridad
+				Print 'DATOS ELIMINADOS'
+			END
+		END
+	END
+GO
+
 
 --Buscar datos
 
+Create PROCEDURE sp_BuscarPrioridad (@IdPrioridad int)
+as
+	if((@IdPrioridad = null))
+	
+		BEGIN
+			Print 'DATOS NO INGRESADOS'
+		END
+
+	else
+		
+		BEGIN
+			If exists (select IdPrioridad from Prioridad where IdPrioridad = @IdPrioridad)
+				BEGIN
+					Select	IdPrioridad, NivelPrioridad From Prioridad where IdPrioridad= @IdPrioridad
+				END
+		END	
+go
 
 -------------------------------------------------------------------
 --Tabla ArticuloEquipo
@@ -465,3 +780,4 @@ select * from OrdenDiagnostico;
 select * from Anexos; 
 select * from Comentarios; 
 select * from EstadoOrden;
+
