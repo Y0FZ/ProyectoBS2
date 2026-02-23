@@ -178,6 +178,7 @@ Anexos: Se usa para agregar los archivos
 
 --Integracion de datos a tabla
 
+--
 insert into Cliente values
 ('208460900', 'Yeremy', 'Fernandez', 87610820, '','')
 go
@@ -363,7 +364,12 @@ go
 
 --Adicion de datos
 
---Tabla Tal
---Procedimiento almacenado
+--Modificacion de datos
+
+--Borrar datos
+
+--Buscar datos
+
+--Tabla 
 
 --Adicion de datos
