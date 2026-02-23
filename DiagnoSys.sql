@@ -379,3 +379,14 @@ go
 --Borrar datos
 
 --Buscar datos
+
+--Vistas de Tablas 
+select * from Cliente; 
+select * from Rol; 
+select * from Usuario; 
+select * from Prioridad; 
+select * from ArticuloEquipo; 
+select * from OrdenDiagnostico; 
+select * from Anexos; 
+select * from Comentarios; 
+select * from EstadoOrden;
