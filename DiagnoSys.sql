@@ -227,12 +227,8 @@ insert into Comentarios values
 (1, 'Se recomienda cambio de memoria', '2026-01-13', 'IND', 4, 1, 1)
 go
 
-select * from Cliente
-go
 
-select * from OrdenDiagnostico
-go
-
+----------------------------------------------
 --Procedimiento almacenado--
 
 --Tabla clientes
@@ -359,6 +355,7 @@ as
 		END	
 go
 
+-------------------------------------------------------------------
 --Tabla Rol
 --Procedimiento almacenado
 
@@ -370,7 +367,10 @@ go
 
 --Buscar datos
 
+
+------------------------------------------------------------------
 --Tabla Usuario
+--Procedimiento almacenado
 
 --Adicion de datos
 
@@ -379,6 +379,81 @@ go
 --Borrar datos
 
 --Buscar datos
+
+-----------------------------------------------------------------
+--Tabla Prioridad 
+--Procedimiento almacenado
+
+--Adicion de datos
+
+--Modificacion de datos
+
+--Borrar datos
+
+--Buscar datos
+
+
+-------------------------------------------------------------------
+--Tabla ArticuloEquipo
+--Procedimiento almacenado
+
+--Adicion de datos
+
+--Modificacion de datos
+
+--Borrar datos
+
+--Buscar datos
+
+-------------------------------------------------------------------
+--Tabla OrdenDiagnostico
+--Procedimiento almacenado
+
+--Adicion de datos
+
+--Modificacion de datos
+
+--Borrar datos
+
+--Buscar datos
+
+-------------------------------------------------------------------
+--Tabla Anexos
+--Procedimiento almacenado
+
+--Adicion de datos
+
+--Modificacion de datos
+
+--Borrar datos
+
+--Buscar datos
+
+--------------------------------------------------------------------
+--Tabla Comentarios
+--Procedimiento almacenado
+
+--Adicion de datos
+
+--Modificacion de datos
+
+--Borrar datos
+
+--Buscar datos
+
+-------------------------------------------------------------------
+--Tabla EstadoOrden
+--Procedimiento almacenado
+
+--Adicion de datos
+
+--Modificacion de datos
+
+--Borrar datos
+
+--Buscar datos
+
+---------------------------------------------------------------------
 
 --Vistas de Tablas 
 select * from Cliente; 
