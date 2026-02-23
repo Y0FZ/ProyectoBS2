@@ -370,6 +370,12 @@ go
 
 --Buscar datos
 
---Tabla 
+--Tabla Usuario
 
 --Adicion de datos
+
+--Modificacion de datos
+
+--Borrar datos
+
+--Buscar datos
