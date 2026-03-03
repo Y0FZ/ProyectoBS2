@@ -834,29 +834,29 @@ go
 --Procedimiento almacenado
 
 --Adicion de datos
-Create PROCEDURE sp_IgresarOrdenDiagnostico (@InOrden int, @FechaCreacion date, @Descripcion varchar(100), @EstadoRecepcion varchar(50), @SerieEquipo varchar (30), @IdClienteD varchar (12), @Prioridad int)
+Create PROCEDURE sp_IgresarOrdenDiagnostico (@IdOrden int, @FechaCreacion date, @Descripcion varchar(100), @EstadoRecepcion varchar(50), @SerieEquipo varchar (30), @IdClienteD varchar (12), @Prioridad int)
 
 as
-	if((@InOrden=null) or (@FechaCreacion='') or (@Descripcion='') or (@EstadoRecepcion='') or (@SerieEquipo='') or (@IdClienteD='') or (@Prioridad=''))
+	if((@IdOrden=null) or (@FechaCreacion='') or (@Descripcion='') or (@EstadoRecepcion='') or (@SerieEquipo='') or (@IdClienteD='') or (@Prioridad=''))
 		BEGIN
 			Print 'INGRESO DE DATOS INCOMPLETO'
 			return
 		END
 	else
 		BEGIN
-			If not exists (select InOrden from OrdenDiagnostico where @InOrden = @InOrden)
+			If not exists (select IdOrden from OrdenDiagnostico where @IdOrden = @IdOrden)
 
 		BEGIN
 			Insert into OrdenDiagnostico(IdOrden, FechaCreacion, Descripcion, EstadoRecepcion, SerieEquipo, IdClienteD, Prioridad)
 
-			Values(@InOrden, @FechaCreacion, @Descripcion,@EstadoRecepcion, @SerieEquipo,@IdClienteD, @Prioridad)
+			Values(@IdOrden, @FechaCreacion, @Descripcion,@EstadoRecepcion, @SerieEquipo,@IdClienteD, @Prioridad)
 
 			Print 'DATOS INGRESADOS'
 
 		END
 	else
 		BEGIN
-			If exists (select IdOrden from OrdenDiagnostico where IdOrden = @InOrden)
+			If exists (select IdOrden from OrdenDiagnostico where IdOrden = @IdOrden)
 			BEGIN
 				Print 'DATOS DUPLICADOS'
 			END
@@ -867,10 +867,10 @@ GO
 
 --Modificacion de datos
 
-Create PROCEDURE sp_ModificarOrdenDiagnostico (@InOrden int, @FechaCreacion date, @Descripcion varchar(100), @EstadoRecepcion varchar(50), @SerieEquipo varchar (30), @IdClienteD varchar (12), @Prioridad int)
+Create PROCEDURE sp_ModificarOrdenDiagnostico (@IdOrden int, @FechaCreacion date, @Descripcion varchar(100), @EstadoRecepcion varchar(50), @SerieEquipo varchar (30), @IdClienteD varchar (12), @Prioridad int)
 
 as
-	if((@InOrden=null) or (@FechaCreacion='') or (@Descripcion='') or (@EstadoRecepcion='') or (@SerieEquipo='') or (@IdClienteD='') or (@Prioridad=''))
+	if((@IdOrden=null) or (@FechaCreacion='') or (@Descripcion='') or (@EstadoRecepcion='') or (@SerieEquipo='') or (@IdClienteD='') or (@Prioridad=''))
 		BEGIN
 			Print 'INGRESO DE DATOS INCOMPLETO'
 			return
@@ -885,12 +885,16 @@ as
 		else
 			
 			BEGIN
-				if exists (select NumeroSerie from ArticuloEquipo where NumeroSerie = @NumeroSerie)
+				if exists (select @IdOrden from OrdenDiagnostico where IdOrden = @IdOrden)
 				BEGIN
-					update ArticuloEquipo set NumeroSerie = @NumeroSerie,
-											  TipoEquipo = @TipoEquipo,
-											  Marca = @Marca, 
-											  Modelo = @Modelo
+					update OrdenDiagnostico set IdOrden = @IdOrden, 
+												FechaCreacion = @FechaCreacion, 
+												Descripcion = @Descripcion,
+												EstadoRecepcion = @EstadoRecepcion,
+												SerieEquipo = @SerieEquipo,
+												IdClienteD = @IdClienteD,
+												Prioridad = @Prioridad
+											
 					
 					Print 'ACTUALIZACION COMPLETA'
 				END
@@ -901,10 +905,10 @@ GO
 
 --Borrar datos
 
-Create PROCEDURE sp_BorrarArticuloEquipo (@NumeroSerie varchar (30))
+Create PROCEDURE sp_BorrarOrdenDiagnostico (@IdOrden int)
 
 as
-	if((@NumeroSerie=''))
+	if((@IdOrden=''))
 		BEGIN
 			Print 'INGRESO DE DATOS INCOMPLETO'
 			return
@@ -912,17 +916,17 @@ as
 	else
 		BEGIN
 
-			if not exists (select @NumeroSerie from ArticuloEquipo where NumeroSerie = @NumeroSerie)
+			if not exists (select @IdOrden from OrdenDiagnostico where Idorden = @IdOrden)
 				
 				BEGIN
 					Print 'DATOS NO REGISTRADOS'	
 		END
 	else
 		BEGIN
-			If exists (select NumeroSerie from ArticuloEquipo where NumeroSerie = @NumeroSerie)
+			If exists (select @IdOrden from OrdenDiagnostico where IdOrden = @IdOrden)
 			
 			BEGIN
-				delete from ArticuloEquipo where NumeroSerie = @NumeroSerie
+				delete from OrdenDiagnostico where IdOrden = @IdOrden
 				Print 'DATOS ELIMINADOS'
 			END
 		END
@@ -931,9 +935,9 @@ GO
 
 
 --Buscar datos
-Create PROCEDURE sp_BuscarArticuloEquipo (@NumeroSerie varchar (30))
+Create PROCEDURE sp_BuscarOrdenDiagnostico (@IdOrden int)
 as
-	if((@NumeroSerie = null))
+	if((@IdOrden = null))
 	
 		BEGIN
 			Print 'DATOS NO INGRESADOS'
@@ -942,9 +946,9 @@ as
 	else
 		
 		BEGIN
-			If exists (select NumeroSerie from ArticuloEquipo where NumeroSerie = @NumeroSerie)
+			If exists (select IdOrden from OrdenDiagnostico where IdOrden = @IdOrden)
 				BEGIN
-					Select	NumeroSerie, TipoEquipo, Marca, Modelo From ArticuloEquipo where NumeroSerie= @NumeroSerie
+					Select	IdOrden, FechaCreacion, Descripcion, EstadoRecepcion, SerieEquipo, IdClienteD, Prioridad From OrdenDiagnostico where IdOrden= @IdOrden
 				END
 		END	
 go
