@@ -17,16 +17,16 @@ export class ArticuloEquipoController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.articuloEquipoService.findOne(id); // <--- Quitamos el +
+    return this.articuloEquipoService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDto: any) {
-    return this.articuloEquipoService.update(id, updateDto); // <--- Quitamos el +
+    return this.articuloEquipoService.update(id, updateDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.articuloEquipoService.remove(id); // <--- Quitamos el +
+    return this.articuloEquipoService.remove(id);
   }
 }

@@ -106,7 +106,7 @@ ej: Recibida, Pendiente, En Revicion...
 --Creacion de tabla OrdenDiagnostico
 Create table OrdenDiagnostico(
 IdOrden int not null primary key,
-FechaCreacion date not null,
+FechaCreacion date default getdate() not null,
 Descripcion Varchar(100),
 EstadoRecepcion Varchar(50),
 SerieEquipo Varchar(30) not null references ArticuloEquipo (NumeroSerie),
@@ -756,7 +756,7 @@ go
 
 --Buscar datos
 
--------------------------------------------------------------------
+------------------- ------------------------------------------------
 --Tabla EstadoOrden
 --Procedimiento almacenado
 
@@ -769,9 +769,24 @@ go
 --Buscar datos
 
 ---------------------------------------------------------------------
+/*
+Create Trigger tr_ClienteAuditoria
+on Cliente
+after update
+as
+begin
+	set nocount on;
+
+	insert into Cliente
+	(IdCliente, NombreCliente, ApellidoCliente, Telefono, Correo, Direccion)
+	select
+	d.Idcliente,
+		case
+			when i.
+
 
 --Vistas de Tablas 
-select * from Cliente; 
+select * from Cliente; */
 select * from Rol; 
 select * from Usuario; 
 select * from Prioridad; 
