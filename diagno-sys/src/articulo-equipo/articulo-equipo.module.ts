@@ -6,7 +6,6 @@ import { ArticuloEquipo } from './entities/articulo-equipo.entity';
 
 @Module({
   imports: [
-    // Esta es la pieza que falta para resolver el error de dependencias
     TypeOrmModule.forFeature([ArticuloEquipo])
   ],
   controllers: [ArticuloEquipoController],
