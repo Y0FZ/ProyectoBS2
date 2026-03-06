@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
-@Entity('Cliente') // Nombre exacto en el SQL
+@Entity('Cliente') 
 export class Cliente {
   @PrimaryColumn({ length: 12 })
   IdCliente: string;

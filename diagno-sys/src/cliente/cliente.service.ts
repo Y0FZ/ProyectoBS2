@@ -21,12 +21,10 @@ export class ClienteService {
   }
 
   async findOne(id: string) {
-    // Usando tu SP: sp_BuscarCliente
     return await this.clienteRepository.query(`EXEC sp_BuscarCliente @IdCliente='${id}'`);
   }
 
   async remove(id: string) {
-    // Usando tu SP: sp_BorrarCliente
     return await this.clienteRepository.query(`EXEC sp_BorrarCliente @IdCliente='${id}'`);
   }
 }
