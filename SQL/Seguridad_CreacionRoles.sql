@@ -1,0 +1,5 @@
+--CREACION DE ROLES
+CREATE ROLE RolRecepcion;
+CREATE ROLE RolTecnico;
+CREATE ROLE RolAdministrador;
+GO
