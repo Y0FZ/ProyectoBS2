@@ -230,6 +230,7 @@ go
 ----------------------------------------------
 
 /*
+
 Create Trigger tr_ClienteAuditoria
 on Cliente
 after update
