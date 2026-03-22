@@ -229,24 +229,35 @@ go
 
 ----------------------------------------------
 
-/*
-Create Trigger tr_ClienteAuditoria
-on Cliente
-after update
-as
-begin
-	set nocount on;
+--Tabla para auditoria de clientes
 
-	insert into Cliente
-	(IdCliente, NombreCliente, ApellidoCliente, Telefono, Correo, Direccion)
-	select
-	d.Idcliente,
-		case
-			when i.
+CREATE TABLE Auditoria_Clientes (
+    IdAuditoria INT IDENTITY(1,1) PRIMARY KEY,
+    IdCliente Varchar(12) NOT NULL foreign key references Cliente (IdCliente),
+    CampoModificado VARCHAR(50),
+    ValorAnterior VARCHAR(MAX),
+    ValorNuevo VARCHAR(MAX),
+    UsuarioModifica Varchar(12) NOT NULL foreign key references Usuario (IdUsuarios),
+    FechaModificacion DATETIME DEFAULT GETDATE(),
+    Accion VARCHAR(10)
+)
+GO
 
+--Auditoria Usuarios
+CREATE TABLE Auditoria_Usuarios (
+    IdAuditoria INT IDENTITY(1,1) PRIMARY KEY,
+    IdUsuarioAfectado Varchar(12) NOT NULL foreign key references Usuario (IdUsuarios),
+    CampoModificado VARCHAR(50),
+    ValorAnterior VARCHAR(MAX),
+    ValorNuevo VARCHAR(MAX),
+    UsuarioQueModifico Varchar(12) NOT NULL foreign key references Usuario (IdUsuarios),
+    FechaModificacion DATETIME DEFAULT GETDATE(),
+    Accion VARCHAR(10)
+)
+GO
 
 --Vistas de Tablas 
-select * from Cliente; */
+select * from Cliente; 
 select * from Rol; 
 select * from Usuario; 
 select * from Prioridad; 
