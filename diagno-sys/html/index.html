@@ -1,19 +1,58 @@
 <!DOCTYPE html>
-<!-- Apertura-->
-<html lang="en">
-
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOGIN DGS</title>
-    <link rel="icon" type="image/png" href="img/ico.png">
-
+    <title>DiagnoSys - Login</title>
 </head>
-<body>
-    <div>
-        <h1>Bienvenido al Sistema Gestor de Diagnósticos</h1>
-    </div>
+<body style="background-color: #fafafa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 40px;">
 
+    <table align="center" width="420" border="0" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #eee; padding: 40px; border-radius: 10px; margin-top: 50px;">
+        <tr>
+            <td>
+                <h2 style="font-weight: 300; color: #333; text-align: center; margin-bottom: 30px;">Inicio de Sesión</h2>
+                
+                <form id="loginForm">
+                    <label style="font-size: 11px; color: #999; text-transform: uppercase;">Usuario</label>
+                    <input type="text" id="IdUsuario" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+
+                    <label style="font-size: 11px; color: #999; text-transform: uppercase;">Contraseña</label>
+                    <input type="password" id="password" required style="width: 100%; padding: 10px 0; margin-bottom: 35px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+
+                    <div align="center">
+                        <button type="button" onclick="validarLogin()" style="background-color: #333; color: #fff; border: none; padding: 12px 60px; border-radius: 25px; cursor: pointer; font-size: 11px; letter-spacing: 1px; font-weight: bold;">
+                            ENTRAR
+                        </button>
+                    </div>
+
+                    <div align="center" style="margin-top: 25px;">
+                        <a href="" onclick="alert('Modulo no activo')" style="font-size: 10px; color: #333; text-transform: uppercase; text-decoration: none; letter-spacing: 1px;">¿Olvidó su contraseña?</a>
+                    </div>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        function validarLogin() {
+            const user = document.getElementById('IdUsuario').value;
+            const pass = document.getElementById('password').value;
+
+            if(!user || !pass) {
+                alert("Por favor, ingrese sus credenciales.");
+                return;
+            }
+
+            // Simulación de validación (Esto luego se conectará con tu tabla Usuario en NestJS)
+            if(user === "admin" && pass === "1234") {
+                // Guardamos solo el nombre de usuario para la sesión
+                localStorage.setItem('diagnoSys_session', user);
+                alert("Bienvenido al sistema");
+                // Aquí podrías redireccionar: window.location.href = 'dashboard.html';
+            } else {
+                alert("Usuario o contraseña incorrectos.");
+            }
+        }
+    </script>
 
 </body>
 </html>
