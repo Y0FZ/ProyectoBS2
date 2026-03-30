@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>DiagnoSys - Módulos</title>
+</head>
+<body style="background-color: #fafafa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 40px;">
+
+    <!-- Contenedor principal: Panel de navegación entre módulos -->
+    <table align="center" width="420" border="0" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #eee; padding: 40px; border-radius: 10px; margin-top: 50px;">
+        <tr>
+            <td>
+                <h2 style="font-weight: 300; color: #333; text-align: center; margin-bottom: 10px;">Módulos del Sistema</h2>
+                <p style="font-size: 12px; color: #999; text-align: center; margin-bottom: 35px; text-transform: uppercase; letter-spacing: 1px;">Seleccione una opción para continuar</p>
+                
+                <!-- Menú de navegación -->
+                <div align="center">
+                    <button type="button" onclick="location.href='FrClient.html'" style="width: 100%; background-color: #333; color: #fff; border: none; padding: 15px; border-radius: 25px; cursor: pointer; font-size: 11px; letter-spacing: 1px; font-weight: bold; margin-bottom: 15px;">
+                        REGISTRO DE ENTRADA (CLIENTES)
+                    </button>
+
+                    <button type="button" onclick="mostrarAlerta('El módulo de Consulta de Órdenes está en mantenimiento.')" style="width: 100%; background-color: #ffffff; color: #333; border: 1px solid #ddd; padding: 15px; border-radius: 25px; cursor: pointer; font-size: 11px; letter-spacing: 1px; font-weight: bold; margin-bottom: 15px;">
+                        CONSULTAR ÓRDENES
+                    </button>
+
+                    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+                    <button type="button" onclick="confirmarCerrarSesion()" style="background: none; border: none; color: #999; cursor: pointer; font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">
+                        CERRAR SESIÓN
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Estructura del Modal (Pop-up): Se mantiene oculto (display: none) hasta que se llama por JS -->
+    <div id="modalAlerta" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+        <table width="100%" height="100%" border="0">
+            <tr>
+                <td align="center" valign="middle">
+                    <!-- Caja de contenido del modal con sombra y bordes redondeados -->
+                    <div style="background-color: #ffffff; padding: 30px; border-radius: 15px; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;">
+                        <!-- Espacio donde se inyectará el texto del mensaje -->
+                        <p id="textoAlerta" style="color: #555; font-size: 14px; line-height: 1.6; margin-bottom: 25px;"></p>
+                        <!-- Botón para cerrar el modal -->
+                        <button onclick="cerrarAlerta()" style="background-color: #333; color: #fff; border: none; padding: 10px 30px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: bold;">ACEPTAR</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Estructura del Modal de Confirmación -->
+    <div id="modalConfirmacion" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1001;">
+        <table width="100%" height="100%" border="0">
+            <tr>
+                <td align="center" valign="middle">
+                    <div style="background-color: #ffffff; padding: 30px; border-radius: 15px; width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;">
+                        <h3 style="font-weight: 400; color: #333; margin-top: 0;">¿Cerrar Sesión?</h3>
+                        <p style="color: #555; font-size: 14px; margin-bottom: 25px;">¿Estás seguro de que deseas salir del sistema?</p>
+                        
+                        <button onclick="cerrarSesion()" style="background-color: #333; color: #fff; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: bold; margin-right: 10px;">SÍ, SALIR</button>
+                        <button onclick="ocultarConfirmacion()" style="background-color: #eee; color: #333; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: bold;">CANCELAR</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        /**
+         * Verificación de sesión simple al cargar la página
+         */
+        window.onload = function() {
+            if(!localStorage.getItem('diagnoSys_session')) {
+                console.log("Acceso no validado, redirigiendo...");
+                // location.href = 'index.html'; // Descomentar para activar protección de ruta
+            }
+        };
+
+        /**
+         * Activa la visibilidad del modal e inserta el mensaje deseado.
+         * @param {string} mensaje - El texto que se mostrará en el pop-up.
+         */
+        function mostrarAlerta(mensaje) {
+            document.getElementById('textoAlerta').innerHTML = mensaje;
+            document.getElementById('modalAlerta').style.display = 'block';
+        }
+
+        /**
+         * Oculta el modal de alerta de la interfaz.
+         */
+        function cerrarAlerta() {
+            document.getElementById('modalAlerta').style.display = 'none';
+        }
+
+        /**
+         * Muestra el pop-up de confirmación de salida.
+         */
+        function confirmarCerrarSesion() {
+            document.getElementById('modalConfirmacion').style.display = 'block';
+        }
+
+        function ocultarConfirmacion() {
+            document.getElementById('modalConfirmacion').style.display = 'none';
+        }
+
+        /**
+         * Limpia los datos de sesión y redirige al login.
+         */
+        function cerrarSesion() {
+            localStorage.removeItem('diagnoSys_session');
+            window.location.href = 'index.html';
+        }
+    </script>
+
+</body>
+</html>

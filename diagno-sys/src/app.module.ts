@@ -4,6 +4,10 @@ import { ClienteModule } from './cliente/cliente.module';
 import { Cliente } from './cliente/entities/cliente.entity';
 import { ArticuloEquipoModule } from './articulo-equipo/articulo-equipo.module';
 import { ArticuloEquipo } from './articulo-equipo/entities/articulo-equipo.entity';
+import { UsuarioModule } from './usuario/usuario.module';
+import { OrdenDiagnosticoModule } from './orden-diagnostico/orden-diagnostico.module';
+import { PrioridadModule } from './prioridad/prioridad.module';
+import { RolModule } from './rol/rol.module';
 
 
 @Module({
@@ -30,6 +34,10 @@ import { ArticuloEquipo } from './articulo-equipo/entities/articulo-equipo.entit
     }),
     ClienteModule,
     ArticuloEquipoModule,
+    UsuarioModule,
+    OrdenDiagnosticoModule,
+    PrioridadModule,
+    RolModule,
   ],
 })
 export class AppModule {}

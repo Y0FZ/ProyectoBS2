@@ -5,18 +5,18 @@ export class Cliente {
   @PrimaryColumn({ length: 12 })
   IdCliente: string;
 
-  @Column({ length: 10 })
+  @Column({ type: 'varchar', length: 10 })
   NombreCliente: string;
 
-  @Column({ length: 10 })
+  @Column({ type: 'varchar', length: 10 })
   ApellidoCliente: string;
 
-  @Column()
+  @Column({ type: 'int' })
   Telefono: number;
 
-  @Column({ length: 20, nullable: true })
+  @Column({ type: 'varchar', length: 20, nullable: true })
   Correo: string;
 
-  @Column({ length: 20, nullable: true })
+  @Column({ type: 'varchar', length: 20, nullable: true })
   Direccion: string;
 }
