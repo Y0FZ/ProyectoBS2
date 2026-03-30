@@ -6,51 +6,95 @@
 </head>
 <body style="background-color: #fafafa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 40px;">
 
+    <!-- Contenedor principal: Se utiliza una tabla para asegurar el centrado exacto del formulario en la pantalla -->
     <table align="center" width="420" border="0" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #eee; padding: 40px; border-radius: 10px; margin-top: 50px;">
         <tr>
             <td>
                 <h2 style="font-weight: 300; color: #333; text-align: center; margin-bottom: 30px;">Inicio de Sesión</h2>
                 
-                <form id="loginForm">
+                <!-- Formulario de acceso -->
+                <form id="loginForm" onsubmit="event.preventDefault(); validarLogin();">
                     <label style="font-size: 11px; color: #999; text-transform: uppercase;">Usuario</label>
+                    <!-- Input de texto con estilo minimalista (solo borde inferior) -->
                     <input type="text" id="IdUsuario" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
 
                     <label style="font-size: 11px; color: #999; text-transform: uppercase;">Contraseña</label>
+                    <!-- Input de tipo password para ocultar los caracteres ingresados -->
                     <input type="password" id="password" required style="width: 100%; padding: 10px 0; margin-bottom: 35px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
 
                     <div align="center">
-                        <button type="button" onclick="validarLogin()" style="background-color: #333; color: #fff; border: none; padding: 12px 60px; border-radius: 25px; cursor: pointer; font-size: 11px; letter-spacing: 1px; font-weight: bold;">
+                        <!-- Botón de acción que dispara la función de validación -->
+                        <button type="submit" style="background-color: #333; color: #fff; border: none; padding: 12px 60px; border-radius: 25px; cursor: pointer; font-size: 11px; letter-spacing: 1px; font-weight: bold;">
                             ENTRAR
                         </button>
                     </div>
 
                     <div align="center" style="margin-top: 25px;">
-                        <a href="" onclick="alert('Modulo no activo')" style="font-size: 10px; color: #333; text-transform: uppercase; text-decoration: none; letter-spacing: 1px;">¿Olvidó su contraseña?</a>
+                        <!-- Enlace de recuperación (actualmente informativo mediante un modal) -->
+                        <a href="javascript:void(0)" onclick="mostrarAlerta('El módulo de recuperación no está activo actualmente.<br><br>Por favor contacte al administrador.')" style="font-size: 10px; color: #333; text-transform: uppercase; text-decoration: none; letter-spacing: 1px;">¿Olvidó su contraseña?</a>
                     </div>
                 </form>
             </td>
         </tr>
     </table>
 
+    <!-- Estructura del Modal (Pop-up): Se mantiene oculto (display: none) hasta que se llama por JS -->
+    <div id="modalAlerta" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+        <table width="100%" height="100%" border="0">
+            <tr>
+                <td align="center" valign="middle">
+                    <!-- Caja de contenido del modal con sombra y bordes redondeados -->
+                    <div style="background-color: #ffffff; padding: 30px; border-radius: 15px; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;">
+                        <!-- Espacio donde se inyectará el texto del mensaje -->
+                        <p id="textoAlerta" style="color: #555; font-size: 14px; line-height: 1.6; margin-bottom: 25px;"></p>
+                        <!-- Botón para cerrar el modal -->
+                        <button onclick="cerrarAlerta()" style="background-color: #333; color: #fff; border: none; padding: 10px 30px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: bold;">ACEPTAR</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <script>
+        /**
+         * Obtiene los valores de los inputs y realiza una validación lógica.
+         * Si es exitosa, guarda la sesión localmente; si no, muestra un error en el modal.
+         */
         function validarLogin() {
             const user = document.getElementById('IdUsuario').value;
             const pass = document.getElementById('password').value;
 
+            // Verifica que ambos campos tengan contenido
             if(!user || !pass) {
-                alert("Por favor, ingrese sus credenciales.");
+                mostrarAlerta("Por favor, ingrese sus credenciales completas.");
                 return;
             }
 
-            // Simulación de validación (Esto luego se conectará con tu tabla Usuario en NestJS)
+            // Lógica de validación estática (temporalmente simulada)
             if(user === "admin" && pass === "1234") {
-                // Guardamos solo el nombre de usuario para la sesión
+                // Persistencia: Se guarda el usuario en el localStorage para identificar la sesión abierta
                 localStorage.setItem('diagnoSys_session', user);
-                alert("Bienvenido al sistema");
-                // Aquí podrías redireccionar: window.location.href = 'dashboard.html';
+                // Redirección a la página intermedia de módulos
+                window.location.href = 'webmed.html';
             } else {
-                alert("Usuario o contraseña incorrectos.");
+                mostrarAlerta("Usuario o contraseña incorrectos.");
             }
+        }
+
+        /**
+         * Activa la visibilidad del modal e inserta el mensaje deseado.
+         * @param {string} mensaje - El texto que se mostrará en el pop-up.
+         */
+        function mostrarAlerta(mensaje) {
+            document.getElementById('textoAlerta').innerHTML = mensaje;
+            document.getElementById('modalAlerta').style.display = 'block';
+        }
+
+        /**
+         * Oculta el modal de alerta de la interfaz.
+         */
+        function cerrarAlerta() {
+            document.getElementById('modalAlerta').style.display = 'none';
         }
     </script>
 

@@ -5,12 +5,12 @@ export class ArticuloEquipo {
   @PrimaryColumn({ length: 30 })
   NumeroSerie: string;
 
-  @Column({ length: 15 })
+  @Column({ type: 'varchar', length: 15 })
   TipoEquipo: string;
 
-  @Column({ length: 10 })
+  @Column({ type: 'varchar', length: 10 })
   Marca: string;
 
-  @Column({ length: 15 })
+  @Column({ type: 'varchar', length: 15 })
   Modelo: string;
 }
