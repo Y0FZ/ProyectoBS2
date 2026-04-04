@@ -1,10 +1,15 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { Usuario } from '../../usuario/entities/usuario.entity';
 
-@Entity('Rol')
+@Entity('Rol') // Asegúrate que este sea el nombre exacto de la tabla en SQL Server
 export class Rol {
-  @PrimaryColumn({ type: 'int' })
-  IdRol: number;
+  @PrimaryColumn()
+  IdRol!: number;
 
-  @Column({ type: 'varchar', length: 15 })
-  NombreRol: string;
+  @Column({ length: 50 })
+  NombreRol!: string;
+
+  // Esta parte es opcional pero ayuda a que la relación sea bidireccional
+  @OneToMany(() => Usuario, (usuario) => usuario.RolRel)
+  usuarios!: Usuario[];
 }

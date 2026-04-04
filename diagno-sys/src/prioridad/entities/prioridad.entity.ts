@@ -5,6 +5,6 @@ export class Prioridad {
   @PrimaryColumn()
   IdPrioridad: number;
 
-  @Column({ type: 'varchar', length: 10, nullable: true })
+  @Column({ length: 10 })
   NivelPrioridad: string;
 }

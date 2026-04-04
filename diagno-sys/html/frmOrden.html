@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>DiagnoSys - Panel de Control</title>
+</head>
+<body style="background-color: #fafafa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 40px;">
+
+    <div style="max-width: 900px; margin: 0 auto 30px auto; display: flex; justify-content: space-between; align-items: center;">
+    <h1 style="font-weight: 300; color: #333; margin: 0; font-size: 24px;">DiagnoSys <span style="color: #999; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">| Orden</span></h1>
+    <button onclick="window.location.href='webmed.html'" style="background: none; border: 1px solid #ddd; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 10px; letter-spacing: 1px; color: #666; font-weight: bold;">VOLVER AL MENÚ</button>
+    </div>
+
+    <table align="center" width="600" border="0" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #eee; padding: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+        <tr>
+            <td>
+                <h2 style="font-weight: 300; color: #333; text-align: center; margin-bottom: 40px;">Nueva Orden de Servicio</h2>
+                
+                <form id="formOrden">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="48%" style="padding-right: 4%;">
+                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">N° de Orden</label>
+                                <input type="number" id="IdOrden" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+                            </td>
+                            <td width="48%">
+                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Prioridad</label>
+                                <select id="Prioridad" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px; background: none; cursor: pointer;">
+                                    <option value="">Cargando...</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Descripción de la Falla</label>
+                                <input type="text" id="Descripcion" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Cédula del Cliente</label>
+                                <input type="text" id="IdClienteD" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Número de Serie (Equipo)</label>
+                                <input type="text" id="SerieEquipo" required style="width: 100%; padding: 10px 0; margin-bottom: 40px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <button type="submit" style="background-color: #333; color: #fff; border: none; padding: 12px 60px; border-radius: 25px; cursor: pointer; font-size: 11px; letter-spacing: 1px; font-weight: bold;">
+                                    GUARDAR ORDEN
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <script>
+        // SEGURIDAD: Impedir acceso sin login
+        if (!localStorage.getItem('diagnoSys_user')) {
+            window.location.href = 'index.html';
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('diagnoSys_user');
+            window.location.href = 'index.html';
+        }
+
+        // Función para obtener las prioridades desde el Backend (NestJS + SQL Server)
+async function cargarPrioridades() {
+    const select = document.getElementById('Prioridad');
+    
+    try {
+        // Hacemos la petición al endpoint que creamos en NestJS
+        const respuesta = await fetch('http://localhost:3000/prioridad');
+        
+        if (!respuesta.ok) {
+            throw new Error('Error al conectar con el servidor');
+        }
+
+        const prioridades = await respuesta.json();
+
+        // Limpiamos el select y agregamos una opción inicial neutra
+        select.innerHTML = '<option value="" disabled selected>Seleccione Prioridad</option>';
+
+        // Mapeamos los datos: p.IdPrioridad será el VALUE y p.NivelPrioridad el TEXTO
+        prioridades.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.IdPrioridad; // El ID numérico para la llave foránea
+            option.textContent = p.NivelPrioridad; // El nombre (Urgente, Media, etc.)
+            select.appendChild(option);
+        });
+
+        console.log("✅ Prioridades cargadas desde la BD");
+
+    } catch (error) {
+        console.error("❌ Error cargando prioridades:", error);
+        select.innerHTML = '<option value="">Error al cargar datos</option>';
+    }
+}
+
+// Aseguramos que se ejecute apenas cargue la página
+window.onload = () => {
+    // Verificación de seguridad
+    if (!localStorage.getItem('diagnoSys_user')) {
+        window.location.href = 'index.html';
+    }
+    // Carga de datos
+    cargarPrioridades();
+};
+
+        // GUARDAR ORDEN (NestJS)
+        document.getElementById('formOrden').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const datos = {
+                IdOrden: parseInt(document.getElementById('IdOrden').value),
+                Descripcion: document.getElementById('Descripcion').value,
+                EstadoRecepcion: "Recibido en Taller",
+                SerieEquipo: document.getElementById('SerieEquipo').value,
+                IdClienteD: document.getElementById('IdClienteD').value,
+                Prioridad: parseInt(document.getElementById('Prioridad').value)
+            };
+
+            try {
+                const res = await fetch('http://localhost:3000/orden-diagnostico', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(datos)
+                });
+
+                if(res.ok) {
+                    alert("✅ Orden guardada correctamente");
+                    e.target.reset();
+                } else {
+                    const err = await res.json();
+                    alert("❌ Error: " + (err.message || "No se pudo guardar"));
+                }
+            } catch (err) {
+                alert("Error crítico de conexión.");
+            }
+        });
+
+        window.onload = cargarPrioridades;
+    </script>
+</body>
+</html>

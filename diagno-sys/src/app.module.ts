@@ -8,6 +8,12 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { OrdenDiagnosticoModule } from './orden-diagnostico/orden-diagnostico.module';
 import { PrioridadModule } from './prioridad/prioridad.module';
 import { RolModule } from './rol/rol.module';
+import { Usuario } from './usuario/entities/usuario.entity';
+import { Rol } from './rol/entities/rol.entity';
+import { Prioridad } from './prioridad/entities/prioridad.entity';
+import { OrdenDiagnostico } from './orden-diagnostico/entities/orden-diagnostico.entity';
+import { EstadoOrden } from './estado-orden/entities/estado-orden.entity';
+import { EstadoOrdenModule } from './estado-orden/estado-orden.module';
 
 
 @Module({
@@ -19,7 +25,15 @@ import { RolModule } from './rol/rol.module';
       username: 'sa',
       password: '1234',
       database: 'DiagnoSysBD', // Nombre según tu script SQL
-      entities: [Cliente, ArticuloEquipo],
+      entities: [Cliente, 
+                ArticuloEquipo, 
+                Usuario, 
+                Rol, 
+                Prioridad, 
+                OrdenDiagnostico, 
+                EstadoOrden],
+                synchronize: false,
+                autoLoadEntities: true,
       options: {
         encrypt: false,
         trustServerCertificate: true,
@@ -38,6 +52,11 @@ import { RolModule } from './rol/rol.module';
     OrdenDiagnosticoModule,
     PrioridadModule,
     RolModule,
+    EstadoOrdenModule,
+    PrioridadModule,
+    RolModule,
+    EstadoOrdenModule,
   ],
+  
 })
 export class AppModule {}

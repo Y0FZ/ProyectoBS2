@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { OrdenDiagnostico } from './entities/orden-diagnostico.entity';
 import { CreateOrdenDiagnosticoDto } from './dto/create-orden-diagnostico.dto';
-import { UpdateOrdenDiagnosticoDto } from './dto/update-orden-diagnostico.dto';
 
 @Injectable()
 export class OrdenDiagnosticoService {
-  create(createOrdenDiagnosticoDto: CreateOrdenDiagnosticoDto) {
-    return 'This action adds a new ordenDiagnostico';
+  constructor(
+    @InjectRepository(OrdenDiagnostico)
+    private readonly ordenRepo: Repository<OrdenDiagnostico>,
+  ) {}
+
+  async create(createDto: CreateOrdenDiagnosticoDto) {
+    // Creamos la instancia mapeando los campos de tu SQL
+    const nuevaOrden = this.ordenRepo.create({
+      IdOrden: createDto.IdOrden,
+      Descripcion: createDto.Descripcion,
+      EstadoRecepcion: createDto.EstadoRecepcion,
+      equipo: { NumeroSerie: createDto.SerieEquipo }, // Relación directa por ID
+      cliente: { IdCliente: createDto.IdClienteD },   // Relación directa por ID
+      prioridad: { IdPrioridad: createDto.Prioridad } // Relación directa por ID
+    });
+
+    return await this.ordenRepo.save(nuevaOrden);
   }
 
   findAll() {
-    return `This action returns all ordenDiagnostico`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} ordenDiagnostico`;
-  }
-
-  update(id: number, updateOrdenDiagnosticoDto: UpdateOrdenDiagnosticoDto) {
-    return `This action updates a #${id} ordenDiagnostico`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} ordenDiagnostico`;
+    // Esto es para tu tabla de "Órdenes Recientes" en la web
+    return this.ordenRepo.find({
+      relations: ['cliente', 'equipo', 'prioridad']
+    });
   }
 }

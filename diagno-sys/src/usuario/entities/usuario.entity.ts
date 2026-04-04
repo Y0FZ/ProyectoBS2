@@ -4,18 +4,18 @@ import { Rol } from '../../rol/entities/rol.entity';
 @Entity('Usuario')
 export class Usuario {
   @PrimaryColumn({ length: 12 })
-  IdUsuarios: string;
+  IdUsuarios!: string;
 
   @Column({ type: 'varchar', length: 20 })
-  NombreUsuario: string;
+  NombreUsuario!: string;
 
   @Column({ type: 'varchar', length: 20 })
-  Contrasena: string;
+  Contrasena!: string;
 
   @Column({ type: 'int' })
-  IdRol: number;
+  IdRol!: number;
 
-  @ManyToOne(() => Rol)
+  @ManyToOne(() => Rol, (rol) => rol.IdRol)
   @JoinColumn({ name: 'IdRol' }) 
-  RolRel: Rol;
+  RolRel!: Rol;
 }

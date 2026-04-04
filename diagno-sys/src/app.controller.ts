@@ -1,12 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { PrioridadService } from './prioridad/prioridad.service'; // Se agrega /prioridad/
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+@Controller('prioridad')
+export class PrioridadController {
+  constructor(private readonly prioridadService: PrioridadService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  findAll() {
+    return this.prioridadService.findAll();
   }
+  
 }

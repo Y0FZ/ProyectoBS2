@@ -17,18 +17,18 @@ export class OrdenDiagnosticoController {
     return this.ordenDiagnosticoService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ordenDiagnosticoService.findOne(+id);
-  }
+  //@Get(':id')
+  //findOne(@Param('id') id: string) {
+   // return this.ordenDiagnosticoService.findOne(+id);
+ // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrdenDiagnosticoDto: UpdateOrdenDiagnosticoDto) {
-    return this.ordenDiagnosticoService.update(+id, updateOrdenDiagnosticoDto);
-  }
+  //@Patch(':id')
+  //update(@Param('id') id: string, @Body() updateOrdenDiagnosticoDto: UpdateOrdenDiagnosticoDto) {
+  //  return this.ordenDiagnosticoService.update(+id, updateOrdenDiagnosticoDto);
+  //}
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ordenDiagnosticoService.remove(+id);
-  }
+  //@Delete(':id')
+  //remove(@Param('id') id: string) {
+  //  return this.ordenDiagnosticoService.remove(+id);
+  //}
 }
