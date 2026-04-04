@@ -37,9 +37,17 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">
-                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Cédula del Cliente</label>
-                                <input type="text" id="IdClienteD" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+                            <td colspan="2" style="position: relative;">
+                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Cliente (Buscar por nombre o cédula)</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="busquedaCliente" list="listaClientes" placeholder="Escriba para filtrar..." style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+                                    
+                                    <button type="button" onclick="window.location.href='clientes.html'" style="background: #333; color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer;">+</button>
+                                </div>
+                                
+                                <datalist id="listaClientes"></datalist>
+                                
+                                <input type="hidden" id="IdClienteD">
                             </td>
                         </tr>
                         <tr>
@@ -72,38 +80,74 @@
             window.location.href = 'index.html';
         }
 
-        // Función para obtener las prioridades desde el Backend (NestJS + SQL Server)
-async function cargarPrioridades() {
-    const select = document.getElementById('Prioridad');
-    
+        async function inicializarFormulario() {
+    // 1. Obtener el próximo número de orden
     try {
-        // Hacemos la petición al endpoint que creamos en NestJS
-        const respuesta = await fetch('http://localhost:3000/prioridad');
+        const resId = await fetch('http://localhost:3000/orden-diagnostico/proximo-id');
+        const proximoId = await resId.json();
+        document.getElementById('IdOrden').value = proximoId;
+        document.getElementById('IdOrden').readOnly = true; // Evitamos errores manuales
+    } catch (e) { console.error("Error al obtener ID de orden"); }
+
+    // 2. Cargar lista de clientes para el buscador
+    try {
+        const resClientes = await fetch('http://localhost:3000/cliente'); // Asegúrate de tener este endpoint
+        const clientes = await resClientes.json();
+        const dataList = document.getElementById('listaClientes');
         
-        if (!respuesta.ok) {
-            throw new Error('Error al conectar con el servidor');
+        clientes.forEach(c => {
+            const option = document.createElement('option');
+            // Formato: "Nombre del Cliente (Cédula)"
+            option.value = `${c.Nombre} ${c.Apellidos} (${c.Cedula})`;
+            option.dataset.id = c.Cedula; // Guardamos la cédula real aquí
+            dataList.appendChild(option);
+        });
+    } catch (e) { console.error("Error al cargar clientes"); }
+}
+
+// Lógica para capturar la cédula real cuando el usuario selecciona del menú
+document.getElementById('busquedaCliente').addEventListener('input', (e) => {
+    const val = e.target.value;
+    const opts = document.getElementById('listaClientes').childNodes;
+    for (let i = 0; i < opts.length; i++) {
+        if (opts[i].value === val) {
+            document.getElementById('IdClienteD').value = opts[i].dataset.id;
+            break;
+        }
+    }
+});
+
+// Ejecutar al cargar
+window.onload = () => {
+    if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
+    cargarPrioridades();
+    inicializarFormulario();
+};
+
+        // Función para obtener las prioridades desde el Backend (NestJS + SQL Server)
+    async function inicializarFormulario() {
+        // 1. Cargar el Próximo Número de Orden
+        try {
+            const resId = await fetch('http://localhost:3000/orden-diagnostico/proximo-id');
+            if (resId.ok) {
+                const proximoId = await resId.json();
+                const inputOrden = document.getElementById('IdOrden');
+                inputOrden.value = proximoId;
+                inputOrden.readOnly = true; // Recomendado para evitar saltos en la BD
+                console.log("✅ Próximo ID cargado:", proximoId);
+            }
+        } catch (e) {
+            console.error("❌ Error obteniendo ID de orden:", e);
         }
 
-        const prioridades = await respuesta.json();
+        // 2. Cargar Prioridades (Lo que ya tenías)
+        await cargarPrioridades();
 
-        // Limpiamos el select y agregamos una opción inicial neutra
-        select.innerHTML = '<option value="" disabled selected>Seleccione Prioridad</option>';
-
-        // Mapeamos los datos: p.IdPrioridad será el VALUE y p.NivelPrioridad el TEXTO
-        prioridades.forEach(p => {
-            const option = document.createElement('option');
-            option.value = p.IdPrioridad; // El ID numérico para la llave foránea
-            option.textContent = p.NivelPrioridad; // El nombre (Urgente, Media, etc.)
-            select.appendChild(option);
-        });
-
-        console.log("✅ Prioridades cargadas desde la BD");
-
-    } catch (error) {
-        console.error("❌ Error cargando prioridades:", error);
-        select.innerHTML = '<option value="">Error al cargar datos</option>';
+        // 3. Cargar Clientes para el "Menu"
+        await cargarClientesBuscador();
     }
-}
+
+    window.onload = inicializarFormulario;
 
 // Aseguramos que se ejecute apenas cargue la página
 window.onload = () => {
@@ -147,6 +191,38 @@ window.onload = () => {
         });
 
         window.onload = cargarPrioridades;
+
+        async function cargarClientesBuscador() {
+    const dataList = document.getElementById('listaClientes');
+    try {
+        const res = await fetch('http://localhost:3000/cliente'); // Verifica que este sea tu endpoint
+        const clientes = await res.json();
+        
+        dataList.innerHTML = ""; // Limpiar
+        clientes.forEach(c => {
+            const option = document.createElement('option');
+            // Mostramos Nombre y Cédula en el menú
+            option.value = `${c.Nombre} ${c.Apellidos} - ${c.Cedula}`;
+            option.dataset.cedula = c.Cedula; // Guardamos la cédula real
+            dataList.appendChild(option);
+        });
+    } catch (e) {
+        console.error("❌ Error cargando clientes:", e);
+    }
+}
+
+        document.getElementById('busquedaCliente').addEventListener('change', function(e) {
+            const val = e.target.value;
+            const opts = document.getElementById('listaClientes').childNodes;
+            for (let i = 0; i < opts.length; i++) {
+                if (opts[i].value === val) {
+                    // Si el valor coincide, guardamos la cédula en el input que se enviará
+                    document.getElementById('IdClienteD').value = opts[i].dataset.cedula;
+                    break;
+                }
+            }
+        });
+
     </script>
 </body>
 </html>

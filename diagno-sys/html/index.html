@@ -20,22 +20,33 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = document.getElementById('IdUsuario').value;
-            const pass = document.getElementById('password').value;
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('IdUsuario').value;
+    const pass = document.getElementById('password').value;
 
-            // Validación (Luego la conectaremos al Backend de NestJS)
-            if(user === "admin" && pass === "1234") {
-                localStorage.setItem('diagnoSys_user', user);
-                localStorage.setItem('userRole', "1"); // Guardamos que es Admin
-                window.location.href = 'webmed.html';
-            } else if(user === "tecnico" && pass === "123") {
-                localStorage.setItem('diagnoSys_user', user);
-                localStorage.setItem('userRole', "2"); // Guardamos que es Técnico (No verá Usuarios)
-                window.location.href = 'webmed.html';
-            }
+    try {
+        const response = await fetch('http://localhost:3000/usuario/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id, pass: pass })
         });
+
+        if (response.ok) {
+            const usuario = await response.json();
+    
+            localStorage.setItem('diagnoSys_user', usuario.NombreUsuario);
+            // IMPORTANTE: Usamos el IdRol que procesamos en el servicio
+            localStorage.setItem('userRole', usuario.IdRol.toString()); 
+    
+            window.location.href = 'webmed.html'; 
+        } else {
+            alert("Usuario o contraseña incorrectos");
+        }
+    } catch (error) {
+        alert("Error de conexión con el servidor de DiagnoSys");
+    }
+    });
     </script>
 </body>
 </html>
