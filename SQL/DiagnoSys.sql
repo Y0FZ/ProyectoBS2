@@ -193,6 +193,10 @@ insert into Usuario values
 ('IND', 'Indiana', '12345', 2)
 go
 
+insert into Usuario values
+('YFZ', 'Yeremy', '123', 3)
+go
+
 insert into Prioridad values
 (1, 'Alta'),
 (2, 'Estandar'),
