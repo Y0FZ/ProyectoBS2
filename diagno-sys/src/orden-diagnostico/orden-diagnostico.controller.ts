@@ -17,6 +17,11 @@ export class OrdenDiagnosticoController {
     return this.ordenDiagnosticoService.findAll();
   }
 
+  @Get('proximo-id')
+getProximoId() {
+  return this.ordenDiagnosticoService.findLastId();
+}
+
   //@Get(':id')
   //findOne(@Param('id') id: string) {
    // return this.ordenDiagnosticoService.findOne(+id);

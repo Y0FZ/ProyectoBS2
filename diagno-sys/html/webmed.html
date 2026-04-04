@@ -42,8 +42,8 @@
         </div>
 
         <div class="card" onclick="window.location.href='historial.html'">
-            <h3>Historial</h3>
-            <p>Consulta y actualización de estados</p>
+            <h3>ORDENES</h3>
+            <p>Gestion y actualización de estados</p>
         </div>
 
         <div id="adminPanel" class="card admin-only" onclick="window.location.href='usuarios.html'">
@@ -60,7 +60,16 @@
             }
 
             const userRole = localStorage.getItem('userRole'); 
-            if (userRole === "1") { // Suponiendo 1 = Admin en tu BD
+            if (userRole === "2") { // Suponiendo 1 = Admin en tu BD
+                document.getElementById('adminPanel').style.display = 'block';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userRole = localStorage.getItem('userRole');
+            console.log("Rol detectado:", userRole); // Esto te dirá qué número está llegando realmente
+
+            if (userRole === "1") {
                 document.getElementById('adminPanel').style.display = 'block';
             }
         });

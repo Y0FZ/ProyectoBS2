@@ -11,6 +11,14 @@ export class OrdenDiagnosticoService {
     private readonly ordenRepo: Repository<OrdenDiagnostico>,
   ) {}
 
+  async findLastId(): Promise<number> {
+  const ultimaOrden = await this.ordenRepo.find({
+    order: { IdOrden: 'DESC' },
+    take: 1,
+  });
+  return ultimaOrden.length > 0 ? ultimaOrden[0].IdOrden + 1 : 1;
+}
+
   async create(createDto: CreateOrdenDiagnosticoDto) {
     // Creamos la instancia mapeando los campos de tu SQL
     const nuevaOrden = this.ordenRepo.create({
@@ -22,11 +30,12 @@ export class OrdenDiagnosticoService {
       prioridad: { IdPrioridad: createDto.Prioridad } // Relación directa por ID
     });
 
+    
+
     return await this.ordenRepo.save(nuevaOrden);
   }
 
   findAll() {
-    // Esto es para tu tabla de "Órdenes Recientes" en la web
     return this.ordenRepo.find({
       relations: ['cliente', 'equipo', 'prioridad']
     });

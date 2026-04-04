@@ -25,10 +25,23 @@ export class UsuarioService {
     return this.usuarioRepository.findOne({ where: { IdUsuarios: id }, relations: ['RolRel'] });
   }
 
-  async update(id: string, updateUsuarioDto: UpdateUsuarioDto) {
-    await this.usuarioRepository.update(id, updateUsuarioDto);
-    return this.findOne(id);
+  async validateUser(id: string, pass: string): Promise<any> {
+  const usuario = await this.usuarioRepository.findOne({
+    where: { IdUsuarios: id },
+    relations: ['RolRel'], // Esto fuerza a TypeORM a traer los datos del Rol
+  });
+
+  if (usuario && usuario.Contrasena === pass) {
+    // Al incluir RolRel, ahora tienes acceso a usuario.RolRel.IdRol y usuario.RolRel.NombreRol
+    const { Contrasena, ...result } = usuario;
+    return {
+      ...result,
+      IdRol: usuario.RolRel ? usuario.RolRel.IdRol : null,
+      NombreRol: usuario.RolRel ? usuario.RolRel.NombreRol : 'Sin Rol'
+    };
   }
+  return null;
+}
 
   remove(id: string) {
     return this.usuarioRepository.delete(id);
