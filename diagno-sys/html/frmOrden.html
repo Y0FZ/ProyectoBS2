@@ -69,160 +69,86 @@
         </tr>
     </table>
 
-    <script>
-        // SEGURIDAD: Impedir acceso sin login
-        if (!localStorage.getItem('diagnoSys_user')) {
-            window.location.href = 'index.html';
-        }
-
-        function cerrarSesion() {
-            localStorage.removeItem('diagnoSys_user');
-            window.location.href = 'index.html';
-        }
-
-        async function inicializarFormulario() {
-    // 1. Obtener el próximo número de orden
-    try {
-        const resId = await fetch('http://localhost:3000/orden-diagnostico/proximo-id');
-        const proximoId = await resId.json();
-        document.getElementById('IdOrden').value = proximoId;
-        document.getElementById('IdOrden').readOnly = true; // Evitamos errores manuales
-    } catch (e) { console.error("Error al obtener ID de orden"); }
-
-    // 2. Cargar lista de clientes para el buscador
-    try {
-        const resClientes = await fetch('http://localhost:3000/cliente'); // Asegúrate de tener este endpoint
-        const clientes = await resClientes.json();
-        const dataList = document.getElementById('listaClientes');
-        
-        clientes.forEach(c => {
-            const option = document.createElement('option');
-            // Formato: "Nombre del Cliente (Cédula)"
-            option.value = `${c.Nombre} ${c.Apellidos} (${c.Cedula})`;
-            option.dataset.id = c.Cedula; // Guardamos la cédula real aquí
-            dataList.appendChild(option);
-        });
-    } catch (e) { console.error("Error al cargar clientes"); }
+    <script>// 1. SEGURIDAD Y CIERRE DE SESIÓN
+if (!localStorage.getItem('diagnoSys_user')) {
+    window.location.href = 'index.html';
 }
 
-// Lógica para capturar la cédula real cuando el usuario selecciona del menú
-document.getElementById('busquedaCliente').addEventListener('input', (e) => {
+function cerrarSesion() {
+    localStorage.removeItem('diagnoSys_user');
+    localStorage.removeItem('userRole');
+    window.location.href = 'index.html';
+}
+
+// 2. FUNCIÓN PRINCIPAL DE INICIALIZACIÓN
+async function inicializarFormulario() {
+    console.log("Iniciando DiagnoSys...");
+
+    // Cargar ID de Orden Automático
+    try {
+        const resId = await fetch('http://localhost:3000/orden-diagnostico/proximo-id');
+        if (!resId.ok) throw new Error("Error en servidor");
+        
+        const data = await resId.json();
+        
+        // Esta lógica detecta si es un número solo o un objeto
+        let valorId;
+        if (typeof data === 'number') {
+            valorId = data;
+        } else {
+            valorId = data.IdOrden || data.id || data.proximoId || 1;
+        }
+
+        document.getElementById('IdOrden').value = valorId;
+        document.getElementById('IdOrden').readOnly = true;
+        console.log("✅ ID Cargado:", valorId);
+    } catch (e) { 
+        console.error("❌ Error ID Orden:", e);
+        document.getElementById('IdOrden').value = 1; // Valor base si falla
+    }
+    
+    // No olvides llamar a las otras cargas
+    await cargarPrioridades();
+}
+
+// 3. CAPTURAR CLIENTE SELECCIONADO
+document.getElementById('busquedaCliente').addEventListener('input', function(e) {
     const val = e.target.value;
     const opts = document.getElementById('listaClientes').childNodes;
     for (let i = 0; i < opts.length; i++) {
         if (opts[i].value === val) {
-            document.getElementById('IdClienteD').value = opts[i].dataset.id;
+            document.getElementById('IdClienteD').value = opts[i].getAttribute('data-id');
             break;
         }
     }
 });
 
-// Ejecutar al cargar
-window.onload = () => {
-    if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
-    cargarPrioridades();
-    inicializarFormulario();
-};
+// 4. GUARDAR ORDEN
+document.getElementById('formOrden').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const datos = {
+        IdOrden: parseInt(document.getElementById('IdOrden').value),
+        Descripcion: document.getElementById('Descripcion').value,
+        EstadoRecepcion: "Recibido en Taller",
+        SerieEquipo: document.getElementById('SerieEquipo').value,
+        IdClienteD: document.getElementById('IdClienteD').value,
+        Prioridad: parseInt(document.getElementById('Prioridad').value)
+    };
 
-        // Función para obtener las prioridades desde el Backend (NestJS + SQL Server)
-    async function inicializarFormulario() {
-        // 1. Cargar el Próximo Número de Orden
-        try {
-            const resId = await fetch('http://localhost:3000/orden-diagnostico/proximo-id');
-            if (resId.ok) {
-                const proximoId = await resId.json();
-                const inputOrden = document.getElementById('IdOrden');
-                inputOrden.value = proximoId;
-                inputOrden.readOnly = true; // Recomendado para evitar saltos en la BD
-                console.log("✅ Próximo ID cargado:", proximoId);
-            }
-        } catch (e) {
-            console.error("❌ Error obteniendo ID de orden:", e);
-        }
-
-        // 2. Cargar Prioridades (Lo que ya tenías)
-        await cargarPrioridades();
-
-        // 3. Cargar Clientes para el "Menu"
-        await cargarClientesBuscador();
-    }
-
-    window.onload = inicializarFormulario;
-
-// Aseguramos que se ejecute apenas cargue la página
-window.onload = () => {
-    // Verificación de seguridad
-    if (!localStorage.getItem('diagnoSys_user')) {
-        window.location.href = 'index.html';
-    }
-    // Carga de datos
-    cargarPrioridades();
-};
-
-        // GUARDAR ORDEN (NestJS)
-        document.getElementById('formOrden').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const datos = {
-                IdOrden: parseInt(document.getElementById('IdOrden').value),
-                Descripcion: document.getElementById('Descripcion').value,
-                EstadoRecepcion: "Recibido en Taller",
-                SerieEquipo: document.getElementById('SerieEquipo').value,
-                IdClienteD: document.getElementById('IdClienteD').value,
-                Prioridad: parseInt(document.getElementById('Prioridad').value)
-            };
-
-            try {
-                const res = await fetch('http://localhost:3000/orden-diagnostico', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(datos)
-                });
-
-                if(res.ok) {
-                    alert("✅ Orden guardada correctamente");
-                    e.target.reset();
-                } else {
-                    const err = await res.json();
-                    alert("❌ Error: " + (err.message || "No se pudo guardar"));
-                }
-            } catch (err) {
-                alert("Error crítico de conexión.");
-            }
-        });
-
-        window.onload = cargarPrioridades;
-
-        async function cargarClientesBuscador() {
-    const dataList = document.getElementById('listaClientes');
     try {
-        const res = await fetch('http://localhost:3000/cliente'); // Verifica que este sea tu endpoint
-        const clientes = await res.json();
-        
-        dataList.innerHTML = ""; // Limpiar
-        clientes.forEach(c => {
-            const option = document.createElement('option');
-            // Mostramos Nombre y Cédula en el menú
-            option.value = `${c.Nombre} ${c.Apellidos} - ${c.Cedula}`;
-            option.dataset.cedula = c.Cedula; // Guardamos la cédula real
-            dataList.appendChild(option);
+        const res = await fetch('http://localhost:3000/orden-diagnostico', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datos)
         });
-    } catch (e) {
-        console.error("❌ Error cargando clientes:", e);
-    }
-}
+        if(res.ok) {
+            alert("✅ Orden guardada");
+            location.reload(); // Recarga para actualizar el ID automático
+        }
+    } catch (err) { alert("Error al guardar"); }
+});
 
-        document.getElementById('busquedaCliente').addEventListener('change', function(e) {
-            const val = e.target.value;
-            const opts = document.getElementById('listaClientes').childNodes;
-            for (let i = 0; i < opts.length; i++) {
-                if (opts[i].value === val) {
-                    // Si el valor coincide, guardamos la cédula en el input que se enviará
-                    document.getElementById('IdClienteD').value = opts[i].dataset.cedula;
-                    break;
-                }
-            }
-        });
-
-    </script>
+// EJECUCIÓN AL CARGAR
+window.onload = inicializarFormulario;</script>
 </body>
 </html>

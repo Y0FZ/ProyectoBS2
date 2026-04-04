@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrdenDiagnostico } from './entities/orden-diagnostico.entity';
@@ -19,6 +19,8 @@ export class OrdenDiagnosticoService {
   return ultimaOrden.length > 0 ? ultimaOrden[0].IdOrden + 1 : 1;
 }
 
+
+
   async create(createDto: CreateOrdenDiagnosticoDto) {
     // Creamos la instancia mapeando los campos de tu SQL
     const nuevaOrden = this.ordenRepo.create({
@@ -33,6 +35,18 @@ export class OrdenDiagnosticoService {
     
 
     return await this.ordenRepo.save(nuevaOrden);
+  }
+
+  async findOne(id: number): Promise<OrdenDiagnostico> {
+    const orden = await this.ordenRepo.findOne({
+      where: { IdOrden: id },
+      relations: ['cliente', 'equipo', 'prioridad']
+    });
+
+    if (!orden) {
+      throw new NotFoundException(`La orden #${id} no existe`);
+    }
+    return orden;
   }
 
   findAll() {
