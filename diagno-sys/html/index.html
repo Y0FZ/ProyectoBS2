@@ -4,99 +4,38 @@
     <meta charset="UTF-8">
     <title>DiagnoSys - Login</title>
 </head>
-<body style="background-color: #fafafa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 40px;">
+<body style="background-color: #fafafa; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
 
-    <!-- Contenedor principal: Se utiliza una tabla para asegurar el centrado exacto del formulario en la pantalla -->
-    <table align="center" width="420" border="0" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #eee; padding: 40px; border-radius: 10px; margin-top: 50px;">
-        <tr>
-            <td>
-                <h2 style="font-weight: 300; color: #333; text-align: center; margin-bottom: 30px;">Inicio de Sesión</h2>
-                
-                <!-- Formulario de acceso -->
-                <form id="loginForm" onsubmit="event.preventDefault(); validarLogin();">
-                    <label style="font-size: 11px; color: #999; text-transform: uppercase;">Usuario</label>
-                    <!-- Input de texto con estilo minimalista (solo borde inferior) -->
-                    <input type="text" id="IdUsuario" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+    <div style="background: white; padding: 40px; border-radius: 10px; border: 1px solid #eee; width: 350px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h2 style="font-weight: 300; text-align: center; margin-bottom: 30px;">Inicio de Sesión</h2>
+        <form id="loginForm">
+            <label style="font-size: 11px; color: #999; text-transform: uppercase;">Usuario</label>
+            <input type="text" id="IdUsuario" required style="width: 100%; padding: 10px 0; margin-bottom: 20px; border: none; border-bottom: 1px solid #ddd; outline: none;">
 
-                    <label style="font-size: 11px; color: #999; text-transform: uppercase;">Contraseña</label>
-                    <!-- Input de tipo password para ocultar los caracteres ingresados -->
-                    <input type="password" id="password" required style="width: 100%; padding: 10px 0; margin-bottom: 35px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
+            <label style="font-size: 11px; color: #999; text-transform: uppercase;">Contraseña</label>
+            <input type="password" id="password" required style="width: 100%; padding: 10px 0; margin-bottom: 30px; border: none; border-bottom: 1px solid #ddd; outline: none;">
 
-                    <div align="center">
-                        <!-- Botón de acción que dispara la función de validación -->
-                        <button type="submit" style="background-color: #333; color: #fff; border: none; padding: 12px 60px; border-radius: 25px; cursor: pointer; font-size: 11px; letter-spacing: 1px; font-weight: bold;">
-                            ENTRAR
-                        </button>
-                    </div>
-
-                    <div align="center" style="margin-top: 25px;">
-                        <!-- Enlace de recuperación (actualmente informativo mediante un modal) -->
-                        <a href="javascript:void(0)" onclick="mostrarAlerta('El módulo de recuperación no está activo actualmente.<br><br>Por favor contacte al administrador.')" style="font-size: 10px; color: #333; text-transform: uppercase; text-decoration: none; letter-spacing: 1px;">¿Olvidó su contraseña?</a>
-                    </div>
-                </form>
-            </td>
-        </tr>
-    </table>
-
-    <!-- Estructura del Modal (Pop-up): Se mantiene oculto (display: none) hasta que se llama por JS -->
-    <div id="modalAlerta" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
-        <table width="100%" height="100%" border="0">
-            <tr>
-                <td align="center" valign="middle">
-                    <!-- Caja de contenido del modal con sombra y bordes redondeados -->
-                    <div style="background-color: #ffffff; padding: 30px; border-radius: 15px; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;">
-                        <!-- Espacio donde se inyectará el texto del mensaje -->
-                        <p id="textoAlerta" style="color: #555; font-size: 14px; line-height: 1.6; margin-bottom: 25px;"></p>
-                        <!-- Botón para cerrar el modal -->
-                        <button onclick="cerrarAlerta()" style="background-color: #333; color: #fff; border: none; padding: 10px 30px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: bold;">ACEPTAR</button>
-                    </div>
-                </td>
-            </tr>
-        </table>
+            <button type="submit" style="width: 100%; background: #333; color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; font-weight: bold;">ENTRAR</button>
+        </form>
     </div>
 
     <script>
-        /**
-         * Obtiene los valores de los inputs y realiza una validación lógica.
-         * Si es exitosa, guarda la sesión localmente; si no, muestra un error en el modal.
-         */
-        function validarLogin() {
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
             const user = document.getElementById('IdUsuario').value;
             const pass = document.getElementById('password').value;
 
-            // Verifica que ambos campos tengan contenido
-            if(!user || !pass) {
-                mostrarAlerta("Por favor, ingrese sus credenciales completas.");
-                return;
-            }
-
-            // Lógica de validación estática (temporalmente simulada)
+            // Validación (Luego la conectaremos al Backend de NestJS)
             if(user === "admin" && pass === "1234") {
-                // Persistencia: Se guarda el usuario en el localStorage para identificar la sesión abierta
-                localStorage.setItem('diagnoSys_session', user);
-                // Redirección a la página intermedia de módulos
+                localStorage.setItem('diagnoSys_user', user);
+                localStorage.setItem('userRole', "1"); // Guardamos que es Admin
                 window.location.href = 'webmed.html';
-            } else {
-                mostrarAlerta("Usuario o contraseña incorrectos.");
+            } else if(user === "tecnico" && pass === "123") {
+                localStorage.setItem('diagnoSys_user', user);
+                localStorage.setItem('userRole', "2"); // Guardamos que es Técnico (No verá Usuarios)
+                window.location.href = 'webmed.html';
             }
-        }
-
-        /**
-         * Activa la visibilidad del modal e inserta el mensaje deseado.
-         * @param {string} mensaje - El texto que se mostrará en el pop-up.
-         */
-        function mostrarAlerta(mensaje) {
-            document.getElementById('textoAlerta').innerHTML = mensaje;
-            document.getElementById('modalAlerta').style.display = 'block';
-        }
-
-        /**
-         * Oculta el modal de alerta de la interfaz.
-         */
-        function cerrarAlerta() {
-            document.getElementById('modalAlerta').style.display = 'none';
-        }
+        });
     </script>
-
 </body>
 </html>

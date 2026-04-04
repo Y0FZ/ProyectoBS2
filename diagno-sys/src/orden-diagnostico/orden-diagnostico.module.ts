@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { OrdenDiagnosticoService } from './orden-diagnostico.service';
-import { OrdenDiagnosticoController } from './orden-diagnostico.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { OrdenDiagnostico } from './entities/orden-diagnostico.entity';
 
 @Module({
-  controllers: [OrdenDiagnosticoController],
-  providers: [OrdenDiagnosticoService],
+  imports: [TypeOrmModule.forFeature([OrdenDiagnostico])],
+  exports: [TypeOrmModule],
 })
 export class OrdenDiagnosticoModule {}

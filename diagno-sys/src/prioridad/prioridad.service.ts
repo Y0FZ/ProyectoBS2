@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePrioridadDto } from './dto/create-prioridad.dto';
 import { UpdatePrioridadDto } from './dto/update-prioridad.dto';
+import { InjectRepository } from '@nestjs/typeorm'; 
+import { Repository } from 'typeorm';              
+import { Prioridad } from './entities/prioridad.entity';
 
 @Injectable()
 export class PrioridadService {
-  create(createPrioridadDto: CreatePrioridadDto) {
-    return 'This action adds a new prioridad';
-  }
+  constructor(
+    @InjectRepository(Prioridad)
+    private readonly repo: Repository<Prioridad>,
+  ) {}
 
   findAll() {
-    return `This action returns all prioridad`;
+    return this.repo.find(); // Trae Urgente, Alta, Media, Baja desde SQL
   }
 
   findOne(id: number) {
