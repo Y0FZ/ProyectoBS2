@@ -21,13 +21,12 @@ export class OrdenDiagnosticoController {
 
   @Get('proximo-id')
   getProximoId() {
-    console.log("Solicitando próximo ID...");
     return this.ordenDiagnosticoService.findLastId();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-      return this.ordenDiagnosticoService.findOne(+id);
+    return this.ordenDiagnosticoService.findOne(+id);
   }
 
   //@Patch(':id')
