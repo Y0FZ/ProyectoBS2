@@ -2,81 +2,108 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DiagnoSys - Panel Principal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #fafafa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 40px; }
-        .header { max-width: 900px; margin: 0 auto 50px auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 300; color: #333; margin: 0; font-size: 24px; }
-        .logo span { color: #999; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
-        
-        .btn-outline { background: none; border: 1px solid #ddd; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 10px; letter-spacing: 1px; color: #666; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
-        .btn-outline:hover { background: #f0f0f0; border-color: #bbb; }
+        :root {
+            --primary: #1a1a1a;
+            --bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-muted: #8898aa;
+        }
 
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 900px; margin: 0 auto; }
+        body { 
+            background-color: var(--bg); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            padding: 40px; 
+            color: var(--primary);
+        }
+
+        .header { 
+            max-width: 1000px; 
+            margin: 0 auto 50px auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        .logo { font-weight: 600; font-size: 24px; letter-spacing: -1px; }
+        .logo span { color: var(--text-muted); font-weight: 300; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-left: 10px; }
         
-        .card { background: white; border: 1px solid #eee; padding: 40px; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: #333; }
-        .card h3 { font-weight: 300; color: #333; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; font-size: 16px; }
-        .card p { font-size: 12px; color: #999; margin: 0; }
+        .btn-logout { 
+            background: white; border: 1px solid #e1e4e8; padding: 10px 20px; 
+            border-radius: 12px; cursor: pointer; font-size: 11px; 
+            font-weight: 600; text-transform: uppercase; transition: 0.3s; 
+        }
+        .btn-logout:hover { background: #fee; color: #d73a49; border-color: #ffcfcf; }
+
+        .grid-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04); 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            border: 1px solid transparent;
+            text-align: center;
+        }
+
+        .card:hover { 
+            transform: translateY(-10px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
+            border-color: #e1e4e8;
+        }
+
+        .card h3 { margin: 0 0 10px 0; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; }
+        .card p { margin: 0; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
         
-        /* Estilo especial para Admin */
-        .admin-only { display: none; border-left: 4px solid #333; }
+        #adminPanel { display: none; border-top: 4px solid var(--primary); }
     </style>
 </head>
 <body>
-
     <div class="header">
-        <h1 class="logo">DiagnoSys <span>| Inicio</span></h1>
-        <button onclick="cerrarSesion()" class="btn-outline">CERRAR SESIÓN</button>
+        <div class="logo">DiagnoSys <span>Panel de Control</span></div>
+        <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
     </div>
 
     <div class="grid-container">
         <div class="card" onclick="window.location.href='frmOrden.html'">
             <h3>Nueva Orden</h3>
-            <p>Registro de ingresos al taller</p>
+            <p>Ingreso de equipos a diagnóstico y reparación.</p>
         </div>
-
         <div class="card" onclick="window.location.href='clientes.html'">
             <h3>Clientes</h3>
-            <p>Administración de base de datos</p>
+            <p>Registro y base de datos de usuarios finales.</p>
         </div>
-
         <div class="card" onclick="window.location.href='historial.html'">
-            <h3>ORDENES</h3>
-            <p>Gestion y actualización de estados</p>
+            <h3>Historial</h3>
+            <p>Consulta y actualización de órdenes activas.</p>
         </div>
-
-        <div id="adminPanel" class="card admin-only" onclick="window.location.href='usuarios.html'">
-            <h3>Usuarios</h3>
-            <p>Gestión de personal y permisos</p>
+        <div id="adminPanel" class="card" onclick="window.location.href='usuarios.html'">
+            <h3>Administración</h3>
+            <p>Gestión de personal, roles y permisos del sistema.</p>
         </div>
     </div>
 
     <script>
-        // Seguridad y Control de Rol
         document.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('diagnoSys_user')) {
-                window.location.href = 'index.html';
-            }
-
-            const userRole = localStorage.getItem('userRole'); 
-            if (userRole === "2") { // Suponiendo 1 = Admin en tu BD
-                document.getElementById('adminPanel').style.display = 'block';
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
             const userRole = localStorage.getItem('userRole');
-            console.log("Rol detectado:", userRole); // Esto te dirá qué número está llegando realmente
-
-            if (userRole === "1") {
-                document.getElementById('adminPanel').style.display = 'block';
-            }
+            if (userRole === "2") document.getElementById('adminPanel').style.display = 'block';
         });
 
         function cerrarSesion() {
-            localStorage.removeItem('diagnoSys_user');
-            localStorage.removeItem('userRole');
+            localStorage.clear();
             window.location.href = 'index.html';
         }
     </script>
