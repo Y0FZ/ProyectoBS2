@@ -30,20 +30,18 @@ export class OrdenDiagnosticoService {
     }
   }
 
-  async create(createDto: any) { 
-      // Usamos los nombres de variables que definimos en la Entity arriba
-      const nuevaOrden = this.ordenRepo.create({
-        IdOrden: createDto.IdOrden,
-        FechaRecepcion: createDto.FechaRecepcion, // Debe coincidir con la variable de la Entity
-        Descripcion: createDto.Descripcion,
-        EstadoArticulo: createDto.EstadoArticulo, // Debe coincidir con la variable de la Entity
-        EstadoRecepcion: createDto.EstadoRecepcion,
-        equipo: { NumeroSerie: createDto.SerieEquipo } as any,
-        cliente: { IdCliente: createDto.IdClienteD } as any,
-        prioridad: { IdPrioridad: createDto.Prioridad } as any
-      });
+  async create(createDto: CreateOrdenDiagnosticoDto) { 
+    const nuevaOrden = this.ordenRepo.create({
+      IdOrden: createDto.IdOrden,
+      FechaCreacion: createDto.FechaCreacion,
+      Descripcion: createDto.Descripcion,
+      EstadoRecepcion: createDto.EstadoRecepcion,
+      equipo: { NumeroSerie: createDto.SerieEquipo } as any,
+      cliente: { IdCliente: createDto.IdClienteD } as any,
+      prioridad: { IdPrioridad: createDto.Prioridad } as any
+    });
 
-      return await this.ordenRepo.save(nuevaOrden);
+    return await this.ordenRepo.save(nuevaOrden);
   }
 
   async findOne(id: number): Promise<OrdenDiagnostico> {

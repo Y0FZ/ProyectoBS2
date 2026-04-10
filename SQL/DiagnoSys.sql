@@ -107,8 +107,8 @@ ej: Recibida, Pendiente, En Revicion...
 Create table OrdenDiagnostico(
 IdOrden int not null primary key,
 FechaCreacion date default getdate() not null,
-Descripcion Varchar(100),
-EstadoRecepcion Varchar(50),
+Descripcion Varchar(200),
+EstadoRecepcion Varchar(200),
 SerieEquipo Varchar(30) not null references ArticuloEquipo (NumeroSerie),
 IdClienteD Varchar(12) not null references Cliente (IdCliente),
 Prioridad int not null references Prioridad (IdPrioridad)

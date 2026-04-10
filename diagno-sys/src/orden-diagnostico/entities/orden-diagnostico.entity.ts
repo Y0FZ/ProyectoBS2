@@ -8,29 +8,25 @@ export class OrdenDiagnostico {
   @PrimaryColumn()
   IdOrden!: number;
 
-  // En el código usas 'FechaRecepcion', pero en SQL se guardará como 'FechaCreacion'
-  @Column({ name: 'FechaCreacion', type: 'date', nullable: true }) 
-  FechaRecepcion!: string;
+  @Column({ name: 'FechaCreacion', type: 'date', nullable: false }) 
+  FechaCreacion!: string;
 
-  @Column({ length: 500, nullable: true })
+  @Column({ length: 200, nullable: true })
   Descripcion!: string;
-
-  // En el código usas 'EstadoArticulo', que es lo que espera tu DTO y tu HTML
-  @Column({ length: 500, nullable: true })
-  EstadoArticulo!: string;
 
   @Column({ length: 50, nullable: true })
   EstadoRecepcion!: string;
 
+  // RELACIONES EXACTAS
   @ManyToOne(() => ArticuloEquipo)
-  @JoinColumn({ name: 'SerieEquipo' })
+  @JoinColumn({ name: 'SerieEquipo' }) // Columna en SQL
   equipo!: ArticuloEquipo;
 
   @ManyToOne(() => Cliente)
-  @JoinColumn({ name: 'IdClienteD' })
+  @JoinColumn({ name: 'IdClienteD' }) // Columna en SQL
   cliente!: Cliente;
 
   @ManyToOne(() => Prioridad)
-  @JoinColumn({ name: 'Prioridad' })
+  @JoinColumn({ name: 'Prioridad' }) // Columna en SQL
   prioridad!: Prioridad;
 }

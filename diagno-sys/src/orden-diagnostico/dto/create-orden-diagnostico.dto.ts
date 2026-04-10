@@ -6,15 +6,11 @@ export class CreateOrdenDiagnosticoDto {
 
   @IsString()
   @IsOptional()
-  FechaRecepcion?: string; // Usamos string porque desde el input date llega como "YYYY-MM-DD"
+  FechaCreacion?: string; // Usamos string porque desde el input date llega como "YYYY-MM-DD"
 
   @IsString()
   @IsOptional()
   Descripcion?: string;
-
-  @IsString()
-  @IsOptional()
-  EstadoArticulo?: string; // Nuevo: Para el estado físico (rayones, golpes, etc.)
 
   @IsString()
   @IsOptional()
