@@ -5,31 +5,130 @@
     <title>DiagnoSys - Nueva Orden</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f5f7fa; font-family: 'Inter', sans-serif; margin: 0; padding: 40px; }
-        .container { max-width: 700px; margin: 0 auto; }
-        .header-form { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .header-form h1 { font-weight: 300; font-size: 24px; margin: 0; }
-        .form-card { background: white; padding: 50px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
-        .form-group { margin-bottom: 30px; position: relative; }
-        label { display: block; font-size: 11px; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 10px 0; border: none; border-bottom: 1px solid #eee; outline: none; font-size: 16px; background: transparent; transition: 0.3s; }
-        input:focus, select:focus, textarea:focus { border-bottom-color: #1a1a1a; }
-        input[readonly] { color: #888; border-bottom-style: dashed; }
-        .btn-save { background: #1a1a1a; color: white; width: 100%; padding: 18px; border: none; border-radius: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        body { background-color: #f5f7fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container { max-width:
+            700px;
+            margin: 0 auto;
+        }
+
+        
+        .header-form { display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header { 
+            max-width: 1000px; 
+            margin: 0 auto 50px auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 24px;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--text-muted);
+            font-weight: 300;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-left: 10px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #999;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            border-bottom: 1px solid #eee;
+            outline: none;
+            font-size: 16px;
+            background: transparent;
+            transition: 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-bottom-color: #1a1a1a;
+        }
+        
+        input[readonly] {
+            color: #888;
+            border-bottom-style: dashed;
+        }
+        
+        .btn-save {
+            background: #1a1a1a;
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        
         .btn-mini { background: #1a1a1a; color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; flex-shrink: 0; }
+        
         .btn-save:hover { background: #333; transform: translateY(-2px); }
+        
         .row { display: flex; gap: 30px; }
+        
         .col { flex: 1; }
-        .btn-back { background: none; border: 1px solid #ddd; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 10px; font-weight: bold; color: #666; }
+        
+        .btn-back { 
+            background: white; border: 1px solid #e1e4e8; padding: 10px 20px; 
+            border-radius: 12px; cursor: pointer; font-size: 11px; 
+            font-weight: 600; text-transform: uppercase; transition: 0.3s;
+        }
+        .btn-back:hover { background: rgba(105, 103, 103, 0.212); color: #000000; border-color: #160809; }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-form">
-            <h1>Nueva Orden</h1>
+    
+    
+        <div class="header">
+            <div class="logo">DiagnoSys <span>Nueva Orden</span></div>
+            
             <button class="btn-back" onclick="window.location.href='webmed.html'">VOLVER</button>
         </div>
 
+        <div class="container"> 
         <div class="form-card">
             <form id="formOrden">
                 <div class="row">
@@ -39,7 +138,7 @@
                     </div>
                     <div class="form-group col">
                         <label>Fecha de Recepción</label>
-                        <input type="text" id="FechaRecepcion" readonly>
+                        <input type="date" id="FechaRecepcion" readonly>
                     </div>
                 </div>
 
@@ -94,7 +193,11 @@ if (!localStorage.getItem('diagnoSys_user')) {
 
 async function inicializarFormulario() {   
     // A. Fecha automática (Inmediato)
-    document.getElementById('FechaRecepcion').value = new Date().toISOString().split('T')[0];
+    // A. Fecha automática (Corregida para Hora Local)
+const fechaLocal = new Date();
+const offset = fechaLocal.getTimezoneOffset(); // Diferencia en minutos
+const fechaAjustada = new Date(fechaLocal.getTime() - (offset * 60 * 1000));
+document.getElementById('FechaRecepcion').value = fechaAjustada.toISOString().split('T')[0];
 
     // B. Cargar Próximo ID (Prioridad Alta)
     try {
