@@ -2,29 +2,29 @@
 --Procedimiento almacenado
 
 --Adicion de datos
-Create PROCEDURE sp_IgresarOrdenDiagnostico (@InOrden int, @FechaCreacion date, @Descripcion varchar(100), @EstadoRecepcion varchar(50), @SerieEquipo varchar (30), @IdClienteD varchar (12), @Prioridad int)
+Create PROCEDURE sp_IgresarOrdenDiagnostico (@IdOrden int, @FechaCreacion date, @Descripcion varchar(100), @EstadoRecepcion varchar(50), @SerieEquipo varchar (30), @IdClienteD varchar (12), @Prioridad int)
 
 as
-	if((@InOrden=null) or (@FechaCreacion='') or (@Descripcion='') or (@EstadoRecepcion='') or (@SerieEquipo='') or (@IdClienteD='') or (@Prioridad=''))
+	if((@IdOrden=null) or (@FechaCreacion='') or (@Descripcion='') or (@EstadoRecepcion='') or (@SerieEquipo='') or (@IdClienteD='') or (@Prioridad=''))
 		BEGIN
 			Print 'INGRESO DE DATOS INCOMPLETO'
 			return
 		END
 	else
 		BEGIN
-			If not exists (select InOrden from OrdenDiagnostico where @InOrden = @InOrden)
+			If not exists (select IdOrden from OrdenDiagnostico where @IdOrden = @IdOrden)
 
 		BEGIN
 			Insert into OrdenDiagnostico(IdOrden, FechaCreacion, Descripcion, EstadoRecepcion, SerieEquipo, IdClienteD, Prioridad)
 
-			Values(@InOrden, @FechaCreacion, @Descripcion,@EstadoRecepcion, @SerieEquipo,@IdClienteD, @Prioridad)
+			Values(@IdOrden, @FechaCreacion, @Descripcion,@EstadoRecepcion, @SerieEquipo,@IdClienteD, @Prioridad)
 
 			Print 'DATOS INGRESADOS'
 
 		END
 	else
 		BEGIN
-			If exists (select IdOrden from OrdenDiagnostico where IdOrden = @InOrden)
+			If exists (select IdOrden from OrdenDiagnostico where IdOrden = @IdOrden)
 			BEGIN
 				Print 'DATOS DUPLICADOS'
 			END
@@ -36,7 +36,7 @@ GO
 --Modificacion de datos
 
 CREATE PROCEDURE sp_ModificarOrdenDiagnostico (
-    @InOrden int, 
+    @IdOrden int, 
     @FechaCreacion date, 
     @Descripcion varchar(100), 
     @EstadoRecepcion varchar(50), 
@@ -47,14 +47,14 @@ CREATE PROCEDURE sp_ModificarOrdenDiagnostico (
 AS
 BEGIN
     -- 1. Validación de nulos y vacíos (Corregido el uso de IS NULL)
-    IF (@InOrden IS NULL OR @FechaCreacion IS NULL OR @SerieEquipo = '' OR @IdClienteD = '')
+    IF (@IdOrden IS NULL OR @FechaCreacion IS NULL OR @SerieEquipo = '' OR @IdClienteD = '')
     BEGIN
         PRINT 'INGRESO DE DATOS INCOMPLETO'
         RETURN
     END
 
     -- 2. Verificar si la Orden existe
-    IF NOT EXISTS (SELECT 1 FROM OrdenDiagnostico WHERE IdOrden = @InOrden)
+    IF NOT EXISTS (SELECT 1 FROM OrdenDiagnostico WHERE IdOrden = @IdOrden)
     BEGIN
         PRINT 'DATOS NO REGISTRADOS (LA ORDEN NO EXISTE)'
     END
@@ -69,7 +69,7 @@ BEGIN
             SerieEquipo = @SerieEquipo,
             IdClienteD = @IdClienteD,
             Prioridad = @Prioridad
-        WHERE IdOrden = @InOrden
+        WHERE IdOrden = @IdOrden
 
         PRINT 'ACTUALIZACION DE ORDEN COMPLETA'
     END
