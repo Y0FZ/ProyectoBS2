@@ -2,136 +2,310 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>DiagnoSys - Panel de Control</title>
-</head>
-<body style="background-color: #fafafa; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 40px;">
+    <title>DiagnoSys - Nueva Orden</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #f5f7fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 40px;
+        }
 
-    <div style="max-width: 900px; margin: 0 auto 30px auto; display: flex; justify-content: space-between; align-items: center;">
-    <h1 style="font-weight: 300; color: #333; margin: 0; font-size: 24px;">DiagnoSys <span style="color: #999; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">| Orden</span></h1>
-    <button onclick="window.location.href='webmed.html'" style="background: none; border: 1px solid #ddd; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-size: 10px; letter-spacing: 1px; color: #666; font-weight: bold;">VOLVER AL MENÚ</button>
+        .container { max-width:
+            700px;
+            margin: 0 auto;
+        }
+
+        
+        .header-form { display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header { 
+            max-width: 1000px; 
+            margin: 0 auto 50px auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 24px;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--text-muted);
+            font-weight: 300;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-left: 10px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #999;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            border-bottom: 1px solid #eee;
+            outline: none;
+            font-size: 16px;
+            background: transparent;
+            transition: 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-bottom-color: #1a1a1a;
+        }
+        
+        input[readonly] {
+            color: #888;
+            border-bottom-style: dashed;
+        }
+        
+        .btn-save {
+            background: #1a1a1a;
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        
+        .btn-mini { background: #1a1a1a; color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; flex-shrink: 0; }
+        
+        .btn-save:hover { background: #333; transform: translateY(-2px); }
+        
+        .row { display: flex; gap: 30px; }
+        
+        .col { flex: 1; }
+        
+        .btn-back { 
+            background: white; border: 1px solid #e1e4e8; padding: 10px 20px; 
+            border-radius: 12px; cursor: pointer; font-size: 11px; 
+            font-weight: 600; text-transform: uppercase; transition: 0.3s;
+        }
+        .btn-back:hover { background: rgba(105, 103, 103, 0.212); color: #000000; border-color: #160809; }
+
+    </style>
+</head>
+<body>
+    
+    
+        <div class="header">
+            <div class="logo">DiagnoSys <span>Nueva Orden</span></div>
+            
+            <button class="btn-back" onclick="window.location.href='webmed.html'">VOLVER</button>
+        </div>
+
+        <div class="container"> 
+        <div class="form-card">
+            <form id="formOrden">
+                <div class="row">
+                    <div class="form-group col">
+                        <label>N° de Orden</label>
+                        <input type="text" id="IdOrden" readonly>
+                    </div>
+                    <div class="form-group col">
+                        <label>Fecha de Recepción</label>
+                        <input type="date" id="FechaCreacion" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select id="Prioridad" required>
+                        <option value="" disabled selected>Cargando...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Cliente (Nombre o Cédula)</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="busquedaCliente" list="listaClientes" placeholder="Escriba para filtrar..." required>
+                        <button type="button" onclick="window.location.href='clientes.html'" class="btn-mini">+</button>
+                    </div>
+                    <datalist id="listaClientes"></datalist>
+                    <input type="text" id="IdClienteD">
+                </div>
+
+                <div class="form-group">
+                    <label>Equipo / Dispositivo</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="busquedaEquipo" list="listaEquipos" placeholder="Buscar por Serie o Modelo..." required>
+                        <button type="button" onclick="window.location.href='equipos.html'" class="btn-mini">+</button>
+                    </div>
+                    <datalist id="listaEquipos"></datalist>
+                    <input type="text" id="SerieEquipo">
+                </div>
+
+                <div class="form-group">
+                    <label>Estado Físico del Artículo</label>
+                    <textarea id="EstadoRecepcion" rows="2" placeholder="Ej: Rayones en tapa, falta cargador..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción de la Falla</label>
+                    <textarea id="Descripcion" rows="2" placeholder="Detalle el problema técnico..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-save">Registrar Orden de Servicio</button>
+            </form>
+        </div>
     </div>
 
-    <table align="center" width="600" border="0" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border: 1px solid #eee; padding: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
-        <tr>
-            <td>
-                <h2 style="font-weight: 300; color: #333; text-align: center; margin-bottom: 40px;">Nueva Orden de Servicio</h2>
-                
-                <form id="formOrden">
-                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td width="48%" style="padding-right: 4%;">
-                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">N° de Orden</label>
-                                <input type="number" id="IdOrden" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
-                            </td>
-                            <td width="48%">
-                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Prioridad</label>
-                                <select id="Prioridad" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px; background: none; cursor: pointer;">
-                                    <option value="">Cargando...</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Descripción de la Falla</label>
-                                <input type="text" id="Descripcion" required style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="position: relative;">
-                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Cliente (Buscar por nombre o cédula)</label>
-                                <div style="display: flex; gap: 10px;">
-                                    <input type="text" id="busquedaCliente" list="listaClientes" placeholder="Escriba para filtrar..." style="width: 100%; padding: 10px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
-                                    
-                                    <button type="button" onclick="window.location.href='clientes.html'" style="background: #333; color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer;">+</button>
-                                </div>
-                                
-                                <datalist id="listaClientes"></datalist>
-                                
-                                <input type="hidden" id="IdClienteD">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <label style="font-size: 11px; color: #999; text-transform: uppercase;">Número de Serie (Equipo)</label>
-                                <input type="text" id="SerieEquipo" required style="width: 100%; padding: 10px 0; margin-bottom: 40px; border: none; border-bottom: 1px solid #ddd; outline: none; font-size: 15px;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" align="center">
-                                <button type="submit" style="background-color: #333; color: #fff; border: none; padding: 12px 60px; border-radius: 25px; cursor: pointer; font-size: 11px; letter-spacing: 1px; font-weight: bold;">
-                                    GUARDAR ORDEN
-                                </button>
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </td>
-        </tr>
-    </table>
+<script>
 
-    <script>// 1. SEGURIDAD Y CIERRE DE SESIÓN
+// 1. SEGURIDAD
 if (!localStorage.getItem('diagnoSys_user')) {
     window.location.href = 'index.html';
 }
 
-function cerrarSesion() {
-    localStorage.removeItem('diagnoSys_user');
-    localStorage.removeItem('userRole');
-    window.location.href = 'index.html';
-}
+async function inicializarFormulario() {   
+    // A. Fecha automática (Inmediato)
+    // A. Fecha automática (Corregida para Hora Local)
+const fechaLocal = new Date();
+const offset = fechaLocal.getTimezoneOffset(); // Diferencia en minutos
+const fechaAjustada = new Date(fechaLocal.getTime() - (offset * 60 * 1000));
+document.getElementById('FechaCreacion').value = fechaAjustada.toISOString().split('T')[0];
 
-// 2. FUNCIÓN PRINCIPAL DE INICIALIZACIÓN
-async function inicializarFormulario() {
-    console.log("Iniciando DiagnoSys...");
-
-    // Cargar ID de Orden Automático
+    // B. Cargar Próximo ID (Prioridad Alta)
     try {
         const resId = await fetch('http://localhost:3000/orden-diagnostico/proximo-id');
-        if (!resId.ok) throw new Error("Error en servidor");
-        
-        const data = await resId.json();
-        
-        // Esta lógica detecta si es un número solo o un objeto
-        let valorId;
-        if (typeof data === 'number') {
-            valorId = data;
-        } else {
-            valorId = data.IdOrden || data.id || data.proximoId || 1;
+        if (resId.ok) {
+            const siguienteId = await resId.json();
+            document.getElementById('IdOrden').value = siguienteId;
+            console.log("ID cargado con éxito:", siguienteId);
         }
-
-        document.getElementById('IdOrden').value = valorId;
-        document.getElementById('IdOrden').readOnly = true;
-        console.log("✅ ID Cargado:", valorId);
-    } catch (e) { 
-        console.error("❌ Error ID Orden:", e);
-        document.getElementById('IdOrden').value = 1; // Valor base si falla
+    } catch (error) {
+        console.error("Error al cargar ID:", error);
     }
-    
-    // No olvides llamar a las otras cargas
-    await cargarPrioridades();
+
+    // C. Cargar Prioridades
+    try {
+        const resPrio = await fetch('http://localhost:3000/prioridad');
+        const prioridades = await resPrio.json();
+        const selectPrio = document.getElementById('Prioridad');
+        selectPrio.innerHTML = '<option value="" disabled selected>Seleccione...</option>';
+        prioridades.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.IdPrioridad;
+            opt.textContent = p.NivelPrioridad;
+            selectPrio.appendChild(opt);
+        });
+    } catch (e) { console.error("Error Prioridades:", e); }
+
+    // D. Cargar Clientes (Usando setAttribute para compatibilidad)
+    try {
+        const resCli = await fetch('http://localhost:3000/cliente');
+        const clientes = await resCli.json();
+        const dl = document.getElementById('listaClientes');
+        clientes.forEach(c => {
+            const opt = document.createElement('option');
+            // Guardamos el ID en el value para que sea fácil de capturar
+            opt.value = `${c.Nombre} ${c.Apellidos} (${c.Cedula})`;
+            opt.setAttribute('data-id', c.IdCliente || c.Cedula); 
+            dl.appendChild(opt);
+        });
+    } catch (e) { console.error("Error Clientes:", e); }
+
+    // E. Cargar Equipos
+    try {
+        const resEq = await fetch('http://localhost:3000/articulo-equipo');
+        const equipos = await resEq.json();
+        const dlEq = document.getElementById('listaEquipos');
+        equipos.forEach(e => {
+            const opt = document.createElement('option');
+            opt.value = `${e.Marca} ${e.Modelo} - S/N: ${e.NumeroSerie}`;
+            opt.setAttribute('data-id', e.NumeroSerie);
+            dlEq.appendChild(opt);
+        });
+    } catch (err) { console.error("Error Equipos:", err); }
 }
 
-// 3. CAPTURAR CLIENTE SELECCIONADO
-document.getElementById('busquedaCliente').addEventListener('input', function(e) {
-    const val = e.target.value;
-    const opts = document.getElementById('listaClientes').childNodes;
-    for (let i = 0; i < opts.length; i++) {
-        if (opts[i].value === val) {
-            document.getElementById('IdClienteD').value = opts[i].getAttribute('data-id');
-            break;
-        }
+    function configurarBuscadores() {
+        // Cliente
+        document.getElementById('busquedaCliente').addEventListener('input', (e) => {
+            const val = e.target.value;
+            const options = document.getElementById('listaClientes').options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === val) {
+                    // Aquí extraemos el ID que guardaste con setAttribute
+                    const idReal = options[i].getAttribute('data-id');
+                    document.getElementById('IdClienteD').value = idReal;
+                    console.log("ID Cliente capturado:", idReal);
+                    break;
+                }
+            }
+        });
+
+        // Equipo
+        document.getElementById('busquedaEquipo').addEventListener('input', (e) => {
+            const val = e.target.value;
+            const options = document.getElementById('listaEquipos').options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].value === val) {
+                    // Aquí extraemos el Número de Serie real
+                    const serieReal = options[i].getAttribute('data-id');
+                    document.getElementById('SerieEquipo').value = serieReal;
+                    console.log("Serie Equipo capturada:", serieReal);
+                    break;
+                }
+            }
+        });
     }
-});
 
 // 4. GUARDAR ORDEN
-document.getElementById('formOrden').addEventListener('submit', async (e) => {
+
+    document.getElementById('formOrden').addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    const serie = document.getElementById('SerieEquipo').value;
+    const cliente = document.getElementById('IdClienteD').value;
+
+    // Validación crítica antes de llamar al SP
+    if (!serie || serie === "0" || !cliente || cliente === "0") {
+        alert("⚠️ Error: Debes seleccionar un Equipo y un Cliente de la lista desplegable.");
+        return;
+    }
+
     const datos = {
         IdOrden: parseInt(document.getElementById('IdOrden').value),
+        FechaCreacion: document.getElementById('FechaCreacion').value,
         Descripcion: document.getElementById('Descripcion').value,
-        EstadoRecepcion: "Recibido en Taller",
-        SerieEquipo: document.getElementById('SerieEquipo').value,
-        IdClienteD: document.getElementById('IdClienteD').value,
+        EstadoRecepcion: document.getElementById('EstadoRecepcion').value || "No especificado",
+        SerieEquipo: serie,
+        IdClienteD: cliente,
         Prioridad: parseInt(document.getElementById('Prioridad').value)
     };
 
@@ -141,14 +315,24 @@ document.getElementById('formOrden').addEventListener('submit', async (e) => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datos)
         });
-        if(res.ok) {
-            alert("✅ Orden guardada");
-            location.reload(); // Recarga para actualizar el ID automático
+
+        if (res.ok) {
+            alert("✅ Orden #" + datos.IdOrden + " registrada con éxito");
+            window.location.reload();
+        } else {
+            const err = await res.json();
+            alert("❌ Error: " + (err.message || "No se pudo guardar"));
         }
-    } catch (err) { alert("Error al guardar"); }
+    } catch (error) {
+        alert("❌ Error de conexión");
+    }
 });
 
-// EJECUCIÓN AL CARGAR
-window.onload = inicializarFormulario;</script>
+window.onload = () => {
+    inicializarFormulario();
+    configurarBuscadores();
+};
+
+</script>
 </body>
 </html>
