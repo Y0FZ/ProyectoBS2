@@ -156,7 +156,7 @@
                         <button type="button" onclick="window.location.href='clientes.html'" class="btn-mini">+</button>
                     </div>
                     <datalist id="listaClientes"></datalist>
-                    <input type="hidden" id="IdClienteD">
+                    <input type="text" id="IdClienteD">
                 </div>
 
                 <div class="form-group">
@@ -166,7 +166,7 @@
                         <button type="button" onclick="window.location.href='equipos.html'" class="btn-mini">+</button>
                     </div>
                     <datalist id="listaEquipos"></datalist>
-                    <input type="hidden" id="SerieEquipo">
+                    <input type="text" id="SerieEquipo">
                 </div>
 
                 <div class="form-group">
@@ -286,23 +286,26 @@ document.getElementById('FechaCreacion').value = fechaAjustada.toISOString().spl
     }
 
 // 4. GUARDAR ORDEN
-document.getElementById('formOrden').addEventListener('submit', async (e) => {
+
+    document.getElementById('formOrden').addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    // Verificación de seguridad antes de enviar
-    const idOrden = document.getElementById('IdOrden').value;
-    if(!idOrden) {
-        alert("⚠️ Error: No se ha generado un número de orden.");
+
+    const serie = document.getElementById('SerieEquipo').value;
+    const cliente = document.getElementById('IdClienteD').value;
+
+    // Validación crítica antes de llamar al SP
+    if (!serie || serie === "0" || !cliente || cliente === "0") {
+        alert("⚠️ Error: Debes seleccionar un Equipo y un Cliente de la lista desplegable.");
         return;
     }
 
     const datos = {
-        IdOrden: parseInt(idOrden),
+        IdOrden: parseInt(document.getElementById('IdOrden').value),
         FechaCreacion: document.getElementById('FechaCreacion').value,
-        Descripcion: document.getElementById('Descripcion').value || "Sin descripción",
+        Descripcion: document.getElementById('Descripcion').value,
         EstadoRecepcion: document.getElementById('EstadoRecepcion').value || "No especificado",
-        SerieEquipo: document.getElementById('SerieEquipo').value,
-        IdClienteD: document.getElementById('IdClienteD').value,
+        SerieEquipo: serie,
+        IdClienteD: cliente,
         Prioridad: parseInt(document.getElementById('Prioridad').value)
     };
 
