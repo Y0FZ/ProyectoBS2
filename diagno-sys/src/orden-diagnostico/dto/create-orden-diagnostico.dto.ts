@@ -6,7 +6,7 @@ export class CreateOrdenDiagnosticoDto {
 
   @IsString()
   @IsOptional()
-  FechaCreacion?: string; // Usamos string porque desde el input date llega como "YYYY-MM-DD"
+  FechaCreacion?: Date; // Usamos string porque desde el input date llega como "YYYY-MM-DD"
 
   @IsString()
   @IsOptional()

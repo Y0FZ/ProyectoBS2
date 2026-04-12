@@ -9,7 +9,7 @@ export class OrdenDiagnostico {
   IdOrden!: number;
 
   @Column({ name: 'FechaCreacion', type: 'date', nullable: false }) 
-  FechaCreacion!: string;
+  FechaCreacion!: Date;
 
   @Column({ length: 200, nullable: true })
   Descripcion!: string;

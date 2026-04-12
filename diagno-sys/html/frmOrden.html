@@ -286,25 +286,6 @@ document.getElementById('FechaCreacion').value = fechaAjustada.toISOString().spl
     }
 
 // 4. GUARDAR ORDEN
-/*document.getElementById('formOrden').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // Verificación de seguridad antes de enviar
-    const idOrden = document.getElementById('IdOrden').value;
-    if(!idOrden) {
-        alert("⚠️ Error: No se ha generado un número de orden.");
-        return;
-    }
-
-    const datos = {
-        IdOrden: parseInt(idOrden),
-        FechaCreacion: document.getElementById('FechaCreacion').value,
-        Descripcion: document.getElementById('Descripcion').value || "Sin descripción",
-        EstadoRecepcion: document.getElementById('EstadoRecepcion').value || "No especificado",
-        SerieEquipo: document.getElementById('SerieEquipo').value,
-        IdClienteD: document.getElementById('IdClienteD').value,
-        Prioridad: parseInt(document.getElementById('Prioridad').value)
-    };*/
 
     document.getElementById('formOrden').addEventListener('submit', async (e) => {
     e.preventDefault();
