@@ -43,11 +43,12 @@
         tbody tr { border-bottom:1px solid var(--line); transition:background 0.15s; cursor:pointer; }
         tbody tr:last-child { border-bottom:none; }
         tbody tr:hover { background:var(--surface); }
+        tbody tr.selected { background:#f0f0ff; }
         tbody td { padding:12px 14px; font-size:13px; color:var(--ink); vertical-align:middle; }
         .td-id { font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-mute); font-weight:500; }
         .td-bold { font-weight:500; }
 
-        /* BADGES DE ESTADO */
+        /* BADGES ESTADO */
         .badge-estado { display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:500; }
         .badge-recibida   { background:#eff6ff; color:#1d4ed8; }
         .badge-pendiente  { background:#fefce8; color:#854d0e; }
@@ -65,7 +66,18 @@
         .empty-state { padding:3rem; text-align:center; color:var(--ink-mute); }
         .empty-state p { font-size:14px; margin-top:8px; }
 
-        /* MODAL DETALLE */
+        /* Barra de acciones contextual */
+        .action-bar { display:none; background:var(--white); border:1px solid var(--line); border-radius:12px; padding:0.75rem 1.25rem; margin-bottom:1.25rem; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+        .action-bar.visible { display:flex; }
+        .action-bar-info { font-size:13px; color:var(--ink-soft); }
+        .action-bar-info strong { color:var(--ink); font-weight:600; }
+        .action-bar-btns { display:flex; gap:8px; }
+        .btn-action { border:1px solid var(--line); border-radius:8px; padding:7px 14px; font-size:12px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:6px; background:var(--white); color:var(--ink-soft); }
+        .btn-action:hover { background:var(--surface); border-color:#c4c4d0; color:var(--ink); }
+        .btn-action.primary { background:var(--ink); color:white; border-color:var(--ink); }
+        .btn-action.primary:hover { background:#2a2a2a; }
+
+        /* MODALES */
         .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:200; align-items:center; justify-content:center; }
         .modal-overlay.active { display:flex; }
         .modal-box { background:var(--white); border-radius:16px; border:1px solid var(--line); padding:2rem; width:100%; max-width:540px; margin:1rem; max-height:90vh; overflow-y:auto; }
@@ -75,11 +87,10 @@
         .btn-close-modal { background:none; border:none; cursor:pointer; padding:4px; color:var(--ink-mute); border-radius:6px; }
         .btn-close-modal:hover { background:var(--surface); }
 
-        /* Sección info en modal */
+        /* Info grid en modal detalle */
         .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem 1.5rem; margin-bottom:1.25rem; }
         .info-item label { display:block; font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-mute); font-family:'DM Mono',monospace; margin-bottom:4px; }
         .info-item span { font-size:14px; color:var(--ink); }
-
         .separator { border:none; border-top:1px solid var(--line); margin:1.25rem 0; }
 
         /* Campo estado editable en modal */
@@ -87,6 +98,46 @@
         .field-inline label { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-mute); font-family:'DM Mono',monospace; white-space:nowrap; }
         .field-inline select { flex:1; padding:8px 10px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:'DM Sans',sans-serif; color:var(--ink); outline:none; background:var(--surface); }
 
+        /* Campos del modal de comentario */
+        .fp-field { margin-bottom:1.25rem; }
+        .fp-field label { display:block; font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-mute); margin-bottom:5px; font-family:'DM Mono',monospace; }
+        .fp-field input, .fp-field select, .fp-field textarea {
+            width:100%; padding:9px 0; border:none; border-bottom:1px solid var(--line); outline:none;
+            font-size:14px; font-family:'DM Sans',sans-serif; background:transparent; color:var(--ink); transition:border-color 0.2s;
+        }
+        .fp-field input:focus, .fp-field select:focus, .fp-field textarea:focus { border-bottom-color:var(--ink); }
+        .fp-field textarea { resize:vertical; line-height:1.6; min-height:80px; }
+
+        /* Upload area */
+        .upload-area {
+            border:2px dashed var(--line); border-radius:10px; padding:1.25rem;
+            text-align:center; cursor:pointer; transition:all 0.2s; margin-top:8px;
+        }
+        .upload-area:hover, .upload-area.dragover { border-color:#c4c4d0; background:var(--surface); }
+        .upload-area p { font-size:13px; color:var(--ink-mute); margin:0; }
+        .upload-area strong { font-size:12px; color:var(--ink-soft); }
+        #fileInput { display:none; }
+        .file-list { margin-top:10px; display:flex; flex-direction:column; gap:6px; }
+        .file-item { display:flex; align-items:center; gap:8px; padding:7px 10px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:12px; color:var(--ink-soft); }
+        .file-item svg { flex-shrink:0; color:var(--ink-mute); }
+        .file-item .file-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .file-item .btn-remove-file { background:none; border:none; cursor:pointer; color:var(--ink-mute); padding:2px; border-radius:4px; }
+        .file-item .btn-remove-file:hover { color:#dc2626; }
+
+        /* Lista comentarios */
+        .comment-list { display:flex; flex-direction:column; gap:12px; max-height:55vh; overflow-y:auto; padding-right:4px; }
+        .comment-item { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:1rem 1.25rem; }
+        .comment-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+        .comment-user { font-size:11px; font-weight:600; font-family:'DM Mono',monospace; color:var(--ink); }
+        .comment-date { font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; }
+        .comment-text { font-size:13px; color:var(--ink-soft); line-height:1.55; }
+        .comment-estado { display:inline-block; margin-top:6px; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:500; }
+        .comment-anexo { display:flex; align-items:center; gap:6px; margin-top:8px; font-size:12px; color:var(--ink-mute); }
+        .comment-anexo a { color:var(--ink-soft); text-decoration:none; font-weight:500; }
+        .comment-anexo a:hover { color:var(--ink); text-decoration:underline; }
+        .empty-comments { padding:2rem; text-align:center; color:var(--ink-mute); font-size:13px; }
+
+        /* Modal footer */
         .modal-footer { display:flex; gap:8px; margin-top:1.5rem; justify-content:flex-end; }
         .btn-cancel { background:none; border:1px solid var(--line); border-radius:8px; padding:9px 18px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; color:var(--ink-soft); cursor:pointer; }
         .btn-cancel:hover { background:var(--surface); }
@@ -101,8 +152,7 @@
 
         @media(max-width:576px){
             .topbar{padding:0 1rem} .main{padding:1.5rem 1rem} .brand-section,.brand-divider{display:none}
-            thead th:nth-child(3),tbody td:nth-child(3),
-            thead th:nth-child(5),tbody td:nth-child(5){display:none}
+            thead th:nth-child(3),tbody td:nth-child(3),thead th:nth-child(5),tbody td:nth-child(5){display:none}
         }
     </style>
 </head>
@@ -140,6 +190,23 @@
             </select>
         </div>
 
+        <!-- Barra de acciones contextual (aparece al seleccionar una fila) -->
+        <div class="action-bar" id="actionBar">
+            <div class="action-bar-info">
+                Orden seleccionada: <strong id="actionBarOrdenLabel">—</strong>
+            </div>
+            <div class="action-bar-btns">
+                <button class="btn-action" onclick="abrirLeerComentarios()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Ver comentarios
+                </button>
+                <button class="btn-action primary" onclick="abrirAgregarComentario()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+                    Agregar comentario
+                </button>
+            </div>
+        </div>
+
         <div class="table-card">
             <div class="table-header">
                 <span class="table-label">Órdenes</span>
@@ -165,7 +232,9 @@
         </div>
     </div>
 
-    <!-- MODAL DETALLE ORDEN -->
+    <!-- ══════════════════════════════════════════
+         MODAL DETALLE ORDEN
+    ══════════════════════════════════════════ -->
     <div class="modal-overlay" id="modalDetalle">
         <div class="modal-box">
             <div class="modal-header">
@@ -200,14 +269,88 @@
 
             <div class="field-inline">
                 <label>Estado actual</label>
-                <select id="selectEstado">
-                    <option value="">Cargando...</option>
-                </select>
+                <select id="selectEstado"><option value="">Cargando...</option></select>
             </div>
 
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="cerrarModal()">Cerrar</button>
                 <button class="btn-confirm" onclick="guardarEstado()">Guardar estado</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         MODAL — AGREGAR COMENTARIO
+    ══════════════════════════════════════════ -->
+    <div class="modal-overlay" id="modalAgregarCom">
+        <div class="modal-box" style="max-width:500px;">
+            <div class="modal-header">
+                <div>
+                    <p class="modal-title">Agregar comentario</p>
+                    <p class="modal-subtitle" id="comOrdenLabel">Orden #—</p>
+                </div>
+                <button class="btn-close-modal" onclick="cerrarAgregarComentario()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+
+            <form id="formComentario" onsubmit="guardarComentario(event)">
+                <div class="fp-field">
+                    <label>Estado al comentar</label>
+                    <select id="com_Estado" required>
+                        <option value="">Seleccione estado...</option>
+                    </select>
+                </div>
+                <div class="fp-field">
+                    <label>Comentario</label>
+                    <textarea id="com_Texto" maxlength="100" required placeholder="Describa el avance, observación o nota técnica..."></textarea>
+                </div>
+
+                <!-- Upload de archivo / Anexo -->
+                <div class="fp-field">
+                    <label>Anexos (archivos adjuntos)</label>
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style="margin:0 auto 8px;display:block;opacity:0.35;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round"/><polyline points="17 8 12 3 7 8" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="3" x2="12" y2="15" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        <strong>Haz clic para seleccionar archivos</strong>
+                        <p>o arrastra y suelta aquí</p>
+                    </div>
+                    <input type="file" id="fileInput" multiple accept="image/*,.pdf,.doc,.docx,.txt,.zip">
+                    <div class="file-list" id="fileList"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="cerrarAgregarComentario()">Cancelar</button>
+                    <button type="submit" class="btn-confirm">Guardar comentario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         MODAL — VER COMENTARIOS
+    ══════════════════════════════════════════ -->
+    <div class="modal-overlay" id="modalVerCom">
+        <div class="modal-box" style="max-width:560px;">
+            <div class="modal-header">
+                <div>
+                    <p class="modal-title">Comentarios</p>
+                    <p class="modal-subtitle" id="verComOrdenLabel">Orden #—</p>
+                </div>
+                <button class="btn-close-modal" onclick="cerrarLeerComentarios()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+
+            <div class="comment-list" id="commentList">
+                <div class="empty-comments">Cargando comentarios...</div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="cerrarLeerComentarios()">Cerrar</button>
+                <button class="btn-confirm" onclick="cerrarLeerComentarios(); abrirAgregarComentario();">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="margin-right:5px;"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+                    Nuevo comentario
+                </button>
             </div>
         </div>
     </div>
@@ -219,20 +362,24 @@
         const API_ORDEN  = 'http://localhost:3000/orden-diagnostico';
         const API_ESTADO = 'http://localhost:3000/estado-orden';
         const API_COM    = 'http://localhost:3000/comentario';
+        const API_ANEXO  = 'http://localhost:3000/anexo';
 
         if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
 
-        let ordenesData = [];
-        let estadosData = [];
-        let ordenActual = null;
+        let ordenesData  = [];
+        let estadosData  = [];
+        let ordenActual  = null;
+        let selectedRow  = null;
+        let archivosSeleccionados = [];
 
+        // ── Toast ──
         function toast(msg, tipo = 'ok') {
             const wrap = document.getElementById('toastWrap');
-            const el = document.createElement('div');
+            const el   = document.createElement('div');
             el.className = 'toast' + (tipo === 'error' ? ' error' : '');
             el.textContent = msg;
             wrap.appendChild(el);
-            setTimeout(() => el.remove(), 3000);
+            setTimeout(() => el.remove(), 3500);
         }
 
         function badgePrioridad(nivel) {
@@ -262,8 +409,10 @@
                 estadosData = res.ok ? await res.json() : [];
                 const sel = document.getElementById('selectEstado');
                 sel.innerHTML = estadosData.map(e => `<option value="${e.IdEstado}">${e.Estado}</option>`).join('');
-
-                const filterPrio = document.getElementById('filterPrioridad');
+                // Llenar también el selector del modal de comentario
+                const selCom = document.getElementById('com_Estado');
+                selCom.innerHTML = '<option value="">Seleccione estado...</option>' +
+                    estadosData.map(e => `<option value="${e.IdEstado}">${e.Estado}</option>`).join('');
             } catch { estadosData = []; }
         }
 
@@ -272,13 +421,10 @@
                 const res = await fetch(API_ORDEN);
                 if (!res.ok) throw new Error();
                 ordenesData = await res.json();
-
-                // Poblar filtro prioridades
                 const prioridades = [...new Set(ordenesData.map(o => o.prioridad?.NivelPrioridad).filter(Boolean))];
                 const fp = document.getElementById('filterPrioridad');
                 fp.innerHTML = '<option value="">Todas las prioridades</option>' +
                     prioridades.map(p => `<option value="${p}">${p}</option>`).join('');
-
                 renderTabla(ordenesData);
             } catch {
                 toast('Error al cargar órdenes', 'error');
@@ -295,7 +441,7 @@
                 return;
             }
             document.getElementById('tablaOrdenes').innerHTML = lista.map(o => `
-                <tr onclick="abrirDetalle('${o.IdOrden}')">
+                <tr data-id="${o.IdOrden}" onclick="seleccionarFila(this, '${o.IdOrden}')">
                     <td class="td-id">#${o.IdOrden}</td>
                     <td class="td-bold">${o.cliente ? o.cliente.NombreCliente + ' ' + o.cliente.ApellidoCliente : '—'}</td>
                     <td>${o.equipo ? o.equipo.Marca + ' ' + o.equipo.Modelo : '—'}</td>
@@ -305,7 +451,27 @@
                 </tr>`).join('');
         }
 
-        // Búsqueda + filtro combinados
+        // ── Seleccionar fila (muestra barra de acciones) ──
+        function seleccionarFila(row, idOrden) {
+            // Si ya estaba seleccionada, abre el detalle
+            if (selectedRow === row) {
+                abrirDetalle(idOrden);
+                return;
+            }
+            // Quitar selección anterior
+            if (selectedRow) selectedRow.classList.remove('selected');
+            row.classList.add('selected');
+            selectedRow = row;
+
+            const o = ordenesData.find(x => String(x.IdOrden) === String(idOrden));
+            ordenActual = o || null;
+
+            const label = o ? `#${o.IdOrden} — ${o.cliente ? o.cliente.NombreCliente + ' ' + o.cliente.ApellidoCliente : ''}` : `#${idOrden}`;
+            document.getElementById('actionBarOrdenLabel').textContent = label;
+            document.getElementById('actionBar').classList.add('visible');
+        }
+
+        // ── Búsqueda + filtro ──
         function aplicarFiltros() {
             const q    = document.getElementById('searchInput').value.toLowerCase().trim();
             const prio = document.getElementById('filterPrioridad').value;
@@ -321,30 +487,26 @@
         document.getElementById('searchInput').addEventListener('input', aplicarFiltros);
         document.getElementById('filterPrioridad').addEventListener('change', aplicarFiltros);
 
-        // Abrir modal detalle
+        // ── Modal detalle ──
         function abrirDetalle(idOrden) {
             const o = ordenesData.find(x => String(x.IdOrden) === String(idOrden));
             if (!o) return;
             ordenActual = o;
 
-            document.getElementById('detTitle').textContent   = `Orden #${o.IdOrden}`;
-            document.getElementById('detFecha').textContent   = `Recibida el ${formatFecha(o.FechaCreacion)}`;
-            document.getElementById('detCliente').textContent = o.cliente ? `${o.cliente.NombreCliente} ${o.cliente.ApellidoCliente}` : '—';
-            document.getElementById('detEquipo').textContent  = o.equipo  ? `${o.equipo.Marca} ${o.equipo.Modelo}` : '—';
-            document.getElementById('detSerie').textContent   = o.equipo  ? o.equipo.NumeroSerie : '—';
-            document.getElementById('detPrioridad').textContent = o.prioridad?.NivelPrioridad || '—';
+            document.getElementById('detTitle').textContent      = `Orden #${o.IdOrden}`;
+            document.getElementById('detFecha').textContent      = `Recibida el ${formatFecha(o.FechaCreacion)}`;
+            document.getElementById('detCliente').textContent    = o.cliente ? `${o.cliente.NombreCliente} ${o.cliente.ApellidoCliente}` : '—';
+            document.getElementById('detEquipo').textContent     = o.equipo  ? `${o.equipo.Marca} ${o.equipo.Modelo}` : '—';
+            document.getElementById('detSerie').textContent      = o.equipo  ? o.equipo.NumeroSerie : '—';
+            document.getElementById('detPrioridad').textContent  = o.prioridad?.NivelPrioridad || '—';
             document.getElementById('detEstadoFisico').textContent = o.EstadoRecepcion || 'Sin especificar';
             document.getElementById('detDescripcion').textContent  = o.Descripcion     || 'Sin especificar';
 
-            // Seleccionar el estado actual si hay uno
             if (estadosData.length > 0) {
-                const sel = document.getElementById('selectEstado');
-                // Buscar el estado por nombre si lo hay
-                const estadoNombre = o.EstadoActual;
-                const match = estadosData.find(e => e.Estado === estadoNombre);
+                const sel   = document.getElementById('selectEstado');
+                const match = estadosData.find(e => e.Estado === o.EstadoActual);
                 if (match) sel.value = match.IdEstado;
             }
-
             document.getElementById('modalDetalle').classList.add('active');
         }
 
@@ -352,32 +514,27 @@
             if (!ordenActual) return;
             const idEstado = parseInt(document.getElementById('selectEstado').value);
             const usuario  = localStorage.getItem('diagnoSys_user') || 'IND';
-
-            // Generamos un IdComentario basado en timestamp
-            const idCom = Date.now() % 1000000;
+            const idCom    = Date.now() % 1000000;
             const fechaHoy = new Date().toISOString().split('T')[0];
 
             const payload = {
-                IdComentario:   idCom,
-                Comentario:     `Estado actualizado`,
+                IdComentario:    idCom,
+                Comentario:      'Estado actualizado',
                 FechaComentario: fechaHoy,
-                IUsuario:       usuario,
-                Estado:         idEstado,
-                IdDiagnostico:  ordenActual.IdOrden,
-                Anexos:         null
+                IUsuario:        usuario,
+                Estado:          idEstado,
+                IdDiagnostico:   ordenActual.IdOrden,
+                Anexos:          null
             };
 
             try {
                 const res = await fetch(API_COM, {
-                    method: 'POST',
+                    method:  'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body:    JSON.stringify(payload)
                 });
-                if (res.ok) {
-                    cerrarModal();
-                    toast('✓ Estado actualizado');
-                    cargarOrdenes();
-                } else {
+                if (res.ok) { cerrarModal(); toast('✓ Estado actualizado'); cargarOrdenes(); }
+                else {
                     const err = await res.json().catch(() => ({}));
                     toast(err.message || 'Error al guardar estado', 'error');
                 }
@@ -385,12 +542,229 @@
         }
 
         function cerrarModal() {
-            ordenActual = null;
             document.getElementById('modalDetalle').classList.remove('active');
         }
 
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
-        document.getElementById('modalDetalle').addEventListener('click', e => { if (e.target === e.currentTarget) cerrarModal(); });
+        /* ═══════════════════════════════════════════════
+           MODAL AGREGAR COMENTARIO
+        ═══════════════════════════════════════════════ */
+        function abrirAgregarComentario() {
+            if (!ordenActual) { toast('Selecciona una orden primero', 'error'); return; }
+            document.getElementById('formComentario').reset();
+            archivosSeleccionados = [];
+            document.getElementById('fileList').innerHTML = '';
+            document.getElementById('comOrdenLabel').textContent =
+                `Orden #${ordenActual.IdOrden}` + (ordenActual.cliente ? ` — ${ordenActual.cliente.NombreCliente} ${ordenActual.cliente.ApellidoCliente}` : '');
+            // Pre-seleccionar el estado actual en el select
+            if (estadosData.length > 0) {
+                const match = estadosData.find(e => e.Estado === ordenActual.EstadoActual);
+                if (match) document.getElementById('com_Estado').value = match.IdEstado;
+            }
+            document.getElementById('modalAgregarCom').classList.add('active');
+            setTimeout(() => document.getElementById('com_Estado').focus(), 80);
+        }
+
+        function cerrarAgregarComentario() {
+            document.getElementById('modalAgregarCom').classList.remove('active');
+        }
+
+        // Upload de archivos
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput  = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            agregarArchivos(e.dataTransfer.files);
+        });
+        fileInput.addEventListener('change', () => agregarArchivos(fileInput.files));
+
+        function agregarArchivos(files) {
+            for (const file of files) {
+                if (!archivosSeleccionados.find(f => f.name === file.name && f.size === file.size)) {
+                    archivosSeleccionados.push(file);
+                }
+            }
+            renderFileList();
+            fileInput.value = '';
+        }
+
+        function renderFileList() {
+            const fl = document.getElementById('fileList');
+            fl.innerHTML = archivosSeleccionados.map((f, i) => `
+                <div class="file-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="file-name">${f.name}</span>
+                    <span style="color:var(--ink-mute);font-size:11px;">${(f.size/1024).toFixed(1)} KB</span>
+                    <button type="button" class="btn-remove-file" onclick="quitarArchivo(${i})">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </button>
+                </div>`).join('');
+        }
+
+        function quitarArchivo(i) {
+            archivosSeleccionados.splice(i, 1);
+            renderFileList();
+        }
+
+        async function guardarComentario(e) {
+            e.preventDefault();
+            if (!ordenActual) return;
+
+            const idEstado = parseInt(document.getElementById('com_Estado').value);
+            const texto    = document.getElementById('com_Texto').value.trim();
+            const usuario  = localStorage.getItem('diagnoSys_user') || 'IND';
+            const idCom    = Date.now() % 1000000;
+            const fechaHoy = new Date().toISOString().split('T')[0];
+
+            // Subir archivos si hay y guardar ID del anexo
+            let idAnexo = null;
+            if (archivosSeleccionados.length > 0) {
+                try {
+                    const formData = new FormData();
+                    archivosSeleccionados.forEach(f => formData.append('files', f));
+                    // Asumimos que el backend tiene un endpoint de upload o guardamos el nombre
+                    // Si no hay endpoint de upload, guardamos solo el nombre del primer archivo
+                    const nombreAnexo = archivosSeleccionados.map(f => f.name).join(', ');
+                    const idA = Date.now() % 1000000 + 1;
+                    const resAnexo = await fetch(API_ANEXO, {
+                        method:  'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body:    JSON.stringify({ IdAnexos: idA, RutaArchivo: nombreAnexo })
+                    });
+                    if (resAnexo.ok) {
+                        const anexoCreado = await resAnexo.json().catch(() => ({}));
+                        idAnexo = anexoCreado.IdAnexos || idA;
+                    }
+                } catch (err) {
+                    console.warn('No se pudo registrar el anexo:', err);
+                }
+            }
+
+            const payload = {
+                IdComentario:    idCom,
+                Comentario:      texto,
+                FechaComentario: fechaHoy,
+                IUsuario:        usuario,
+                Estado:          idEstado,
+                IdDiagnostico:   ordenActual.IdOrden,
+                Anexos:          idAnexo
+            };
+
+            try {
+                const res = await fetch(API_COM, {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    cerrarAgregarComentario();
+                    toast('✓ Comentario guardado');
+                    cargarOrdenes();
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    toast(err.message || 'Error al guardar comentario', 'error');
+                }
+            } catch { toast('Error de conexión', 'error'); }
+        }
+
+        /* ═══════════════════════════════════════════════
+           MODAL VER COMENTARIOS
+        ═══════════════════════════════════════════════ */
+        async function abrirLeerComentarios() {
+            if (!ordenActual) { toast('Selecciona una orden primero', 'error'); return; }
+
+            document.getElementById('verComOrdenLabel').textContent =
+                `Orden #${ordenActual.IdOrden}` + (ordenActual.cliente ? ` — ${ordenActual.cliente.NombreCliente} ${ordenActual.cliente.ApellidoCliente}` : '');
+            document.getElementById('commentList').innerHTML = '<div class="empty-comments">Cargando...</div>';
+            document.getElementById('modalVerCom').classList.add('active');
+
+            try {
+                const res = await fetch(`${API_COM}?idDiagnostico=${ordenActual.IdOrden}`);
+                let comentarios = [];
+                if (res.ok) {
+                    const data = await res.json();
+                    // Filtrar solo los de esta orden por si el endpoint retorna todos
+                    comentarios = Array.isArray(data)
+                        ? data.filter(c => String(c.IdDiagnostico) === String(ordenActual.IdOrden))
+                        : [];
+                }
+                renderComentarios(comentarios);
+            } catch {
+                document.getElementById('commentList').innerHTML =
+                    '<div class="empty-comments">No se pudo cargar los comentarios.</div>';
+            }
+        }
+
+        function renderComentarios(lista) {
+            const cl = document.getElementById('commentList');
+            if (lista.length === 0) {
+                cl.innerHTML = '<div class="empty-comments">No hay comentarios para esta orden.</div>';
+                return;
+            }
+            // Ordenar de más reciente a más antiguo
+            lista.sort((a, b) => new Date(b.FechaComentario) - new Date(a.FechaComentario));
+
+            cl.innerHTML = lista.map(c => {
+                const estadoNombre = estadosData.find(e => e.IdEstado === c.Estado)?.Estado || `Estado ${c.Estado}`;
+                const badgeClass   = (() => {
+                    const map = { 'Recibida':'badge-recibida','Pendiente':'badge-pendiente','En Revicion':'badge-revision','En Espera':'badge-espera','En reparacion':'badge-reparacion','Reparado':'badge-reparado','Entregado':'badge-entregado' };
+                    return map[estadoNombre] || 'badge-recibida';
+                })();
+                const anexoHTML = c.Anexos ? `
+                    <div class="comment-anexo">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span>Anexo:</span>
+                        <a href="#" onclick="verAnexo(${c.Anexos}); return false;">Archivo adjunto #${c.Anexos}</a>
+                    </div>` : '';
+                return `
+                <div class="comment-item">
+                    <div class="comment-item-header">
+                        <span class="comment-user">${c.IUsuario}</span>
+                        <span class="comment-date">${formatFecha(c.FechaComentario)}</span>
+                    </div>
+                    <div class="comment-text">${c.Comentario}</div>
+                    <span class="comment-estado badge-estado ${badgeClass}">${estadoNombre}</span>
+                    ${anexoHTML}
+                </div>`;
+            }).join('');
+        }
+
+        async function verAnexo(idAnexo) {
+            try {
+                const res = await fetch(`${API_ANEXO}/${idAnexo}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.RutaArchivo) {
+                        toast(`Anexo: ${data.RutaArchivo}`);
+                        // Si es una URL válida, abrir en nueva pestaña
+                        if (data.RutaArchivo.startsWith('http')) window.open(data.RutaArchivo, '_blank');
+                    }
+                }
+            } catch { toast('No se pudo cargar el anexo', 'error'); }
+        }
+
+        function cerrarLeerComentarios() {
+            document.getElementById('modalVerCom').classList.remove('active');
+        }
+
+        // ── Cerrar modales con Escape o click fuera ──
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                cerrarModal();
+                cerrarAgregarComentario();
+                cerrarLeerComentarios();
+            }
+        });
+        ['modalDetalle','modalAgregarCom','modalVerCom'].forEach(id => {
+            document.getElementById(id).addEventListener('click', e => {
+                if (e.target === e.currentTarget) {
+                    cerrarModal(); cerrarAgregarComentario(); cerrarLeerComentarios();
+                }
+            });
+        });
 
         cargarEstados();
         cargarOrdenes();
