@@ -3,34 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DiagnoSys - Clientes</title>
+    <title>DiagnoSys - Administración</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
         :root { --ink:#0f0f0f; --ink-soft:#4a4a52; --ink-mute:#9898a6; --surface:#f6f6f8; --white:#ffffff; --line:#e4e4ea; }
         body { background:var(--surface); font-family:'DM Sans',sans-serif; color:var(--ink); min-height:100vh; }
 
-        /* NAVBAR */
         .topbar { background:var(--white); border-bottom:1px solid var(--line); padding:0 2rem; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
         .brand { display:flex; align-items:center; gap:12px; }
-        .brand-icon { width:32px; height:32px; background:var(--ink); border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+        .brand-icon { width:32px; height:32px; background:var(--ink); border-radius:8px; display:flex; align-items:center; justify-content:center; }
         .brand-name { font-size:16px; font-weight:600; letter-spacing:-0.3px; color:var(--ink); }
         .brand-divider { width:1px; height:18px; background:var(--line); }
         .brand-section { font-size:12px; color:var(--ink-mute); letter-spacing:0.04em; font-family:'DM Mono',monospace; }
         .btn-back { background:none; border:1px solid var(--line); border-radius:8px; padding:6px 14px; font-size:12px; font-weight:500; font-family:'DM Sans',sans-serif; color:var(--ink-soft); cursor:pointer; transition:all 0.18s; display:flex; align-items:center; gap:6px; }
         .btn-back:hover { background:var(--surface); border-color:#c4c4d0; color:var(--ink); }
 
-        /* MAIN */
-        .main { padding:2.5rem 2rem; max-width:1040px; margin:0 auto; }
+        .main { padding:2.5rem 2rem; max-width:960px; margin:0 auto; }
         .page-title { font-size:22px; font-weight:600; letter-spacing:-0.4px; margin-bottom:4px; }
         .page-sub { font-size:13px; color:var(--ink-mute); margin-bottom:2rem; }
+
+        /* ADMIN ALERT */
+        .admin-alert { background:#fefce8; border:1px solid #fde68a; border-radius:10px; padding:10px 16px; font-size:12px; color:#854d0e; margin-bottom:1.5rem; display:flex; align-items:center; gap:8px; }
 
         /* TOOLBAR */
         .toolbar { display:flex; gap:10px; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; }
         .search-wrap { position:relative; flex:1; min-width:200px; }
         .search-wrap svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none; opacity:0.4; }
-        .search-input { width:100%; padding:9px 12px 9px 36px; border:1px solid var(--line); border-radius:9px; background:var(--white); font-size:14px; font-family:'DM Sans',sans-serif; color:var(--ink); outline:none; transition:border-color 0.18s; }
+        .search-input { width:100%; padding:9px 12px 9px 36px; border:1px solid var(--line); border-radius:9px; background:var(--white); font-size:14px; font-family:'DM Sans',sans-serif; color:var(--ink); outline:none; }
         .search-input:focus { border-color:#c4c4d0; }
         .search-input::placeholder { color:var(--ink-mute); }
         .btn-add { background:var(--ink); color:white; border:none; border-radius:9px; padding:9px 16px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.18s; display:flex; align-items:center; gap:7px; white-space:nowrap; }
@@ -40,7 +41,7 @@
         .table-card { background:var(--white); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
         .table-header { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.5rem; border-bottom:1px solid var(--line); }
         .table-label { font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-mute); font-family:'DM Mono',monospace; }
-        .count-badge { font-size:11px; font-weight:500; color:var(--ink-mute); font-family:'DM Mono',monospace; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:2px 10px; }
+        .count-badge { font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:2px 10px; }
         table { width:100%; border-collapse:collapse; }
         thead th { padding:10px 16px; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-mute); border-bottom:1px solid var(--line); font-family:'DM Mono',monospace; text-align:left; }
         tbody tr { border-bottom:1px solid var(--line); transition:background 0.15s; }
@@ -58,19 +59,31 @@
         .empty-state { padding:3rem; text-align:center; color:var(--ink-mute); }
         .empty-state p { font-size:14px; margin-top:8px; }
 
+        /* BADGE ROL */
+        .badge-rol { display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:500; }
+        .badge-admin   { background:#f0fdf4; color:#14532d; }
+        .badge-recep   { background:#eff6ff; color:#1d4ed8; }
+        .badge-tecnico { background:#faf5ff; color:#581c87; }
+
+        /* AVATAR */
+        .avatar { width:32px; height:32px; border-radius:50%; background:var(--surface); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:var(--ink-soft); font-family:'DM Mono',monospace; flex-shrink:0; }
+
         /* MODAL */
         .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:200; align-items:center; justify-content:center; }
         .modal-overlay.active { display:flex; }
-        .modal-box { background:var(--white); border-radius:16px; border:1px solid var(--line); padding:2rem; width:100%; max-width:480px; margin:1rem; max-height:90vh; overflow-y:auto; }
+        .modal-box { background:var(--white); border-radius:16px; border:1px solid var(--line); padding:2rem; width:100%; max-width:440px; margin:1rem; max-height:90vh; overflow-y:auto; }
         .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; }
         .modal-title { font-size:16px; font-weight:600; letter-spacing:-0.2px; }
         .btn-close-modal { background:none; border:none; cursor:pointer; padding:4px; color:var(--ink-mute); border-radius:6px; }
         .btn-close-modal:hover { background:var(--surface); }
         .field { margin-bottom:1.25rem; }
         .field label { display:block; font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-mute); margin-bottom:5px; font-family:'DM Mono',monospace; }
-        .field input { width:100%; padding:9px 0; border:none; border-bottom:1px solid var(--line); outline:none; font-size:14px; font-family:'DM Sans',sans-serif; background:transparent; color:var(--ink); transition:border-color 0.2s; }
-        .field input:focus { border-bottom-color:var(--ink); }
+        .field input, .field select { width:100%; padding:9px 0; border:none; border-bottom:1px solid var(--line); outline:none; font-size:14px; font-family:'DM Sans',sans-serif; background:transparent; color:var(--ink); transition:border-color 0.2s; appearance:none; }
+        .field input:focus, .field select:focus { border-bottom-color:var(--ink); }
         .field input[readonly] { color:var(--ink-mute); border-bottom-style:dashed; cursor:not-allowed; }
+        .pass-wrap { position:relative; }
+        .pass-wrap input { padding-right:32px; }
+        .toggle-pass { position:absolute; right:0; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--ink-mute); padding:4px; }
         .modal-footer { display:flex; gap:8px; margin-top:1.75rem; justify-content:flex-end; }
         .btn-cancel { background:none; border:1px solid var(--line); border-radius:8px; padding:9px 18px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; color:var(--ink-soft); cursor:pointer; }
         .btn-cancel:hover { background:var(--surface); }
@@ -86,10 +99,7 @@
         .toast.error { background:#dc2626; }
         @keyframes slideIn { from{transform:translateY(12px);opacity:0} to{transform:translateY(0);opacity:1} }
 
-        @media(max-width:576px){
-            .topbar{padding:0 1rem} .main{padding:1.5rem 1rem} .brand-section,.brand-divider{display:none}
-            thead th:nth-child(4),tbody td:nth-child(4),thead th:nth-child(5),tbody td:nth-child(5){display:none}
-        }
+        @media(max-width:576px){ .topbar{padding:0 1rem} .main{padding:1.5rem 1rem} .brand-section,.brand-divider{display:none} }
     </style>
 </head>
 <body>
@@ -104,7 +114,7 @@
             </div>
             <span class="brand-name">DiagnoSys</span>
             <div class="brand-divider"></div>
-            <span class="brand-section">Clientes</span>
+            <span class="brand-section">Administración</span>
         </div>
         <button class="btn-back" onclick="window.location.href='webmed.html'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -113,34 +123,39 @@
     </nav>
 
     <div class="main">
-        <p class="page-title">Clientes</p>
-        <p class="page-sub">Registro y gestión de la base de datos de clientes.</p>
+        <p class="page-title">Administración de usuarios</p>
+        <p class="page-sub">Gestión de personal, roles y accesos del sistema.</p>
+
+        <div class="admin-alert">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.7"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            Solo los usuarios con rol Administrador pueden acceder a esta sección.
+        </div>
 
         <div class="toolbar">
             <div class="search-wrap">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#0f0f0f" stroke-width="1.7"/><path d="M16.5 16.5L21 21" stroke="#0f0f0f" stroke-width="1.7" stroke-linecap="round"/></svg>
-                <input type="text" class="search-input" id="searchInput" placeholder="Buscar por nombre, cédula o teléfono...">
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar por ID o nombre de usuario...">
             </div>
             <button class="btn-add" onclick="abrirModalAgregar()">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-                Agregar cliente
+                Nuevo usuario
             </button>
         </div>
 
         <div class="table-card">
             <div class="table-header">
-                <span class="table-label">Directorio</span>
-                <span class="count-badge" id="countBadge">0 clientes</span>
+                <span class="table-label">Personal del sistema</span>
+                <span class="count-badge" id="countBadge">0 usuarios</span>
             </div>
             <div style="overflow-x:auto;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Cédula</th><th>Nombre</th><th>Teléfono</th><th>Correo</th><th>Dirección</th><th></th>
+                            <th>ID</th><th>Usuario</th><th>Nombre</th><th>Rol</th><th></th>
                         </tr>
                     </thead>
-                    <tbody id="tablaClientes">
-                        <tr><td colspan="6"><div class="empty-state"><p>Cargando clientes...</p></div></td></tr>
+                    <tbody id="tablaUsuarios">
+                        <tr><td colspan="5"><div class="empty-state"><p>Cargando usuarios...</p></div></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -151,49 +166,34 @@
     <div class="modal-overlay" id="modalFormOverlay">
         <div class="modal-box">
             <div class="modal-header">
-                <span class="modal-title" id="modalFormTitle">Agregar cliente</span>
+                <span class="modal-title" id="modalFormTitle">Nuevo usuario</span>
                 <button class="btn-close-modal" onclick="cerrarModalForm()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                 </button>
             </div>
-            <form id="formCliente" onsubmit="guardarCliente(event)">
-                <div class="row g-3">
-                    <div class="col-12">
-                        <div class="field">
-                            <label>Cédula / ID</label>
-                            <input type="text" id="f_IdCliente" maxlength="12" required placeholder="Ej: 1-2345-6789">
-                        </div>
+            <form id="formUsuario" onsubmit="guardarUsuario(event)">
+                <div class="field">
+                    <label>ID de usuario</label>
+                    <input type="text" id="f_IdUsuarios" maxlength="12" required placeholder="Ej: USR01">
+                </div>
+                <div class="field">
+                    <label>Nombre de usuario</label>
+                    <input type="text" id="f_NombreUsuario" maxlength="20" required placeholder="Ej: Juan Técnico">
+                </div>
+                <div class="field">
+                    <label>Contraseña</label>
+                    <div class="pass-wrap">
+                        <input type="password" id="f_Contrasena" maxlength="20" required placeholder="••••••••">
+                        <button type="button" class="toggle-pass" onclick="togglePass()">
+                            <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
+                        </button>
                     </div>
-                    <div class="col-6">
-                        <div class="field">
-                            <label>Nombre</label>
-                            <input type="text" id="f_NombreCliente" maxlength="10" required placeholder="Ej: Juan">
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="field">
-                            <label>Apellido</label>
-                            <input type="text" id="f_ApellidoCliente" maxlength="10" required placeholder="Ej: Pérez">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="field">
-                            <label>Teléfono</label>
-                            <input type="number" id="f_Telefono" required placeholder="Ej: 88887777">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="field">
-                            <label>Correo electrónico</label>
-                            <input type="email" id="f_Correo" maxlength="20" placeholder="Ej: juan@mail.com">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="field">
-                            <label>Dirección</label>
-                            <input type="text" id="f_Direccion" maxlength="20" placeholder="Ej: San José">
-                        </div>
-                    </div>
+                </div>
+                <div class="field">
+                    <label>Rol</label>
+                    <select id="f_IdRol" required>
+                        <option value="">Seleccione un rol...</option>
+                    </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-cancel" onclick="cerrarModalForm()">Cancelar</button>
@@ -207,9 +207,9 @@
     <div class="modal-overlay" id="modalDelOverlay">
         <div class="modal-box" style="max-width:380px;">
             <div class="modal-del-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#dc2626" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="#dc2626" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="#dc2626" stroke-width="1.7" stroke-linecap="round"/><path d="M10 11v6M14 11v6" stroke="#dc2626" stroke-width="1.7" stroke-linecap="round"/></svg>
             </div>
-            <p style="font-size:15px;font-weight:600;margin-bottom:6px;">Eliminar cliente</p>
+            <p style="font-size:15px;font-weight:600;margin-bottom:6px;">Eliminar usuario</p>
             <p style="font-size:13px;color:var(--ink-mute);line-height:1.6;" id="modalDelMsg"></p>
             <div class="modal-footer">
                 <button type="button" class="btn-cancel" onclick="cerrarModalDel()">Cancelar</button>
@@ -222,16 +222,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const API = 'http://localhost:3000/cliente';
-        if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
+        const API_USR = 'http://localhost:3000/usuario';
 
-        // ── Estado global ──
-        // Guardamos los clientes en un Map keyed por IdCliente para acceso O(1)
-        let clientesMap = new Map();
+
+        // Solo admins
+        if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
+        if (localStorage.getItem('userRole') !== '2') window.location.href = 'webmed.html';
+
+        let usuariosMap = new Map();
+        let rolesData   = [];
         let modoEdicion = false;
         let idParaEliminar = null;
 
-        // ── Toast ──
         function toast(msg, tipo = 'ok') {
             const wrap = document.getElementById('toastWrap');
             const el = document.createElement('div');
@@ -241,120 +243,164 @@
             setTimeout(() => el.remove(), 3000);
         }
 
-        // ── Cargar clientes ──
-        async function cargarClientes() {
+        function badgeRol(nombre) {
+            const map = { 'Administrador':'badge-admin', 'Recepcion':'badge-recep', 'Tecnico':'badge-tecnico' };
+            const cls = map[nombre] || 'badge-recep';
+            return `<span class="badge-rol ${cls}">${nombre || '—'}</span>`;
+        }
+
+        function iniciales(nombre) {
+            return nombre ? nombre.split(' ').map(p => p[0]).join('').toUpperCase().slice(0,2) : '??';
+        }
+
+        // ── Cargar roles ──
+        // El endpoint GET /rol no está implementado en el backend (retorna string),
+        // así que cargamos los roles desde los usuarios existentes como fuente de verdad,
+        // con fallback a los roles predefinidos del sistema.
+        async function cargarRoles() {
+            // Roles fijos definidos en la BD (INSERT INTO Rol values (1,'Recepcion'),(2,'Administrador'),(3,'Tecnico'))
+            const rolesFijos = [
+                { IdRol: 1, NombreRol: 'Recepcion' },
+                { IdRol: 2, NombreRol: 'Administrador' },
+                { IdRol: 3, NombreRol: 'Tecnico' },
+            ];
+
             try {
-                const res = await fetch(API);
+                // Intentamos enriquecer con roles reales desde los usuarios (que sí cargan bien)
+                const res = await fetch(API_USR);
+                if (res.ok) {
+                    const usuarios = await res.json();
+                    const rolesDesdeUsuarios = [];
+                    usuarios.forEach(u => {
+                        if (u.RolRel && !rolesDesdeUsuarios.find(r => r.IdRol === u.RolRel.IdRol)) {
+                            rolesDesdeUsuarios.push({ IdRol: u.RolRel.IdRol, NombreRol: u.RolRel.NombreRol });
+                        }
+                    });
+                    // Mezclamos: usamos los de la BD como base, pero completamos con los fijos si faltan
+                    rolesData = rolesFijos.map(rf => {
+                        const encontrado = rolesDesdeUsuarios.find(r => r.IdRol === rf.IdRol);
+                        return encontrado || rf;
+                    });
+                } else {
+                    rolesData = rolesFijos;
+                }
+            } catch {
+                rolesData = rolesFijos;
+            }
+
+            const sel = document.getElementById('f_IdRol');
+            sel.innerHTML = '<option value="">Seleccione un rol...</option>' +
+                rolesData.map(r => `<option value="${r.IdRol}">${r.NombreRol}</option>`).join('');
+        }
+
+        // ── Cargar usuarios ──
+        async function cargarUsuarios() {
+            try {
+                const res = await fetch(API_USR);
                 if (!res.ok) throw new Error();
                 const lista = await res.json();
-                clientesMap.clear();
-                lista.forEach(c => clientesMap.set(c.IdCliente, c));
-                renderTabla([...clientesMap.values()]);
+                usuariosMap.clear();
+                lista.forEach(u => usuariosMap.set(u.IdUsuarios, u));
+                renderTabla([...usuariosMap.values()]);
             } catch {
-                toast('Error al cargar clientes', 'error');
-                document.getElementById('tablaClientes').innerHTML =
-                    '<tr><td colspan="6"><div class="empty-state"><p>No se pudo conectar con el servidor.</p></div></td></tr>';
+                toast('Error al cargar usuarios', 'error');
+                document.getElementById('tablaUsuarios').innerHTML =
+                    '<tr><td colspan="5"><div class="empty-state"><p>No se pudo conectar con el servidor.</p></div></td></tr>';
             }
         }
 
-        // ── Render tabla ──
         function renderTabla(lista) {
-            const badge = document.getElementById('countBadge');
-            badge.textContent = `${lista.length} cliente${lista.length !== 1 ? 's' : ''}`;
-
+            document.getElementById('countBadge').textContent = `${lista.length} usuario${lista.length !== 1 ? 's' : ''}`;
             if (lista.length === 0) {
-                document.getElementById('tablaClientes').innerHTML =
-                    '<tr><td colspan="6"><div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" style="margin:0 auto;display:block;opacity:0.25;"><circle cx="12" cy="8" r="4" stroke="#0f0f0f" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round"/></svg><p>No hay clientes registrados.</p></div></td></tr>';
+                document.getElementById('tablaUsuarios').innerHTML =
+                    '<tr><td colspan="5"><div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" style="margin:0 auto;display:block;opacity:0.25;"><circle cx="12" cy="8" r="4" stroke="#0f0f0f" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#0f0f0f" stroke-width="1.5" stroke-linecap="round"/></svg><p>No hay usuarios registrados.</p></div></td></tr>';
                 return;
             }
-
-            document.getElementById('tablaClientes').innerHTML = lista.map(c => `
+            document.getElementById('tablaUsuarios').innerHTML = lista.map(u => {
+                const rolNombre = u.RolRel?.NombreRol || '—';
+                return `
                 <tr>
-                    <td class="td-id">${c.IdCliente}</td>
-                    <td class="td-name">${c.NombreCliente} ${c.ApellidoCliente}</td>
-                    <td>${c.Telefono}</td>
-                    <td>${c.Correo || '<span style="color:var(--ink-mute)">—</span>'}</td>
-                    <td>${c.Direccion || '<span style="color:var(--ink-mute)">—</span>'}</td>
+                    <td class="td-id">${u.IdUsuarios}</td>
+                    <td>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="avatar">${iniciales(u.NombreUsuario)}</div>
+                            <span class="td-name">${u.NombreUsuario}</span>
+                        </div>
+                    </td>
+                    <td>${u.NombreUsuario}</td>
+                    <td>${badgeRol(rolNombre)}</td>
                     <td>
                         <div class="action-btns">
-                            <button class="btn-edit" data-id="${c.IdCliente}" onclick="abrirModalEditar(this.dataset.id)">
+                            <button class="btn-edit" data-id="${u.IdUsuarios}" onclick="abrirModalEditar(this.dataset.id)">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                                 Editar
                             </button>
-                            <button class="btn-del" data-id="${c.IdCliente}" data-nombre="${c.NombreCliente} ${c.ApellidoCliente}" onclick="abrirModalDel(this.dataset.id, this.dataset.nombre)">
+                            <button class="btn-del" data-id="${u.IdUsuarios}" data-nombre="${u.NombreUsuario}" onclick="abrirModalDel(this.dataset.id, this.dataset.nombre)">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                                 Eliminar
                             </button>
                         </div>
                     </td>
-                </tr>`).join('');
+                </tr>`}).join('');
         }
 
         // ── Búsqueda ──
         document.getElementById('searchInput').addEventListener('input', e => {
             const q = e.target.value.toLowerCase().trim();
-            const todos = [...clientesMap.values()];
-            renderTabla(q ? todos.filter(c =>
-                c.IdCliente.toLowerCase().includes(q) ||
-                c.NombreCliente.toLowerCase().includes(q) ||
-                c.ApellidoCliente.toLowerCase().includes(q) ||
-                String(c.Telefono).includes(q) ||
-                (c.Correo && c.Correo.toLowerCase().includes(q))
+            const todos = [...usuariosMap.values()];
+            renderTabla(q ? todos.filter(u =>
+                u.IdUsuarios.toLowerCase().includes(q) ||
+                u.NombreUsuario.toLowerCase().includes(q)
             ) : todos);
         });
 
         // ── Modal Agregar ──
         function abrirModalAgregar() {
             modoEdicion = false;
-            document.getElementById('modalFormTitle').textContent = 'Agregar cliente';
+            document.getElementById('modalFormTitle').textContent = 'Nuevo usuario';
             document.getElementById('btnConfirmForm').textContent = 'Guardar';
-            document.getElementById('formCliente').reset();
-            document.getElementById('f_IdCliente').removeAttribute('readonly');
-            document.getElementById('f_IdCliente').style.color = '';
+            document.getElementById('formUsuario').reset();
+            document.getElementById('f_IdUsuarios').removeAttribute('readonly');
+            document.getElementById('f_IdUsuarios').style.color = '';
+            document.getElementById('f_Contrasena').setAttribute('required', true);
             document.getElementById('modalFormOverlay').classList.add('active');
-            document.getElementById('f_IdCliente').focus();
+            document.getElementById('f_IdUsuarios').focus();
         }
 
         // ── Modal Editar ──
-        // FIX: usamos clientesMap.get(id) directamente — sin búsqueda por indexOf
         function abrirModalEditar(id) {
-            const c = clientesMap.get(id);
-            if (!c) { toast('Cliente no encontrado', 'error'); return; }
-
+            const u = usuariosMap.get(id);
+            if (!u) { toast('Usuario no encontrado', 'error'); return; }
             modoEdicion = true;
-            document.getElementById('modalFormTitle').textContent = 'Editar cliente';
+            document.getElementById('modalFormTitle').textContent = 'Editar usuario';
             document.getElementById('btnConfirmForm').textContent = 'Actualizar';
-
-            document.getElementById('f_IdCliente').value        = c.IdCliente;
-            document.getElementById('f_IdCliente').setAttribute('readonly', true);
-            document.getElementById('f_IdCliente').style.color  = 'var(--ink-mute)';
-            document.getElementById('f_NombreCliente').value    = c.NombreCliente;
-            document.getElementById('f_ApellidoCliente').value  = c.ApellidoCliente;
-            document.getElementById('f_Telefono').value         = c.Telefono;
-            document.getElementById('f_Correo').value           = c.Correo   || '';
-            document.getElementById('f_Direccion').value        = c.Direccion || '';
-
+            document.getElementById('f_IdUsuarios').value     = u.IdUsuarios;
+            document.getElementById('f_IdUsuarios').setAttribute('readonly', true);
+            document.getElementById('f_IdUsuarios').style.color = 'var(--ink-mute)';
+            document.getElementById('f_NombreUsuario').value  = u.NombreUsuario;
+            document.getElementById('f_Contrasena').value     = '';
+            document.getElementById('f_Contrasena').removeAttribute('required');
+            document.getElementById('f_IdRol').value          = u.IdRol || u.RolRel?.IdRol || '';
             document.getElementById('modalFormOverlay').classList.add('active');
         }
 
-        function cerrarModalForm() {
-            document.getElementById('modalFormOverlay').classList.remove('active');
-        }
+        function cerrarModalForm() { document.getElementById('modalFormOverlay').classList.remove('active'); }
 
-        // ── Guardar (crear o editar) ──
-        async function guardarCliente(e) {
+        // ── Guardar ──
+        async function guardarUsuario(e) {
             e.preventDefault();
             const datos = {
-                IdCliente:       document.getElementById('f_IdCliente').value.trim(),
-                NombreCliente:   document.getElementById('f_NombreCliente').value.trim(),
-                ApellidoCliente: document.getElementById('f_ApellidoCliente').value.trim(),
-                Telefono:        parseInt(document.getElementById('f_Telefono').value),
-                Correo:          document.getElementById('f_Correo').value.trim(),
-                Direccion:       document.getElementById('f_Direccion').value.trim(),
+                IdUsuarios:    document.getElementById('f_IdUsuarios').value.trim(),
+                NombreUsuario: document.getElementById('f_NombreUsuario').value.trim(),
+                Contrasena:    document.getElementById('f_Contrasena').value,
+                IdRol:         parseInt(document.getElementById('f_IdRol').value),
             };
 
+            // En edición sin nueva contraseña, no la enviamos
+            if (modoEdicion && !datos.Contrasena) delete datos.Contrasena;
+
             try {
-                const url    = modoEdicion ? `${API}/${datos.IdCliente}` : API;
+                const url    = modoEdicion ? `${API_USR}/${datos.IdUsuarios}` : API_USR;
                 const method = modoEdicion ? 'PATCH' : 'POST';
                 const res    = await fetch(url, {
                     method,
@@ -363,22 +409,20 @@
                 });
                 if (res.ok) {
                     cerrarModalForm();
-                    toast(modoEdicion ? '✓ Cliente actualizado' : '✓ Cliente registrado');
-                    cargarClientes();
+                    toast(modoEdicion ? '✓ Usuario actualizado' : '✓ Usuario creado');
+                    cargarUsuarios();
                 } else {
                     const err = await res.json().catch(() => ({}));
                     toast(err.message || 'Error al guardar', 'error');
                 }
-            } catch {
-                toast('Error de conexión', 'error');
-            }
+            } catch { toast('Error de conexión', 'error'); }
         }
 
         // ── Modal Eliminar ──
         function abrirModalDel(id, nombre) {
             idParaEliminar = id;
             document.getElementById('modalDelMsg').textContent =
-                `¿Desea eliminar a "${nombre}" (${id})? Esta acción no se puede deshacer.`;
+                `¿Desea eliminar al usuario "${nombre}" (${id})? Esta acción no se puede deshacer.`;
             document.getElementById('modalDelOverlay').classList.add('active');
         }
 
@@ -390,19 +434,27 @@
         document.getElementById('btnConfirmDel').addEventListener('click', async () => {
             if (!idParaEliminar) return;
             try {
-                const res = await fetch(`${API}/${idParaEliminar}`, { method: 'DELETE' });
-                if (res.ok) { cerrarModalDel(); toast('✓ Cliente eliminado'); cargarClientes(); }
+                const res = await fetch(`${API_USR}/${idParaEliminar}`, { method: 'DELETE' });
+                if (res.ok) { cerrarModalDel(); toast('✓ Usuario eliminado'); cargarUsuarios(); }
                 else toast('Error al eliminar', 'error');
             } catch { toast('Error de conexión', 'error'); }
         });
 
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') { cerrarModalForm(); cerrarModalDel(); }
-        });
+        // ── Toggle contraseña ──
+        function togglePass() {
+            const inp = document.getElementById('f_Contrasena');
+            const ico = document.getElementById('eyeIcon');
+            const isPass = inp.type === 'password';
+            inp.type = isPass ? 'text' : 'password';
+            ico.style.opacity = isPass ? '0.9' : '0.45';
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { cerrarModalForm(); cerrarModalDel(); } });
         document.getElementById('modalFormOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) cerrarModalForm(); });
         document.getElementById('modalDelOverlay').addEventListener('click',  e => { if (e.target === e.currentTarget) cerrarModalDel(); });
 
-        cargarClientes();
+        cargarRoles();
+        cargarUsuarios();
     </script>
 </body>
 </html>

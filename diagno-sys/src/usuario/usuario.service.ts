@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
 
 @Injectable()
@@ -12,38 +10,62 @@ export class UsuarioService {
     private readonly usuarioRepository: Repository<Usuario>,
   ) {}
 
-  create(createUsuarioDto: CreateUsuarioDto) {
-    const nuevo = this.usuarioRepository.create(createUsuarioDto);
-    return this.usuarioRepository.save(nuevo);
+  // Usamos INSERT directo porque el SP sp_IgresarUsuario no acepta IdRol
+  // y TypeORM.save() falla por la constraint de FK en IdRol
+  async create(dto: any) {
+    return await this.usuarioRepository.query(
+      `INSERT INTO Usuario (IdUsuarios, NombreUsuario, Contrasena, IdRol)
+       VALUES (@0, @1, @2, @3)`,
+      [dto.IdUsuarios, dto.NombreUsuario, dto.Contrasena, dto.IdRol],
+    );
   }
 
-  findAll() {
-    return this.usuarioRepository.find({ relations: ['RolRel'] });
+  async findAll() {
+    return await this.usuarioRepository.find({ relations: ['RolRel'] });
   }
 
-  findOne(id: string) {
-    return this.usuarioRepository.findOne({ where: { IdUsuarios: id }, relations: ['RolRel'] });
+  async findOne(id: string) {
+    return await this.usuarioRepository.findOne({
+      where: { IdUsuarios: id },
+      relations: ['RolRel'],
+    });
+  }
+
+  async update(id: string, dto: any) {
+    // Si no se envía contraseña nueva, no la tocamos
+    if (dto.Contrasena) {
+      return await this.usuarioRepository.query(
+        `UPDATE Usuario SET NombreUsuario = @0, Contrasena = @1, IdRol = @2
+         WHERE IdUsuarios = @3`,
+        [dto.NombreUsuario, dto.Contrasena, dto.IdRol, id],
+      );
+    } else {
+      return await this.usuarioRepository.query(
+        `UPDATE Usuario SET NombreUsuario = @0, IdRol = @1
+         WHERE IdUsuarios = @2`,
+        [dto.NombreUsuario, dto.IdRol, id],
+      );
+    }
   }
 
   async validateUser(id: string, pass: string): Promise<any> {
-  const usuario = await this.usuarioRepository.findOne({
-    where: { IdUsuarios: id },
-    relations: ['RolRel'], // Esto fuerza a TypeORM a traer los datos del Rol
-  });
+    const usuario = await this.usuarioRepository.findOne({
+      where: { IdUsuarios: id },
+      relations: ['RolRel'],
+    });
 
-  if (usuario && usuario.Contrasena === pass) {
-    // Al incluir RolRel, ahora tienes acceso a usuario.RolRel.IdRol y usuario.RolRel.NombreRol
-    const { Contrasena, ...result } = usuario;
-    return {
-      ...result,
-      IdRol: usuario.RolRel ? usuario.RolRel.IdRol : null,
-      NombreRol: usuario.RolRel ? usuario.RolRel.NombreRol : 'Sin Rol'
-    };
+    if (usuario && usuario.Contrasena === pass) {
+      const { Contrasena, ...result } = usuario;
+      return {
+        ...result,
+        IdRol: usuario.RolRel ? usuario.RolRel.IdRol : null,
+        NombreRol: usuario.RolRel ? usuario.RolRel.NombreRol : 'Sin Rol',
+      };
+    }
+    return null;
   }
-  return null;
-}
 
-  remove(id: string) {
-    return this.usuarioRepository.delete(id);
+  async remove(id: string) {
+    return await this.usuarioRepository.delete(id);
   }
 }

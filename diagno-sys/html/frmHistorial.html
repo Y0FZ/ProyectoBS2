@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiagnoSys - Historial</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+        :root { --ink:#0f0f0f; --ink-soft:#4a4a52; --ink-mute:#9898a6; --surface:#f6f6f8; --white:#ffffff; --line:#e4e4ea; }
+        body { background:var(--surface); font-family:'DM Sans',sans-serif; color:var(--ink); min-height:100vh; }
+
+        .topbar { background:var(--white); border-bottom:1px solid var(--line); padding:0 2rem; height:60px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+        .brand { display:flex; align-items:center; gap:12px; }
+        .brand-icon { width:32px; height:32px; background:var(--ink); border-radius:8px; display:flex; align-items:center; justify-content:center; }
+        .brand-name { font-size:16px; font-weight:600; letter-spacing:-0.3px; color:var(--ink); }
+        .brand-divider { width:1px; height:18px; background:var(--line); }
+        .brand-section { font-size:12px; color:var(--ink-mute); letter-spacing:0.04em; font-family:'DM Mono',monospace; }
+        .btn-back { background:none; border:1px solid var(--line); border-radius:8px; padding:6px 14px; font-size:12px; font-weight:500; font-family:'DM Sans',sans-serif; color:var(--ink-soft); cursor:pointer; transition:all 0.18s; display:flex; align-items:center; gap:6px; }
+        .btn-back:hover { background:var(--surface); border-color:#c4c4d0; color:var(--ink); }
+
+        .main { padding:2.5rem 2rem; max-width:1100px; margin:0 auto; }
+        .page-title { font-size:22px; font-weight:600; letter-spacing:-0.4px; margin-bottom:4px; }
+        .page-sub { font-size:13px; color:var(--ink-mute); margin-bottom:2rem; }
+
+        /* TOOLBAR */
+        .toolbar { display:flex; gap:10px; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; }
+        .search-wrap { position:relative; flex:1; min-width:200px; }
+        .search-wrap svg { position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none; opacity:0.4; }
+        .search-input { width:100%; padding:9px 12px 9px 36px; border:1px solid var(--line); border-radius:9px; background:var(--white); font-size:14px; font-family:'DM Sans',sans-serif; color:var(--ink); outline:none; }
+        .search-input:focus { border-color:#c4c4d0; }
+        .search-input::placeholder { color:var(--ink-mute); }
+        .filter-select { padding:9px 12px; border:1px solid var(--line); border-radius:9px; background:var(--white); font-size:13px; font-family:'DM Sans',sans-serif; color:var(--ink); outline:none; cursor:pointer; }
+
+        /* TABLE */
+        .table-card { background:var(--white); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+        .table-header { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.5rem; border-bottom:1px solid var(--line); }
+        .table-label { font-size:10px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-mute); font-family:'DM Mono',monospace; }
+        .count-badge { font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:2px 10px; }
+        table { width:100%; border-collapse:collapse; }
+        thead th { padding:10px 14px; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-mute); border-bottom:1px solid var(--line); font-family:'DM Mono',monospace; text-align:left; }
+        tbody tr { border-bottom:1px solid var(--line); transition:background 0.15s; cursor:pointer; }
+        tbody tr:last-child { border-bottom:none; }
+        tbody tr:hover { background:var(--surface); }
+        tbody td { padding:12px 14px; font-size:13px; color:var(--ink); vertical-align:middle; }
+        .td-id { font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-mute); font-weight:500; }
+        .td-bold { font-weight:500; }
+
+        /* BADGES DE ESTADO */
+        .badge-estado { display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:500; }
+        .badge-recibida   { background:#eff6ff; color:#1d4ed8; }
+        .badge-pendiente  { background:#fefce8; color:#854d0e; }
+        .badge-revision   { background:#fff7ed; color:#9a3412; }
+        .badge-espera     { background:#f5f3ff; color:#5b21b6; }
+        .badge-reparacion { background:#ecfdf5; color:#065f46; }
+        .badge-reparado   { background:#f0fdf4; color:#14532d; }
+        .badge-entregado  { background:#f1f5f9; color:#334155; }
+
+        /* BADGE PRIORIDAD */
+        .badge-alta     { display:inline-block; padding:3px 9px; border-radius:999px; font-size:11px; background:#fef2f2; color:#991b1b; }
+        .badge-estandar { display:inline-block; padding:3px 9px; border-radius:999px; font-size:11px; background:#f0fdf4; color:#14532d; }
+        .badge-baja     { display:inline-block; padding:3px 9px; border-radius:999px; font-size:11px; background:#f1f5f9; color:#475569; }
+
+        .empty-state { padding:3rem; text-align:center; color:var(--ink-mute); }
+        .empty-state p { font-size:14px; margin-top:8px; }
+
+        /* MODAL DETALLE */
+        .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:200; align-items:center; justify-content:center; }
+        .modal-overlay.active { display:flex; }
+        .modal-box { background:var(--white); border-radius:16px; border:1px solid var(--line); padding:2rem; width:100%; max-width:540px; margin:1rem; max-height:90vh; overflow-y:auto; }
+        .modal-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; }
+        .modal-title { font-size:16px; font-weight:600; letter-spacing:-0.2px; }
+        .modal-subtitle { font-size:12px; color:var(--ink-mute); margin-top:2px; }
+        .btn-close-modal { background:none; border:none; cursor:pointer; padding:4px; color:var(--ink-mute); border-radius:6px; }
+        .btn-close-modal:hover { background:var(--surface); }
+
+        /* Sección info en modal */
+        .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem 1.5rem; margin-bottom:1.25rem; }
+        .info-item label { display:block; font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-mute); font-family:'DM Mono',monospace; margin-bottom:4px; }
+        .info-item span { font-size:14px; color:var(--ink); }
+
+        .separator { border:none; border-top:1px solid var(--line); margin:1.25rem 0; }
+
+        /* Campo estado editable en modal */
+        .field-inline { display:flex; align-items:center; gap:12px; }
+        .field-inline label { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-mute); font-family:'DM Mono',monospace; white-space:nowrap; }
+        .field-inline select { flex:1; padding:8px 10px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:'DM Sans',sans-serif; color:var(--ink); outline:none; background:var(--surface); }
+
+        .modal-footer { display:flex; gap:8px; margin-top:1.5rem; justify-content:flex-end; }
+        .btn-cancel { background:none; border:1px solid var(--line); border-radius:8px; padding:9px 18px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; color:var(--ink-soft); cursor:pointer; }
+        .btn-cancel:hover { background:var(--surface); }
+        .btn-confirm { background:var(--ink); color:white; border:none; border-radius:8px; padding:9px 20px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; }
+        .btn-confirm:hover { background:#2a2a2a; }
+
+        /* TOAST */
+        .toast-wrap { position:fixed; bottom:1.5rem; right:1.5rem; z-index:999; display:flex; flex-direction:column; gap:8px; }
+        .toast { background:var(--ink); color:white; border-radius:10px; padding:12px 18px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; animation:slideIn 0.2s ease; max-width:300px; }
+        .toast.error { background:#dc2626; }
+        @keyframes slideIn { from{transform:translateY(12px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+        @media(max-width:576px){
+            .topbar{padding:0 1rem} .main{padding:1.5rem 1rem} .brand-section,.brand-divider{display:none}
+            thead th:nth-child(3),tbody td:nth-child(3),
+            thead th:nth-child(5),tbody td:nth-child(5){display:none}
+        }
+    </style>
+</head>
+<body>
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M2 17l10 5 10-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12l10 5 10-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <span class="brand-name">DiagnoSys</span>
+            <div class="brand-divider"></div>
+            <span class="brand-section">Historial</span>
+        </div>
+        <button class="btn-back" onclick="window.location.href='webmed.html'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Volver
+        </button>
+    </nav>
+
+    <div class="main">
+        <p class="page-title">Historial de órdenes</p>
+        <p class="page-sub">Consulta y actualización de órdenes activas. Haz clic en una fila para ver el detalle.</p>
+
+        <div class="toolbar">
+            <div class="search-wrap">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#0f0f0f" stroke-width="1.7"/><path d="M16.5 16.5L21 21" stroke="#0f0f0f" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar por orden, cliente o equipo...">
+            </div>
+            <select class="filter-select" id="filterPrioridad">
+                <option value="">Todas las prioridades</option>
+            </select>
+        </div>
+
+        <div class="table-card">
+            <div class="table-header">
+                <span class="table-label">Órdenes</span>
+                <span class="count-badge" id="countBadge">0 órdenes</span>
+            </div>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Cliente</th>
+                            <th>Equipo</th>
+                            <th>Prioridad</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaOrdenes">
+                        <tr><td colspan="6"><div class="empty-state"><p>Cargando órdenes...</p></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DETALLE ORDEN -->
+    <div class="modal-overlay" id="modalDetalle">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <p class="modal-title" id="detTitle">Orden #</p>
+                    <p class="modal-subtitle" id="detFecha"></p>
+                </div>
+                <button class="btn-close-modal" onclick="cerrarModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item"><label>Cliente</label><span id="detCliente">—</span></div>
+                <div class="info-item"><label>Equipo</label><span id="detEquipo">—</span></div>
+                <div class="info-item"><label>N° Serie</label><span id="detSerie" style="font-family:'DM Mono',monospace;font-size:12px;">—</span></div>
+                <div class="info-item"><label>Prioridad</label><span id="detPrioridad">—</span></div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="info-item" style="margin-bottom:1rem;">
+                <label>Estado físico del artículo</label>
+                <span id="detEstadoFisico" style="display:block;font-size:13px;line-height:1.6;color:var(--ink-soft);">—</span>
+            </div>
+            <div class="info-item" style="margin-bottom:1.25rem;">
+                <label>Descripción de la falla</label>
+                <span id="detDescripcion" style="display:block;font-size:13px;line-height:1.6;color:var(--ink-soft);">—</span>
+            </div>
+
+            <hr class="separator">
+
+            <div class="field-inline">
+                <label>Estado actual</label>
+                <select id="selectEstado">
+                    <option value="">Cargando...</option>
+                </select>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="cerrarModal()">Cerrar</button>
+                <button class="btn-confirm" onclick="guardarEstado()">Guardar estado</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_ORDEN  = 'http://localhost:3000/orden-diagnostico';
+        const API_ESTADO = 'http://localhost:3000/estado-orden';
+        const API_COM    = 'http://localhost:3000/comentario';
+
+        if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
+
+        let ordenesData = [];
+        let estadosData = [];
+        let ordenActual = null;
+
+        function toast(msg, tipo = 'ok') {
+            const wrap = document.getElementById('toastWrap');
+            const el = document.createElement('div');
+            el.className = 'toast' + (tipo === 'error' ? ' error' : '');
+            el.textContent = msg;
+            wrap.appendChild(el);
+            setTimeout(() => el.remove(), 3000);
+        }
+
+        function badgePrioridad(nivel) {
+            const map = { 'Alta':'badge-alta', 'Estandar':'badge-estandar', 'Baja':'badge-baja' };
+            const cls = map[nivel] || 'badge-baja';
+            return `<span class="${cls}">${nivel || '—'}</span>`;
+        }
+
+        function badgeEstado(estado) {
+            const map = {
+                'Recibida':'badge-recibida','Pendiente':'badge-pendiente',
+                'En Revicion':'badge-revision','En Espera':'badge-espera',
+                'En reparacion':'badge-reparacion','Reparado':'badge-reparado','Entregado':'badge-entregado'
+            };
+            const cls = map[estado] || 'badge-recibida';
+            return estado ? `<span class="badge-estado ${cls}">${estado}</span>` : '<span style="color:var(--ink-mute)">—</span>';
+        }
+
+        function formatFecha(f) {
+            if (!f) return '—';
+            return new Date(f).toLocaleDateString('es-CR', { day:'2-digit', month:'short', year:'numeric' });
+        }
+
+        async function cargarEstados() {
+            try {
+                const res = await fetch(API_ESTADO);
+                estadosData = res.ok ? await res.json() : [];
+                const sel = document.getElementById('selectEstado');
+                sel.innerHTML = estadosData.map(e => `<option value="${e.IdEstado}">${e.Estado}</option>`).join('');
+
+                const filterPrio = document.getElementById('filterPrioridad');
+            } catch { estadosData = []; }
+        }
+
+        async function cargarOrdenes() {
+            try {
+                const res = await fetch(API_ORDEN);
+                if (!res.ok) throw new Error();
+                ordenesData = await res.json();
+
+                // Poblar filtro prioridades
+                const prioridades = [...new Set(ordenesData.map(o => o.prioridad?.NivelPrioridad).filter(Boolean))];
+                const fp = document.getElementById('filterPrioridad');
+                fp.innerHTML = '<option value="">Todas las prioridades</option>' +
+                    prioridades.map(p => `<option value="${p}">${p}</option>`).join('');
+
+                renderTabla(ordenesData);
+            } catch {
+                toast('Error al cargar órdenes', 'error');
+                document.getElementById('tablaOrdenes').innerHTML =
+                    '<tr><td colspan="6"><div class="empty-state"><p>No se pudo conectar con el servidor.</p></div></td></tr>';
+            }
+        }
+
+        function renderTabla(lista) {
+            document.getElementById('countBadge').textContent = `${lista.length} orden${lista.length !== 1 ? 'es' : ''}`;
+            if (lista.length === 0) {
+                document.getElementById('tablaOrdenes').innerHTML =
+                    '<tr><td colspan="6"><div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" style="margin:0 auto;display:block;opacity:0.25;"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="#0f0f0f" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="#0f0f0f" stroke-width="1.5"/></svg><p>No hay órdenes registradas.</p></div></td></tr>';
+                return;
+            }
+            document.getElementById('tablaOrdenes').innerHTML = lista.map(o => `
+                <tr onclick="abrirDetalle('${o.IdOrden}')">
+                    <td class="td-id">#${o.IdOrden}</td>
+                    <td class="td-bold">${o.cliente ? o.cliente.NombreCliente + ' ' + o.cliente.ApellidoCliente : '—'}</td>
+                    <td>${o.equipo ? o.equipo.Marca + ' ' + o.equipo.Modelo : '—'}</td>
+                    <td>${badgePrioridad(o.prioridad?.NivelPrioridad)}</td>
+                    <td style="color:var(--ink-mute);font-size:12px;">${formatFecha(o.FechaCreacion)}</td>
+                    <td>${badgeEstado(o.EstadoActual)}</td>
+                </tr>`).join('');
+        }
+
+        // Búsqueda + filtro combinados
+        function aplicarFiltros() {
+            const q    = document.getElementById('searchInput').value.toLowerCase().trim();
+            const prio = document.getElementById('filterPrioridad').value;
+            let lista  = ordenesData;
+            if (q) lista = lista.filter(o =>
+                String(o.IdOrden).includes(q) ||
+                (o.cliente && (o.cliente.NombreCliente + ' ' + o.cliente.ApellidoCliente).toLowerCase().includes(q)) ||
+                (o.equipo  && (o.equipo.Marca + ' ' + o.equipo.Modelo).toLowerCase().includes(q))
+            );
+            if (prio) lista = lista.filter(o => o.prioridad?.NivelPrioridad === prio);
+            renderTabla(lista);
+        }
+        document.getElementById('searchInput').addEventListener('input', aplicarFiltros);
+        document.getElementById('filterPrioridad').addEventListener('change', aplicarFiltros);
+
+        // Abrir modal detalle
+        function abrirDetalle(idOrden) {
+            const o = ordenesData.find(x => String(x.IdOrden) === String(idOrden));
+            if (!o) return;
+            ordenActual = o;
+
+            document.getElementById('detTitle').textContent   = `Orden #${o.IdOrden}`;
+            document.getElementById('detFecha').textContent   = `Recibida el ${formatFecha(o.FechaCreacion)}`;
+            document.getElementById('detCliente').textContent = o.cliente ? `${o.cliente.NombreCliente} ${o.cliente.ApellidoCliente}` : '—';
+            document.getElementById('detEquipo').textContent  = o.equipo  ? `${o.equipo.Marca} ${o.equipo.Modelo}` : '—';
+            document.getElementById('detSerie').textContent   = o.equipo  ? o.equipo.NumeroSerie : '—';
+            document.getElementById('detPrioridad').textContent = o.prioridad?.NivelPrioridad || '—';
+            document.getElementById('detEstadoFisico').textContent = o.EstadoRecepcion || 'Sin especificar';
+            document.getElementById('detDescripcion').textContent  = o.Descripcion     || 'Sin especificar';
+
+            // Seleccionar el estado actual si hay uno
+            if (estadosData.length > 0) {
+                const sel = document.getElementById('selectEstado');
+                // Buscar el estado por nombre si lo hay
+                const estadoNombre = o.EstadoActual;
+                const match = estadosData.find(e => e.Estado === estadoNombre);
+                if (match) sel.value = match.IdEstado;
+            }
+
+            document.getElementById('modalDetalle').classList.add('active');
+        }
+
+        async function guardarEstado() {
+            if (!ordenActual) return;
+            const idEstado = parseInt(document.getElementById('selectEstado').value);
+            const usuario  = localStorage.getItem('diagnoSys_user') || 'IND';
+
+            // Generamos un IdComentario basado en timestamp
+            const idCom = Date.now() % 1000000;
+            const fechaHoy = new Date().toISOString().split('T')[0];
+
+            const payload = {
+                IdComentario:   idCom,
+                Comentario:     `Estado actualizado`,
+                FechaComentario: fechaHoy,
+                IUsuario:       usuario,
+                Estado:         idEstado,
+                IdDiagnostico:  ordenActual.IdOrden,
+                Anexos:         null
+            };
+
+            try {
+                const res = await fetch(API_COM, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    cerrarModal();
+                    toast('✓ Estado actualizado');
+                    cargarOrdenes();
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    toast(err.message || 'Error al guardar estado', 'error');
+                }
+            } catch { toast('Error de conexión', 'error'); }
+        }
+
+        function cerrarModal() {
+            ordenActual = null;
+            document.getElementById('modalDetalle').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+        document.getElementById('modalDetalle').addEventListener('click', e => { if (e.target === e.currentTarget) cerrarModal(); });
+
+        cargarEstados();
+        cargarOrdenes();
+    </script>
+</body>
+</html>

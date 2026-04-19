@@ -20,6 +20,11 @@ export class ClienteController {
     return this.clienteService.findOne(id);
   }
 
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateClienteDto: any) {
+    return this.clienteService.update(id, updateClienteDto);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.clienteService.remove(id);
