@@ -14,7 +14,10 @@ import { Prioridad } from './prioridad/entities/prioridad.entity';
 import { OrdenDiagnostico } from './orden-diagnostico/entities/orden-diagnostico.entity';
 import { EstadoOrden } from './estado-orden/entities/estado-orden.entity';
 import { EstadoOrdenModule } from './estado-orden/estado-orden.module';
-
+import { ComentariosModule } from './comentarios/comentarios.module';
+import { AnexosModule } from './anexos/anexos.module';
+import { Comentario } from './comentarios/entities/comentario.entity';
+import { Anexo } from './anexos/entities/anexo.entity';
 
 @Module({
   imports: [
@@ -24,16 +27,20 @@ import { EstadoOrdenModule } from './estado-orden/estado-orden.module';
       port: 1433,
       username: 'sa',
       password: '1234',
-      database: 'DiagnoSysBD', // Nombre según tu script SQL
-      entities: [Cliente, 
-                ArticuloEquipo, 
-                Usuario, 
-                Rol, 
-                Prioridad, 
-                OrdenDiagnostico, 
-                EstadoOrden],
-                synchronize: false,
-                autoLoadEntities: true,
+      database: 'DiagnoSysBD',
+      entities: [
+        Cliente,
+        ArticuloEquipo,
+        Usuario,
+        Rol,
+        Prioridad,
+        OrdenDiagnostico,
+        EstadoOrden,
+        Comentario,   // ← agregado
+        Anexo,        // ← agregado
+      ],
+      synchronize: false,
+      autoLoadEntities: true,
       options: {
         encrypt: false,
         trustServerCertificate: true,
@@ -53,10 +60,8 @@ import { EstadoOrdenModule } from './estado-orden/estado-orden.module';
     PrioridadModule,
     RolModule,
     EstadoOrdenModule,
-    PrioridadModule,
-    RolModule,
-    EstadoOrdenModule,
+    ComentariosModule,
+    AnexosModule,
   ],
-  
 })
 export class AppModule {}

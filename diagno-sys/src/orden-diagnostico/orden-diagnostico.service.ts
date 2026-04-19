@@ -2,8 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrdenDiagnostico } from './entities/orden-diagnostico.entity';
-import { CreateOrdenDiagnosticoDto } from './dto/create-orden-diagnostico.dto';
-
 
 @Injectable()
 export class OrdenDiagnosticoService {
@@ -15,95 +13,88 @@ export class OrdenDiagnosticoService {
   async findLastId(): Promise<number> {
     try {
       const ultimaOrden = await this.ordenRepo.find({
-        select: ['IdOrden'], // <--- ESTO ES CLAVE: Solo pide el ID, ignora lo demás
+        select: ['IdOrden'],
         order: { IdOrden: 'DESC' } as any,
         take: 1,
       });
-      
-      if (ultimaOrden.length > 0) {
-        return Number(ultimaOrden[0].IdOrden) + 1;
-      }
-      return 1;
+      return ultimaOrden.length > 0 ? Number(ultimaOrden[0].IdOrden) + 1 : 1;
     } catch (error) {
-      console.error('Error crítico en el contador:', error);
+      console.error('Error en el contador:', error);
       return 1;
     }
   }
 
-  /*async create(createDto: CreateOrdenDiagnosticoDto) { 
-    const nuevaOrden = this.ordenRepo.create({
-      IdOrden: createDto.IdOrden,
-      FechaCreacion: createDto.FechaCreacion,
-      Descripcion: createDto.Descripcion,
-      EstadoRecepcion: createDto.EstadoRecepcion,
-      equipo: { NumeroSerie: createDto.SerieEquipo } as any,
-      cliente: { IdCliente: createDto.IdClienteD } as any,
-      prioridad: { IdPrioridad: createDto.Prioridad } as any
-    });
-
-    return await this.ordenRepo.save(nuevaOrden);
-  }*/
-
   async create(createDto: any) {
     try {
-      // 1. Validación de seguridad
       if (!createDto.SerieEquipo || !createDto.IdClienteD) {
-        throw new Error("Faltan datos obligatorios (Serie o Cliente)");
+        throw new Error('Faltan datos obligatorios (Serie o Cliente)');
       }
 
-      // 2. Definición de la consulta para el SP
-    const query = `
-    EXEC sp_IgresarOrdenDiagnostico 
-      @IdOrden = @0,
-      @FechaCreacion = @1,
-      @Descripcion = @2,
-      @EstadoRecepcion = @3,
-      @SerieEquipo = @4,
-      @IdClienteD = @5,
-      @Prioridad = @6
-    `;
+      console.log('DTO recibido:', createDto);
 
-      // 3. Preparación de parámetros
-    const parametros = [
-        createDto.IdOrden,
-        createDto.FechaCreacion, // SQL Server acepta el string 'YYYY-MM-DD'
-        createDto.Descripcion || "Sin descripción",
-        createDto.EstadoRecepcion || "No especificado",
-        createDto.SerieEquipo,
-        createDto.IdClienteD,
-        createDto.Prioridad
-    ];
+      // INSERT directo con parámetros posicionales (igual que Usuario y Cliente)
+      // Evita dependencia del SP sp_IgresarOrdenDiagnostico
+      const result = await this.ordenRepo.query(
+        `INSERT INTO OrdenDiagnostico
+           (IdOrden, FechaCreacion, Descripcion, EstadoRecepcion, SerieEquipo, IdClienteD, Prioridad)
+         VALUES (@0, @1, @2, @3, @4, @5, @6)`,
+        [
+          createDto.IdOrden,
+          createDto.FechaCreacion,
+          createDto.Descripcion     || 'Sin descripción',
+          createDto.EstadoRecepcion || 'No especificado',
+          createDto.SerieEquipo,
+          createDto.IdClienteD,
+          createDto.Prioridad,
+        ],
+      );
 
-      console.log("DTO recibido:", createDto);
-      console.log("Parámetros enviados al SP:", parametros);
+      console.log('✅ Orden insertada:', createDto.IdOrden);
 
-      // 4. Ejecución
-      return await this.ordenRepo.query(query, parametros);
+      // Devolver el objeto con IdOrden para que el frontend pueda mostrar el ticket
+      return { IdOrden: createDto.IdOrden, ...createDto };
 
-    } catch (error: any) { // Agregamos ': any' para solucionar el error de las capturas
-      console.error("❌ Error al ejecutar SP_OrdenDiagnostico:");
-      console.error("Mensaje:", error.message);
-      
-      // Si el error viene de SQL Server, TypeORM suele dar más detalles aquí
-      throw new Error(error.message || "No se pudo guardar la orden en la base de datos");
+    } catch (error: any) {
+      console.error('❌ Error al insertar OrdenDiagnostico:', error.message);
+      throw new Error(error.message || 'No se pudo guardar la orden');
     }
   }
 
   async findOne(id: number): Promise<OrdenDiagnostico> {
     const orden = await this.ordenRepo.findOne({
       where: { IdOrden: id },
-      relations: ['cliente', 'equipo', 'prioridad']
+      relations: ['cliente', 'equipo', 'prioridad'],
     });
-
-    if (!orden) {
-      throw new NotFoundException(`La orden #${id} no existe`);
-    }
+    if (!orden) throw new NotFoundException(`La orden #${id} no existe`);
     return orden;
   }
 
-  findAll() {
-    return this.ordenRepo.find({
-      relations: ['cliente', 'equipo', 'prioridad']
+  async findAll(): Promise<any[]> {
+    const ordenes = await this.ordenRepo.find({
+      relations: ['cliente', 'equipo', 'prioridad'],
+      order: { IdOrden: 'DESC' } as any,
     });
+
+    const ordenesConEstado = await Promise.all(
+      ordenes.map(async (o) => {
+        const [ultimoComentario] = await this.ordenRepo.query(
+          `SELECT TOP 1 c.FechaComentario, e.Estado, c.IUsuario
+           FROM Comentarios c
+           INNER JOIN EstadoOrden e ON e.IdEstado = c.Estado
+           WHERE c.IdDiagnostico = @0
+           ORDER BY c.FechaComentario DESC, c.IdComentario DESC`,
+          [o.IdOrden],
+        );
+
+        return {
+          ...o,
+          EstadoActual:        ultimoComentario?.Estado          ?? 'Recibida',
+          FechaUltimoEstado:   ultimoComentario?.FechaComentario ?? null,
+          UsuarioUltimoEstado: ultimoComentario?.IUsuario        ?? null,
+        };
+      }),
+    );
+
+    return ordenesConEstado;
   }
 }

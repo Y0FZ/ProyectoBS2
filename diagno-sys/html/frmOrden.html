@@ -37,7 +37,6 @@
 
         /* ── FORM CARD ── */
         .form-card { background: var(--white); border: 1px solid var(--line); border-radius: 16px; padding: 2rem; }
-
         .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute); font-family: 'DM Mono', monospace; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); }
 
         /* ── FIELDS ── */
@@ -49,25 +48,20 @@
         .field textarea { resize: none; line-height: 1.6; }
         .field select { cursor: pointer; }
 
-        /* Input con botón + */
         .input-with-btn { display: flex; align-items: center; gap: 10px; }
         .input-with-btn input { flex: 1; }
-
         .btn-mini { width: 32px; height: 32px; border-radius: 50%; background: var(--ink); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.18s; }
         .btn-mini:hover { background: #333; }
 
-        /* Campos ocultos de ID */
         #IdClienteD, #SerieEquipo { display: none; }
-
         .field-divider { border: none; border-top: 1px solid var(--line); margin: 2rem 0; }
 
-        /* ── SUBMIT ── */
+        /* ── BUTTONS ── */
         .btn-save { width: 100%; padding: 14px; background: var(--ink); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; margin-top: 0.5rem; transition: all 0.2s; }
         .btn-save:hover { background: #2a2a2a; transform: translateY(-1px); }
+        .btn-save:disabled { background: #9898a6; cursor: not-allowed; transform: none; }
 
-        /* ══════════════════════════════════════════════
-           PANEL FLOTANTE — mismo estilo que frmCliente
-        ══════════════════════════════════════════════ */
+        /* ── MODALES ── */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 300; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-box { background: var(--white); border-radius: 16px; border: 1px solid var(--line); padding: 2rem; width: 100%; max-width: 480px; margin: 1rem; max-height: 90vh; overflow-y: auto; }
@@ -76,7 +70,6 @@
         .btn-close-modal { background: none; border: none; cursor: pointer; padding: 4px; color: var(--ink-mute); border-radius: 6px; }
         .btn-close-modal:hover { background: var(--surface); }
 
-        /* Campos del panel flotante — idénticos a frmCliente */
         .fp-field { margin-bottom: 1.25rem; }
         .fp-field label { display: block; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mute); margin-bottom: 5px; font-family: 'DM Mono', monospace; }
         .fp-field input, .fp-field select { width: 100%; padding: 9px 0; border: none; border-bottom: 1px solid var(--line); outline: none; font-size: 14px; font-family: 'DM Sans', sans-serif; background: transparent; color: var(--ink); transition: border-color 0.2s; }
@@ -93,6 +86,14 @@
         .toast { background: var(--ink); color: white; border-radius: 10px; padding: 12px 18px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; animation: slideIn 0.2s ease; max-width: 300px; }
         .toast.error { background: #dc2626; }
         @keyframes slideIn { from{transform:translateY(12px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+        /* ── IMPRESIÓN ── */
+        @media print {
+            body * { visibility: hidden; }
+            #ticketImpresion, #ticketImpresion * { visibility: visible; }
+            #ticketImpresion { position: fixed; inset: 0; padding: 30px 40px; font-family: 'DM Sans', sans-serif; }
+        }
+        #ticketImpresion { display: none; }
 
         @media (max-width: 576px) {
             .topbar { padding: 0 1rem; } .main { padding: 1.5rem 1rem; }
@@ -164,7 +165,7 @@
                 <div class="field">
                     <label>Cliente (nombre o cédula)</label>
                     <div class="input-with-btn">
-                        <input type="text" id="busquedaCliente" list="listaClientes" placeholder="Escriba para filtrar..." required>
+                        <input type="text" id="busquedaCliente" list="listaClientes" placeholder="Escriba para filtrar..." autocomplete="off">
                         <button type="button" class="btn-mini" onclick="abrirPanelCliente()" title="Registrar nuevo cliente">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
                         </button>
@@ -176,7 +177,7 @@
                 <div class="field">
                     <label>Equipo / dispositivo</label>
                     <div class="input-with-btn">
-                        <input type="text" id="busquedaEquipo" list="listaEquipos" placeholder="Buscar por serie o modelo..." required>
+                        <input type="text" id="busquedaEquipo" list="listaEquipos" placeholder="Buscar por serie o modelo..." autocomplete="off">
                         <button type="button" class="btn-mini" onclick="abrirPanelEquipo()" title="Registrar nuevo equipo">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
                         </button>
@@ -199,15 +200,13 @@
                     <textarea id="Descripcion" rows="2" placeholder="Detalle el problema técnico..."></textarea>
                 </div>
 
-                <button type="submit" class="btn-save">Registrar orden de servicio</button>
+                <button type="submit" class="btn-save" id="btnGuardar">Registrar orden de servicio</button>
 
             </form>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         PANEL FLOTANTE — NUEVO CLIENTE
-    ══════════════════════════════════════════ -->
+    <!-- ══════════════ PANEL — NUEVO CLIENTE ══════════════ -->
     <div class="modal-overlay" id="panelClienteOverlay">
         <div class="modal-box">
             <div class="modal-header">
@@ -219,38 +218,32 @@
             <form id="formNuevoCliente" onsubmit="guardarNuevoCliente(event)">
                 <div class="row g-3">
                     <div class="col-12">
-                        <div class="fp-field">
-                            <label>Cédula / ID</label>
+                        <div class="fp-field"><label>Cédula / ID</label>
                             <input type="text" id="nc_IdCliente" maxlength="12" required placeholder="Ej: 1-2345-6789">
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="fp-field">
-                            <label>Nombre</label>
+                        <div class="fp-field"><label>Nombre</label>
                             <input type="text" id="nc_NombreCliente" maxlength="10" required placeholder="Ej: Juan">
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="fp-field">
-                            <label>Apellido</label>
+                        <div class="fp-field"><label>Apellido</label>
                             <input type="text" id="nc_ApellidoCliente" maxlength="10" required placeholder="Ej: Pérez">
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="fp-field">
-                            <label>Teléfono</label>
+                        <div class="fp-field"><label>Teléfono</label>
                             <input type="number" id="nc_Telefono" required placeholder="Ej: 88887777">
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="fp-field">
-                            <label>Correo electrónico</label>
+                        <div class="fp-field"><label>Correo electrónico</label>
                             <input type="email" id="nc_Correo" maxlength="20" placeholder="Ej: juan@mail.com">
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="fp-field">
-                            <label>Dirección</label>
+                        <div class="fp-field"><label>Dirección</label>
                             <input type="text" id="nc_Direccion" maxlength="20" placeholder="Ej: San José">
                         </div>
                     </div>
@@ -263,9 +256,7 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         PANEL FLOTANTE — NUEVO EQUIPO
-    ══════════════════════════════════════════ -->
+    <!-- ══════════════ PANEL — NUEVO EQUIPO ══════════════ -->
     <div class="modal-overlay" id="panelEquipoOverlay">
         <div class="modal-box">
             <div class="modal-header">
@@ -277,26 +268,22 @@
             <form id="formNuevoEquipo" onsubmit="guardarNuevoEquipo(event)">
                 <div class="row g-3">
                     <div class="col-12">
-                        <div class="fp-field">
-                            <label>Número de serie</label>
+                        <div class="fp-field"><label>Número de serie</label>
                             <input type="text" id="ne_NumeroSerie" maxlength="30" required placeholder="Ej: SN-ABC12345">
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="fp-field">
-                            <label>Tipo de equipo</label>
+                        <div class="fp-field"><label>Tipo de equipo</label>
                             <input type="text" id="ne_TipoEquipo" maxlength="15" required placeholder="Ej: Laptop, Celular, Impresora">
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="fp-field">
-                            <label>Marca</label>
+                        <div class="fp-field"><label>Marca</label>
                             <input type="text" id="ne_Marca" maxlength="10" required placeholder="Ej: HP, Dell">
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="fp-field">
-                            <label>Modelo</label>
+                        <div class="fp-field"><label>Modelo</label>
                             <input type="text" id="ne_Modelo" maxlength="15" required placeholder="Ej: Pavilion 15">
                         </div>
                     </div>
@@ -306,6 +293,68 @@
                     <button type="submit" class="btn-confirm">Guardar equipo</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- ══════════════ TICKET DE IMPRESIÓN ══════════════ -->
+    <div id="ticketImpresion">
+        <div style="border:2px solid #0f0f0f;border-radius:12px;padding:28px 32px;max-width:560px;margin:0 auto;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e4e4ea;">
+                <div style="width:36px;height:36px;background:#0f0f0f;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M2 17l10 5 10-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12l10 5 10-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-size:18px;font-weight:700;letter-spacing:-0.3px;">DiagnoSys</div>
+                    <div style="font-size:11px;color:#9898a6;">Orden de servicio técnico</div>
+                </div>
+                <div style="margin-left:auto;text-align:right;">
+                    <div style="font-size:22px;font-weight:700;font-family:'DM Mono',monospace;" id="t_NumOrden">#---</div>
+                    <div style="font-size:11px;color:#9898a6;" id="t_Fecha">—</div>
+                </div>
+            </div>
+
+            <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px;">
+                <tr>
+                    <td style="padding:6px 0;color:#9898a6;width:120px;vertical-align:top;">Cliente</td>
+                    <td style="padding:6px 0;font-weight:500;" id="t_Cliente">—</td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 0;color:#9898a6;vertical-align:top;">Equipo</td>
+                    <td style="padding:6px 0;font-weight:500;" id="t_Equipo">—</td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 0;color:#9898a6;vertical-align:top;">N° Serie</td>
+                    <td style="padding:6px 0;font-family:monospace;font-size:12px;" id="t_Serie">—</td>
+                </tr>
+                <tr>
+                    <td style="padding:6px 0;color:#9898a6;vertical-align:top;">Prioridad</td>
+                    <td style="padding:6px 0;" id="t_Prioridad">—</td>
+                </tr>
+            </table>
+
+            <div style="border-top:1px solid #e4e4ea;padding-top:14px;margin-bottom:12px;">
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#9898a6;margin-bottom:5px;">Estado físico al recibir</div>
+                <div style="font-size:13px;color:#4a4a52;line-height:1.5;" id="t_EstadoFisico">—</div>
+            </div>
+            <div style="border-top:1px solid #e4e4ea;padding-top:14px;margin-bottom:20px;">
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#9898a6;margin-bottom:5px;">Descripción de la falla</div>
+                <div style="font-size:13px;color:#4a4a52;line-height:1.5;" id="t_Descripcion">—</div>
+            </div>
+
+            <div style="border-top:1px solid #e4e4ea;padding-top:14px;display:flex;justify-content:space-between;align-items:flex-end;">
+                <div>
+                    <div style="font-size:10px;color:#9898a6;text-transform:uppercase;letter-spacing:0.07em;">Firma del cliente</div>
+                    <div style="margin-top:28px;border-top:1px solid #0f0f0f;width:180px;"></div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:10px;color:#9898a6;">Recibido por:</div>
+                    <div style="font-size:12px;font-weight:500;margin-top:4px;" id="t_Tecnico">—</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -319,6 +368,9 @@
 
         if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
 
+        // Caché para impresión
+        let datosOrdenGuardada = null;
+
         // ── Toast ──
         function toast(msg, tipo = 'ok') {
             const wrap = document.getElementById('toastWrap');
@@ -329,12 +381,12 @@
             setTimeout(() => el.remove(), 3500);
         }
 
-        // ── Cargar clientes en datalist ──
+        // ── Cargar clientes ──
         async function cargarClientes() {
             try {
-                const res = await fetch(API_CLIENTE);
+                const res   = await fetch(API_CLIENTE);
                 const lista = await res.json();
-                const dl = document.getElementById('listaClientes');
+                const dl    = document.getElementById('listaClientes');
                 dl.innerHTML = '';
                 lista.forEach(c => {
                     const opt = document.createElement('option');
@@ -345,17 +397,19 @@
             } catch (e) { console.error('Error Clientes:', e); }
         }
 
-        // ── Cargar equipos en datalist ──
+        // ── Cargar equipos ──
         async function cargarEquipos() {
             try {
-                const res = await fetch(API_EQUIPO);
+                const res   = await fetch(API_EQUIPO);
                 const lista = await res.json();
-                const dl = document.getElementById('listaEquipos');
+                const dl    = document.getElementById('listaEquipos');
                 dl.innerHTML = '';
                 lista.forEach(e => {
                     const opt = document.createElement('option');
                     opt.value = `${e.Marca} ${e.Modelo} - S/N: ${e.NumeroSerie}`;
                     opt.setAttribute('data-id', e.NumeroSerie);
+                    opt.setAttribute('data-marca', e.Marca);
+                    opt.setAttribute('data-modelo', e.Modelo);
                     dl.appendChild(opt);
                 });
             } catch (e) { console.error('Error Equipos:', e); }
@@ -372,7 +426,7 @@
             } catch (e) { console.error('Error ID:', e); }
 
             try {
-                const resPrio    = await fetch('http://localhost:3000/prioridad');
+                const resPrio     = await fetch('http://localhost:3000/prioridad');
                 const prioridades = await resPrio.json();
                 const sel = document.getElementById('Prioridad');
                 sel.innerHTML = '<option value="" disabled selected>Seleccione...</option>';
@@ -389,41 +443,80 @@
         }
 
         function configurarBuscadores() {
-            document.getElementById('busquedaCliente').addEventListener('input', e => {
+            document.getElementById('busquedaCliente').addEventListener('change', e => {
                 const val  = e.target.value;
                 const opts = document.getElementById('listaClientes').options;
                 document.getElementById('IdClienteD').value = '';
                 for (let i = 0; i < opts.length; i++) {
-                    if (opts[i].value === val) { document.getElementById('IdClienteD').value = opts[i].getAttribute('data-id'); break; }
+                    if (opts[i].value === val) {
+                        document.getElementById('IdClienteD').value = opts[i].getAttribute('data-id');
+                        break;
+                    }
                 }
             });
+            // También disparar en input por si el usuario borra y reescribe
+            document.getElementById('busquedaCliente').addEventListener('input', e => {
+                const val  = e.target.value;
+                const opts = document.getElementById('listaClientes').options;
+                for (let i = 0; i < opts.length; i++) {
+                    if (opts[i].value === val) {
+                        document.getElementById('IdClienteD').value = opts[i].getAttribute('data-id');
+                        return;
+                    }
+                }
+                document.getElementById('IdClienteD').value = '';
+            });
 
-            document.getElementById('busquedaEquipo').addEventListener('input', e => {
+            document.getElementById('busquedaEquipo').addEventListener('change', e => {
                 const val  = e.target.value;
                 const opts = document.getElementById('listaEquipos').options;
                 document.getElementById('SerieEquipo').value = '';
                 for (let i = 0; i < opts.length; i++) {
-                    if (opts[i].value === val) { document.getElementById('SerieEquipo').value = opts[i].getAttribute('data-id'); break; }
+                    if (opts[i].value === val) {
+                        document.getElementById('SerieEquipo').value = opts[i].getAttribute('data-id');
+                        break;
+                    }
                 }
+            });
+            document.getElementById('busquedaEquipo').addEventListener('input', e => {
+                const val  = e.target.value;
+                const opts = document.getElementById('listaEquipos').options;
+                for (let i = 0; i < opts.length; i++) {
+                    if (opts[i].value === val) {
+                        document.getElementById('SerieEquipo').value = opts[i].getAttribute('data-id');
+                        return;
+                    }
+                }
+                document.getElementById('SerieEquipo').value = '';
             });
         }
 
-        // ── Submit orden ──
+        // ── Submit ──
         document.getElementById('formOrden').addEventListener('submit', async e => {
             e.preventDefault();
-            const serie   = document.getElementById('SerieEquipo').value;
-            const cliente = document.getElementById('IdClienteD').value;
-            if (!serie || !cliente) { toast('⚠ Selecciona equipo y cliente de la lista', 'error'); return; }
+
+            const serie   = document.getElementById('SerieEquipo').value.trim();
+            const cliente = document.getElementById('IdClienteD').value.trim();
+
+            if (!serie)   { toast('⚠ Selecciona un equipo de la lista', 'error'); return; }
+            if (!cliente) { toast('⚠ Selecciona un cliente de la lista', 'error'); return; }
+
+            const prioridadVal = document.getElementById('Prioridad').value;
+            if (!prioridadVal) { toast('⚠ Selecciona una prioridad', 'error'); return; }
 
             const datos = {
                 IdOrden:         parseInt(document.getElementById('IdOrden').value),
                 FechaCreacion:   document.getElementById('FechaCreacion').value,
-                Descripcion:     document.getElementById('Descripcion').value,
-                EstadoRecepcion: document.getElementById('EstadoRecepcion').value || 'No especificado',
+                Descripcion:     document.getElementById('Descripcion').value.trim() || 'Sin descripción',
+                EstadoRecepcion: document.getElementById('EstadoRecepcion').value.trim() || 'No especificado',
                 SerieEquipo:     serie,
                 IdClienteD:      cliente,
-                Prioridad:       parseInt(document.getElementById('Prioridad').value)
+                Prioridad:       parseInt(prioridadVal)
             };
+
+            const btn = document.getElementById('btnGuardar');
+            btn.disabled = true;
+            btn.textContent = 'Guardando...';
 
             try {
                 const res = await fetch(API_ORDEN, {
@@ -431,19 +524,66 @@
                     headers: { 'Content-Type': 'application/json' },
                     body:    JSON.stringify(datos)
                 });
+
                 if (res.ok) {
+                    // Guardar datos para el ticket de impresión
+                    datosOrdenGuardada = datos;
+                    datosOrdenGuardada._clienteTexto = document.getElementById('busquedaCliente').value;
+                    datosOrdenGuardada._equipoTexto  = document.getElementById('busquedaEquipo').value;
+                    datosOrdenGuardada._prioridadTexto = document.getElementById('Prioridad').selectedOptions[0]?.textContent || '';
+
                     toast(`✓ Orden #${datos.IdOrden} registrada`);
-                    setTimeout(() => window.location.reload(), 1200);
+                    prepararTicket(datosOrdenGuardada);
+
+                    // Preguntar al usuario si quiere imprimir
+                    setTimeout(() => {
+                        if (confirm(`✓ Orden #${datos.IdOrden} registrada correctamente.\n\n¿Desea imprimir el comprobante para el cliente?`)) {
+                            imprimirOrden();
+                        } else {
+                            window.location.reload();
+                        }
+                    }, 400);
+
                 } else {
-                    const err = await res.json().catch(() => ({}));
-                    toast(err.message || 'Error al guardar', 'error');
+                    let mensaje = 'Error al guardar la orden';
+                    try {
+                        const err = await res.json();
+                        mensaje = err.message || JSON.stringify(err);
+                    } catch { /* no es JSON */ }
+                    toast(`✗ ${mensaje}`, 'error');
+                    console.error('Error servidor:', mensaje);
+                    btn.disabled = false;
+                    btn.textContent = 'Registrar orden de servicio';
                 }
-            } catch { toast('Error de conexión', 'error'); }
+            } catch (err) {
+                toast('✗ Error de conexión con el servidor', 'error');
+                console.error('Error fetch:', err);
+                btn.disabled = false;
+                btn.textContent = 'Registrar orden de servicio';
+            }
         });
 
-        /* ═══════════════════════════════════════
-           PANEL — CLIENTE
-        ═══════════════════════════════════════ */
+        // ── Ticket de impresión ──
+        function prepararTicket(datos) {
+            document.getElementById('t_NumOrden').textContent  = `#${datos.IdOrden}`;
+            document.getElementById('t_Fecha').textContent     = new Date(datos.FechaCreacion + 'T12:00:00').toLocaleDateString('es-CR', { day:'2-digit', month:'long', year:'numeric' });
+            document.getElementById('t_Cliente').textContent   = datos._clienteTexto || datos.IdClienteD;
+            document.getElementById('t_Equipo').textContent    = datos._equipoTexto  || datos.SerieEquipo;
+            document.getElementById('t_Serie').textContent     = datos.SerieEquipo;
+            document.getElementById('t_Prioridad').textContent = datos._prioridadTexto || `ID ${datos.Prioridad}`;
+            document.getElementById('t_EstadoFisico').textContent = datos.EstadoRecepcion;
+            document.getElementById('t_Descripcion').textContent  = datos.Descripcion;
+            document.getElementById('t_Tecnico').textContent  = localStorage.getItem('diagnoSys_user') || '—';
+        }
+
+        function imprimirOrden() {
+            document.getElementById('ticketImpresion').style.display = 'block';
+            window.print();
+            document.getElementById('ticketImpresion').style.display = 'none';
+            setTimeout(() => window.location.reload(), 300);
+        }
+
+        /* ═══════════════════ PANEL CLIENTE ═══════════════════ */
         function abrirPanelCliente() {
             document.getElementById('formNuevoCliente').reset();
             document.getElementById('panelClienteOverlay').classList.add('active');
@@ -464,15 +604,12 @@
             };
             try {
                 const res = await fetch(API_CLIENTE, {
-                    method:  'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body:    JSON.stringify(datos)
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos)
                 });
                 if (res.ok) {
                     cerrarPanelCliente();
                     toast('✓ Cliente registrado');
                     await cargarClientes();
-                    // Auto-seleccionar el cliente recién creado
                     document.getElementById('busquedaCliente').value = `${datos.NombreCliente} ${datos.ApellidoCliente} (${datos.IdCliente})`;
                     document.getElementById('IdClienteD').value      = datos.IdCliente;
                 } else {
@@ -483,9 +620,7 @@
         }
         document.getElementById('panelClienteOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) cerrarPanelCliente(); });
 
-        /* ═══════════════════════════════════════
-           PANEL — EQUIPO
-        ═══════════════════════════════════════ */
+        /* ═══════════════════ PANEL EQUIPO ═══════════════════ */
         function abrirPanelEquipo() {
             document.getElementById('formNuevoEquipo').reset();
             document.getElementById('panelEquipoOverlay').classList.add('active');
@@ -504,15 +639,12 @@
             };
             try {
                 const res = await fetch(API_EQUIPO, {
-                    method:  'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body:    JSON.stringify(datos)
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos)
                 });
                 if (res.ok) {
                     cerrarPanelEquipo();
                     toast('✓ Equipo registrado');
                     await cargarEquipos();
-                    // Auto-seleccionar el equipo recién creado
                     document.getElementById('busquedaEquipo').value = `${datos.Marca} ${datos.Modelo} - S/N: ${datos.NumeroSerie}`;
                     document.getElementById('SerieEquipo').value    = datos.NumeroSerie;
                 } else {
