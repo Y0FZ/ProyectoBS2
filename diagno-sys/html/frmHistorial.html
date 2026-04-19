@@ -47,8 +47,9 @@
         tbody td { padding:12px 14px; font-size:13px; color:var(--ink); vertical-align:middle; }
         .td-id { font-family:'DM Mono',monospace; font-size:12px; color:var(--ink-mute); font-weight:500; }
         .td-bold { font-weight:500; }
+        .td-meta { font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; }
 
-        /* BADGES ESTADO */
+        /* BADGES */
         .badge-estado { display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:500; }
         .badge-recibida   { background:#eff6ff; color:#1d4ed8; }
         .badge-pendiente  { background:#fefce8; color:#854d0e; }
@@ -57,8 +58,6 @@
         .badge-reparacion { background:#ecfdf5; color:#065f46; }
         .badge-reparado   { background:#f0fdf4; color:#14532d; }
         .badge-entregado  { background:#f1f5f9; color:#334155; }
-
-        /* BADGE PRIORIDAD */
         .badge-alta     { display:inline-block; padding:3px 9px; border-radius:999px; font-size:11px; background:#fef2f2; color:#991b1b; }
         .badge-estandar { display:inline-block; padding:3px 9px; border-radius:999px; font-size:11px; background:#f0fdf4; color:#14532d; }
         .badge-baja     { display:inline-block; padding:3px 9px; border-radius:999px; font-size:11px; background:#f1f5f9; color:#475569; }
@@ -66,7 +65,7 @@
         .empty-state { padding:3rem; text-align:center; color:var(--ink-mute); }
         .empty-state p { font-size:14px; margin-top:8px; }
 
-        /* Barra de acciones contextual */
+        /* ACTION BAR */
         .action-bar { display:none; background:var(--white); border:1px solid var(--line); border-radius:12px; padding:0.75rem 1.25rem; margin-bottom:1.25rem; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
         .action-bar.visible { display:flex; }
         .action-bar-info { font-size:13px; color:var(--ink-soft); }
@@ -87,44 +86,34 @@
         .btn-close-modal { background:none; border:none; cursor:pointer; padding:4px; color:var(--ink-mute); border-radius:6px; }
         .btn-close-modal:hover { background:var(--surface); }
 
-        /* Info grid en modal detalle */
         .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem 1.5rem; margin-bottom:1.25rem; }
         .info-item label { display:block; font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-mute); font-family:'DM Mono',monospace; margin-bottom:4px; }
         .info-item span { font-size:14px; color:var(--ink); }
         .separator { border:none; border-top:1px solid var(--line); margin:1.25rem 0; }
 
-        /* Campo estado editable en modal */
         .field-inline { display:flex; align-items:center; gap:12px; }
         .field-inline label { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; color:var(--ink-mute); font-family:'DM Mono',monospace; white-space:nowrap; }
         .field-inline select { flex:1; padding:8px 10px; border:1px solid var(--line); border-radius:8px; font-size:13px; font-family:'DM Sans',sans-serif; color:var(--ink); outline:none; background:var(--surface); }
 
-        /* Campos del modal de comentario */
         .fp-field { margin-bottom:1.25rem; }
         .fp-field label { display:block; font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-mute); margin-bottom:5px; font-family:'DM Mono',monospace; }
-        .fp-field input, .fp-field select, .fp-field textarea {
-            width:100%; padding:9px 0; border:none; border-bottom:1px solid var(--line); outline:none;
-            font-size:14px; font-family:'DM Sans',sans-serif; background:transparent; color:var(--ink); transition:border-color 0.2s;
-        }
+        .fp-field input, .fp-field select, .fp-field textarea { width:100%; padding:9px 0; border:none; border-bottom:1px solid var(--line); outline:none; font-size:14px; font-family:'DM Sans',sans-serif; background:transparent; color:var(--ink); transition:border-color 0.2s; }
         .fp-field input:focus, .fp-field select:focus, .fp-field textarea:focus { border-bottom-color:var(--ink); }
         .fp-field textarea { resize:vertical; line-height:1.6; min-height:80px; }
 
-        /* Upload area */
-        .upload-area {
-            border:2px dashed var(--line); border-radius:10px; padding:1.25rem;
-            text-align:center; cursor:pointer; transition:all 0.2s; margin-top:8px;
-        }
+        /* Upload */
+        .upload-area { border:2px dashed var(--line); border-radius:10px; padding:1.25rem; text-align:center; cursor:pointer; transition:all 0.2s; margin-top:8px; }
         .upload-area:hover, .upload-area.dragover { border-color:#c4c4d0; background:var(--surface); }
         .upload-area p { font-size:13px; color:var(--ink-mute); margin:0; }
         .upload-area strong { font-size:12px; color:var(--ink-soft); }
         #fileInput { display:none; }
         .file-list { margin-top:10px; display:flex; flex-direction:column; gap:6px; }
         .file-item { display:flex; align-items:center; gap:8px; padding:7px 10px; background:var(--surface); border:1px solid var(--line); border-radius:8px; font-size:12px; color:var(--ink-soft); }
-        .file-item svg { flex-shrink:0; color:var(--ink-mute); }
         .file-item .file-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .file-item .btn-remove-file { background:none; border:none; cursor:pointer; color:var(--ink-mute); padding:2px; border-radius:4px; }
         .file-item .btn-remove-file:hover { color:#dc2626; }
 
-        /* Lista comentarios */
+        /* Comentarios */
         .comment-list { display:flex; flex-direction:column; gap:12px; max-height:55vh; overflow-y:auto; padding-right:4px; }
         .comment-item { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:1rem 1.25rem; }
         .comment-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
@@ -132,23 +121,28 @@
         .comment-date { font-size:11px; color:var(--ink-mute); font-family:'DM Mono',monospace; }
         .comment-text { font-size:13px; color:var(--ink-soft); line-height:1.55; }
         .comment-estado { display:inline-block; margin-top:6px; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:500; }
-        .comment-anexo { display:flex; align-items:center; gap:6px; margin-top:8px; font-size:12px; color:var(--ink-mute); }
-        .comment-anexo a { color:var(--ink-soft); text-decoration:none; font-weight:500; }
-        .comment-anexo a:hover { color:var(--ink); text-decoration:underline; }
         .empty-comments { padding:2rem; text-align:center; color:var(--ink-mute); font-size:13px; }
 
-        /* Modal footer */
         .modal-footer { display:flex; gap:8px; margin-top:1.5rem; justify-content:flex-end; }
         .btn-cancel { background:none; border:1px solid var(--line); border-radius:8px; padding:9px 18px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; color:var(--ink-soft); cursor:pointer; }
         .btn-cancel:hover { background:var(--surface); }
         .btn-confirm { background:var(--ink); color:white; border:none; border-radius:8px; padding:9px 20px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; }
         .btn-confirm:hover { background:#2a2a2a; }
+        .btn-confirm:disabled { background:#9898a6; cursor:not-allowed; }
 
         /* TOAST */
         .toast-wrap { position:fixed; bottom:1.5rem; right:1.5rem; z-index:999; display:flex; flex-direction:column; gap:8px; }
         .toast { background:var(--ink); color:white; border-radius:10px; padding:12px 18px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; animation:slideIn 0.2s ease; max-width:300px; }
         .toast.error { background:#dc2626; }
         @keyframes slideIn { from{transform:translateY(12px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+        /* IMPRESIÓN */
+        @media print {
+            body * { visibility:hidden; }
+            #ticketImpresion, #ticketImpresion * { visibility:visible; }
+            #ticketImpresion { position:fixed; inset:0; padding:30px 40px; font-family:'DM Sans',sans-serif; background:white; }
+        }
+        #ticketImpresion { display:none; }
 
         @media(max-width:576px){
             .topbar{padding:0 1rem} .main{padding:1.5rem 1rem} .brand-section,.brand-divider{display:none}
@@ -188,14 +182,21 @@
             <select class="filter-select" id="filterPrioridad">
                 <option value="">Todas las prioridades</option>
             </select>
+            <select class="filter-select" id="filterEstado">
+                <option value="">Todos los estados</option>
+            </select>
         </div>
 
-        <!-- Barra de acciones contextual (aparece al seleccionar una fila) -->
+        <!-- Barra de acciones contextual -->
         <div class="action-bar" id="actionBar">
             <div class="action-bar-info">
                 Orden seleccionada: <strong id="actionBarOrdenLabel">—</strong>
             </div>
             <div class="action-bar-btns">
+                <button class="btn-action" onclick="imprimirOrdenActual()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6 9 6 2 18 2 18 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="6" y="14" width="12" height="8" rx="1" stroke="currentColor" stroke-width="1.7"/></svg>
+                    Imprimir
+                </button>
                 <button class="btn-action" onclick="abrirLeerComentarios()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     Ver comentarios
@@ -222,19 +223,18 @@
                             <th>Prioridad</th>
                             <th>Fecha</th>
                             <th>Estado</th>
+                            <th>Último cambio</th>
                         </tr>
                     </thead>
                     <tbody id="tablaOrdenes">
-                        <tr><td colspan="6"><div class="empty-state"><p>Cargando órdenes...</p></div></td></tr>
+                        <tr><td colspan="7"><div class="empty-state"><p>Cargando órdenes...</p></div></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         MODAL DETALLE ORDEN
-    ══════════════════════════════════════════ -->
+    <!-- MODAL DETALLE -->
     <div class="modal-overlay" id="modalDetalle">
         <div class="modal-box">
             <div class="modal-header">
@@ -257,7 +257,7 @@
             <hr class="separator">
 
             <div class="info-item" style="margin-bottom:1rem;">
-                <label>Estado físico del artículo</label>
+                <label>Estado físico al recibir</label>
                 <span id="detEstadoFisico" style="display:block;font-size:13px;line-height:1.6;color:var(--ink-soft);">—</span>
             </div>
             <div class="info-item" style="margin-bottom:1.25rem;">
@@ -267,21 +267,21 @@
 
             <hr class="separator">
 
-            <div class="field-inline">
+            <!-- Estado actual con info de quién y cuándo lo cambió -->
+            <div class="field-inline" style="margin-bottom:0.6rem;">
                 <label>Estado actual</label>
                 <select id="selectEstado"><option value="">Cargando...</option></select>
             </div>
+            <div id="detEstadoMeta" style="font-size:11px;color:var(--ink-mute);font-family:'DM Mono',monospace;text-align:right;margin-bottom:1rem;"></div>
 
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="cerrarModal()">Cerrar</button>
-                <button class="btn-confirm" onclick="guardarEstado()">Guardar estado</button>
+                <button class="btn-confirm" id="btnGuardarEstado" onclick="guardarEstado()">Guardar estado</button>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         MODAL — AGREGAR COMENTARIO
-    ══════════════════════════════════════════ -->
+    <!-- MODAL AGREGAR COMENTARIO -->
     <div class="modal-overlay" id="modalAgregarCom">
         <div class="modal-box" style="max-width:500px;">
             <div class="modal-header">
@@ -305,8 +305,6 @@
                     <label>Comentario</label>
                     <textarea id="com_Texto" maxlength="100" required placeholder="Describa el avance, observación o nota técnica..."></textarea>
                 </div>
-
-                <!-- Upload de archivo / Anexo -->
                 <div class="fp-field">
                     <label>Anexos (archivos adjuntos)</label>
                     <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
@@ -317,18 +315,15 @@
                     <input type="file" id="fileInput" multiple accept="image/*,.pdf,.doc,.docx,.txt,.zip">
                     <div class="file-list" id="fileList"></div>
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn-cancel" onclick="cerrarAgregarComentario()">Cancelar</button>
-                    <button type="submit" class="btn-confirm">Guardar comentario</button>
+                    <button type="submit" class="btn-confirm" id="btnGuardarCom">Guardar comentario</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         MODAL — VER COMENTARIOS
-    ══════════════════════════════════════════ -->
+    <!-- MODAL VER COMENTARIOS -->
     <div class="modal-overlay" id="modalVerCom">
         <div class="modal-box" style="max-width:560px;">
             <div class="modal-header">
@@ -340,11 +335,9 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                 </button>
             </div>
-
             <div class="comment-list" id="commentList">
                 <div class="empty-comments">Cargando comentarios...</div>
             </div>
-
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="cerrarLeerComentarios()">Cerrar</button>
                 <button class="btn-confirm" onclick="cerrarLeerComentarios(); abrirAgregarComentario();">
@@ -355,14 +348,65 @@
         </div>
     </div>
 
+    <!-- TICKET DE IMPRESIÓN -->
+    <div id="ticketImpresion">
+        <div style="border:2px solid #0f0f0f;border-radius:12px;padding:28px 32px;max-width:600px;margin:0 auto;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e4e4ea;">
+                <div style="width:36px;height:36px;background:#0f0f0f;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M2 17l10 5 10-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12l10 5 10-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-size:18px;font-weight:700;letter-spacing:-0.3px;">DiagnoSys</div>
+                    <div style="font-size:11px;color:#9898a6;">Resumen de orden de servicio</div>
+                </div>
+                <div style="margin-left:auto;text-align:right;">
+                    <div style="font-size:22px;font-weight:700;font-family:'DM Mono',monospace;" id="tp_NumOrden">#---</div>
+                    <div style="font-size:11px;color:#9898a6;" id="tp_Fecha">—</div>
+                </div>
+            </div>
+
+            <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px;">
+                <tr><td style="padding:6px 0;color:#9898a6;width:130px;vertical-align:top;">Cliente</td><td style="padding:6px 0;font-weight:500;" id="tp_Cliente">—</td></tr>
+                <tr><td style="padding:6px 0;color:#9898a6;vertical-align:top;">Equipo</td><td style="padding:6px 0;font-weight:500;" id="tp_Equipo">—</td></tr>
+                <tr><td style="padding:6px 0;color:#9898a6;vertical-align:top;">N° Serie</td><td style="padding:6px 0;font-family:monospace;font-size:12px;" id="tp_Serie">—</td></tr>
+                <tr><td style="padding:6px 0;color:#9898a6;vertical-align:top;">Prioridad</td><td style="padding:6px 0;" id="tp_Prioridad">—</td></tr>
+                <tr><td style="padding:6px 0;color:#9898a6;vertical-align:top;">Estado actual</td><td style="padding:6px 0;font-weight:500;" id="tp_Estado">—</td></tr>
+            </table>
+
+            <div style="border-top:1px solid #e4e4ea;padding-top:14px;margin-bottom:12px;">
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#9898a6;margin-bottom:5px;">Descripción de la falla</div>
+                <div style="font-size:13px;color:#4a4a52;line-height:1.5;" id="tp_Descripcion">—</div>
+            </div>
+
+            <!-- Historial de comentarios en el ticket -->
+            <div style="border-top:1px solid #e4e4ea;padding-top:14px;margin-bottom:20px;">
+                <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#9898a6;margin-bottom:10px;">Historial de seguimiento</div>
+                <div id="tp_Comentarios" style="font-size:12px;color:#4a4a52;"></div>
+            </div>
+
+            <div style="border-top:1px solid #e4e4ea;padding-top:14px;display:flex;justify-content:space-between;align-items:flex-end;">
+                <div>
+                    <div style="font-size:10px;color:#9898a6;text-transform:uppercase;letter-spacing:0.07em;">Impreso por</div>
+                    <div style="font-size:12px;font-weight:500;margin-top:4px;" id="tp_Usuario">—</div>
+                    <div style="font-size:11px;color:#9898a6;margin-top:2px;" id="tp_FechaImpresion">—</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="toast-wrap" id="toastWrap"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // ─── CORRECCIÓN: URL correcta del controller ('comentarios' plural) ───
         const API_ORDEN  = 'http://localhost:3000/orden-diagnostico';
         const API_ESTADO = 'http://localhost:3000/estado-orden';
-        const API_COM    = 'http://localhost:3000/comentario';
-        const API_ANEXO  = 'http://localhost:3000/anexo';
+        const API_COM    = 'http://localhost:3000/comentarios';   // ← era '/comentario' (sin s)
+        const API_ANEXO  = 'http://localhost:3000/anexos';   // ← corregido: era /anexo (sin s)
 
         if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
 
@@ -371,6 +415,9 @@
         let ordenActual  = null;
         let selectedRow  = null;
         let archivosSeleccionados = [];
+
+        const usuarioActual = localStorage.getItem('diagnoSys_id') || localStorage.getItem('diagnoSys_user') || 'IND'; // ID del usuario → FK en Comentarios
+        const usuarioNombre  = localStorage.getItem('diagnoSys_user') || usuarioActual; // Nombre para mostrar en pantalla
 
         // ── Toast ──
         function toast(msg, tipo = 'ok') {
@@ -395,7 +442,7 @@
                 'En reparacion':'badge-reparacion','Reparado':'badge-reparado','Entregado':'badge-entregado'
             };
             const cls = map[estado] || 'badge-recibida';
-            return estado ? `<span class="badge-estado ${cls}">${estado}</span>` : '<span style="color:var(--ink-mute)">—</span>';
+            return estado ? `<span class="badge-estado ${cls}">${estado}</span>` : '<span style="color:var(--ink-mute)">Recibida</span>';
         }
 
         function formatFecha(f) {
@@ -403,17 +450,35 @@
             return new Date(f).toLocaleDateString('es-CR', { day:'2-digit', month:'short', year:'numeric' });
         }
 
+        // ── Cargar estados desde BD ──
         async function cargarEstados() {
             try {
                 const res = await fetch(API_ESTADO);
-                estadosData = res.ok ? await res.json() : [];
-                const sel = document.getElementById('selectEstado');
-                sel.innerHTML = estadosData.map(e => `<option value="${e.IdEstado}">${e.Estado}</option>`).join('');
-                // Llenar también el selector del modal de comentario
-                const selCom = document.getElementById('com_Estado');
-                selCom.innerHTML = '<option value="">Seleccione estado...</option>' +
-                    estadosData.map(e => `<option value="${e.IdEstado}">${e.Estado}</option>`).join('');
-            } catch { estadosData = []; }
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                estadosData = await res.json();
+
+                if (!Array.isArray(estadosData) || estadosData.length === 0) {
+                    console.warn('Estado-orden: respuesta vacía o no es array', estadosData);
+                    estadosData = [];
+                }
+
+                const opciones = estadosData.map(e => `<option value="${e.IdEstado}">${e.Estado}</option>`).join('');
+                document.getElementById('selectEstado').innerHTML  = opciones;
+                document.getElementById('com_Estado').innerHTML    = '<option value="">Seleccione estado...</option>' + opciones;
+
+                // Llenar filtro de estados en la toolbar
+                const fe = document.getElementById('filterEstado');
+                estadosData.forEach(e => {
+                    const opt = document.createElement('option');
+                    opt.value = e.Estado;
+                    opt.textContent = e.Estado;
+                    fe.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Error cargando estados:', err);
+                toast('No se pudo cargar los estados de orden', 'error');
+                estadosData = [];
+            }
         }
 
         async function cargarOrdenes() {
@@ -421,15 +486,18 @@
                 const res = await fetch(API_ORDEN);
                 if (!res.ok) throw new Error();
                 ordenesData = await res.json();
+
+                // Poblar filtro de prioridades
                 const prioridades = [...new Set(ordenesData.map(o => o.prioridad?.NivelPrioridad).filter(Boolean))];
                 const fp = document.getElementById('filterPrioridad');
                 fp.innerHTML = '<option value="">Todas las prioridades</option>' +
                     prioridades.map(p => `<option value="${p}">${p}</option>`).join('');
+
                 renderTabla(ordenesData);
             } catch {
                 toast('Error al cargar órdenes', 'error');
                 document.getElementById('tablaOrdenes').innerHTML =
-                    '<tr><td colspan="6"><div class="empty-state"><p>No se pudo conectar con el servidor.</p></div></td></tr>';
+                    '<tr><td colspan="7"><div class="empty-state"><p>No se pudo conectar con el servidor.</p></div></td></tr>';
             }
         }
 
@@ -437,10 +505,16 @@
             document.getElementById('countBadge').textContent = `${lista.length} orden${lista.length !== 1 ? 'es' : ''}`;
             if (lista.length === 0) {
                 document.getElementById('tablaOrdenes').innerHTML =
-                    '<tr><td colspan="6"><div class="empty-state"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" style="margin:0 auto;display:block;opacity:0.25;"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="#0f0f0f" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="#0f0f0f" stroke-width="1.5"/></svg><p>No hay órdenes registradas.</p></div></td></tr>';
+                    '<tr><td colspan="7"><div class="empty-state"><p>No hay órdenes registradas.</p></div></td></tr>';
                 return;
             }
-            document.getElementById('tablaOrdenes').innerHTML = lista.map(o => `
+            document.getElementById('tablaOrdenes').innerHTML = lista.map(o => {
+                // Mostrar quién y cuándo fue el último cambio de estado
+                const metaTexto = o.FechaUltimoEstado
+                    ? `<div class="td-meta">${o.UsuarioUltimoEstado || ''} · ${formatFecha(o.FechaUltimoEstado)}</div>`
+                    : '<div class="td-meta" style="color:var(--ink-mute)">Sin cambios</div>';
+
+                return `
                 <tr data-id="${o.IdOrden}" onclick="seleccionarFila(this, '${o.IdOrden}')">
                     <td class="td-id">#${o.IdOrden}</td>
                     <td class="td-bold">${o.cliente ? o.cliente.NombreCliente + ' ' + o.cliente.ApellidoCliente : '—'}</td>
@@ -448,17 +522,14 @@
                     <td>${badgePrioridad(o.prioridad?.NivelPrioridad)}</td>
                     <td style="color:var(--ink-mute);font-size:12px;">${formatFecha(o.FechaCreacion)}</td>
                     <td>${badgeEstado(o.EstadoActual)}</td>
-                </tr>`).join('');
+                    <td>${metaTexto}</td>
+                </tr>`;
+            }).join('');
         }
 
-        // ── Seleccionar fila (muestra barra de acciones) ──
+        // ── Seleccionar fila ──
         function seleccionarFila(row, idOrden) {
-            // Si ya estaba seleccionada, abre el detalle
-            if (selectedRow === row) {
-                abrirDetalle(idOrden);
-                return;
-            }
-            // Quitar selección anterior
+            if (selectedRow === row) { abrirDetalle(idOrden); return; }
             if (selectedRow) selectedRow.classList.remove('selected');
             row.classList.add('selected');
             selectedRow = row;
@@ -466,26 +537,31 @@
             const o = ordenesData.find(x => String(x.IdOrden) === String(idOrden));
             ordenActual = o || null;
 
-            const label = o ? `#${o.IdOrden} — ${o.cliente ? o.cliente.NombreCliente + ' ' + o.cliente.ApellidoCliente : ''}` : `#${idOrden}`;
+            const label = o
+                ? `#${o.IdOrden} — ${o.cliente ? o.cliente.NombreCliente + ' ' + o.cliente.ApellidoCliente : ''}`
+                : `#${idOrden}`;
             document.getElementById('actionBarOrdenLabel').textContent = label;
             document.getElementById('actionBar').classList.add('visible');
         }
 
-        // ── Búsqueda + filtro ──
+        // ── Filtros ──
         function aplicarFiltros() {
-            const q    = document.getElementById('searchInput').value.toLowerCase().trim();
-            const prio = document.getElementById('filterPrioridad').value;
-            let lista  = ordenesData;
+            const q      = document.getElementById('searchInput').value.toLowerCase().trim();
+            const prio   = document.getElementById('filterPrioridad').value;
+            const estado = document.getElementById('filterEstado').value;
+            let lista    = ordenesData;
             if (q) lista = lista.filter(o =>
                 String(o.IdOrden).includes(q) ||
                 (o.cliente && (o.cliente.NombreCliente + ' ' + o.cliente.ApellidoCliente).toLowerCase().includes(q)) ||
                 (o.equipo  && (o.equipo.Marca + ' ' + o.equipo.Modelo).toLowerCase().includes(q))
             );
-            if (prio) lista = lista.filter(o => o.prioridad?.NivelPrioridad === prio);
+            if (prio)   lista = lista.filter(o => o.prioridad?.NivelPrioridad === prio);
+            if (estado) lista = lista.filter(o => o.EstadoActual === estado);
             renderTabla(lista);
         }
         document.getElementById('searchInput').addEventListener('input', aplicarFiltros);
         document.getElementById('filterPrioridad').addEventListener('change', aplicarFiltros);
+        document.getElementById('filterEstado').addEventListener('change', aplicarFiltros);
 
         // ── Modal detalle ──
         function abrirDetalle(idOrden) {
@@ -502,10 +578,18 @@
             document.getElementById('detEstadoFisico').textContent = o.EstadoRecepcion || 'Sin especificar';
             document.getElementById('detDescripcion').textContent  = o.Descripcion     || 'Sin especificar';
 
+            // Mostrar meta del último estado
+            const meta = document.getElementById('detEstadoMeta');
+            if (o.FechaUltimoEstado) {
+                meta.textContent = `Actualizado por ${o.UsuarioUltimoEstado || '—'} el ${formatFecha(o.FechaUltimoEstado)}`;
+            } else {
+                meta.textContent = 'Sin actualizaciones de estado aún';
+            }
+
+            // Seleccionar el estado actual en el select
             if (estadosData.length > 0) {
-                const sel   = document.getElementById('selectEstado');
                 const match = estadosData.find(e => e.Estado === o.EstadoActual);
-                if (match) sel.value = match.IdEstado;
+                if (match) document.getElementById('selectEstado').value = String(match.IdEstado);
             }
             document.getElementById('modalDetalle').classList.add('active');
         }
@@ -513,89 +597,86 @@
         async function guardarEstado() {
             if (!ordenActual) return;
             const idEstado = parseInt(document.getElementById('selectEstado').value);
-            const usuario  = localStorage.getItem('diagnoSys_user') || 'IND';
-            const idCom    = Date.now() % 1000000;
+            if (!idEstado) { toast('⚠ Selecciona un estado', 'error'); return; }
+
+            const btn = document.getElementById('btnGuardarEstado');
+            btn.disabled = true;
+            btn.textContent = 'Guardando...';
+
             const fechaHoy = new Date().toISOString().split('T')[0];
+            const idCom    = Date.now() % 1000000;
 
             const payload = {
                 IdComentario:    idCom,
                 Comentario:      'Estado actualizado',
                 FechaComentario: fechaHoy,
-                IUsuario:        usuario,
+                IUsuario:        usuarioActual,   // ← string directo, no FK
                 Estado:          idEstado,
-                IdDiagnostico:   ordenActual.IdOrden,
-                Anexos:          null
+                IdDiagnostico:   ordenActual.IdOrden
             };
 
             try {
                 const res = await fetch(API_COM, {
-                    method:  'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body:    JSON.stringify(payload)
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
                 });
-                if (res.ok) { cerrarModal(); toast('✓ Estado actualizado'); cargarOrdenes(); }
-                else {
+                if (res.ok) {
+                    cerrarModal();
+                    toast('✓ Estado actualizado');
+                    await cargarOrdenes();
+                } else {
                     const err = await res.json().catch(() => ({}));
                     toast(err.message || 'Error al guardar estado', 'error');
                 }
             } catch { toast('Error de conexión', 'error'); }
+            finally {
+                btn.disabled = false;
+                btn.textContent = 'Guardar estado';
+            }
         }
 
-        function cerrarModal() {
-            document.getElementById('modalDetalle').classList.remove('active');
-        }
+        function cerrarModal() { document.getElementById('modalDetalle').classList.remove('active'); }
 
-        /* ═══════════════════════════════════════════════
-           MODAL AGREGAR COMENTARIO
-        ═══════════════════════════════════════════════ */
+        /* ═══════════ MODAL AGREGAR COMENTARIO ═══════════ */
         function abrirAgregarComentario() {
             if (!ordenActual) { toast('Selecciona una orden primero', 'error'); return; }
             document.getElementById('formComentario').reset();
             archivosSeleccionados = [];
             document.getElementById('fileList').innerHTML = '';
             document.getElementById('comOrdenLabel').textContent =
-                `Orden #${ordenActual.IdOrden}` + (ordenActual.cliente ? ` — ${ordenActual.cliente.NombreCliente} ${ordenActual.cliente.ApellidoCliente}` : '');
-            // Pre-seleccionar el estado actual en el select
+                `Orden #${ordenActual.IdOrden}` + (ordenActual.cliente
+                    ? ` — ${ordenActual.cliente.NombreCliente} ${ordenActual.cliente.ApellidoCliente}` : '');
+            // Pre-seleccionar el estado actual
             if (estadosData.length > 0) {
                 const match = estadosData.find(e => e.Estado === ordenActual.EstadoActual);
-                if (match) document.getElementById('com_Estado').value = match.IdEstado;
+                if (match) document.getElementById('com_Estado').value = String(match.IdEstado);
             }
             document.getElementById('modalAgregarCom').classList.add('active');
-            setTimeout(() => document.getElementById('com_Estado').focus(), 80);
+            setTimeout(() => document.getElementById('com_Texto').focus(), 80);
         }
 
-        function cerrarAgregarComentario() {
-            document.getElementById('modalAgregarCom').classList.remove('active');
-        }
+        function cerrarAgregarComentario() { document.getElementById('modalAgregarCom').classList.remove('active'); }
 
-        // Upload de archivos
+        // Upload
         const uploadArea = document.getElementById('uploadArea');
         const fileInput  = document.getElementById('fileInput');
-
         uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
         uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-        uploadArea.addEventListener('drop', e => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            agregarArchivos(e.dataTransfer.files);
-        });
+        uploadArea.addEventListener('drop', e => { e.preventDefault(); uploadArea.classList.remove('dragover'); agregarArchivos(e.dataTransfer.files); });
         fileInput.addEventListener('change', () => agregarArchivos(fileInput.files));
 
         function agregarArchivos(files) {
             for (const file of files) {
-                if (!archivosSeleccionados.find(f => f.name === file.name && f.size === file.size)) {
+                if (!archivosSeleccionados.find(f => f.name === file.name && f.size === file.size))
                     archivosSeleccionados.push(file);
-                }
             }
             renderFileList();
             fileInput.value = '';
         }
 
         function renderFileList() {
-            const fl = document.getElementById('fileList');
-            fl.innerHTML = archivosSeleccionados.map((f, i) => `
+            document.getElementById('fileList').innerHTML = archivosSeleccionados.map((f, i) => `
                 <div class="file-item">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     <span class="file-name">${f.name}</span>
                     <span style="color:var(--ink-mute);font-size:11px;">${(f.size/1024).toFixed(1)} KB</span>
                     <button type="button" class="btn-remove-file" onclick="quitarArchivo(${i})">
@@ -604,92 +685,85 @@
                 </div>`).join('');
         }
 
-        function quitarArchivo(i) {
-            archivosSeleccionados.splice(i, 1);
-            renderFileList();
-        }
+        function quitarArchivo(i) { archivosSeleccionados.splice(i, 1); renderFileList(); }
 
         async function guardarComentario(e) {
             e.preventDefault();
             if (!ordenActual) return;
 
             const idEstado = parseInt(document.getElementById('com_Estado').value);
-            const texto    = document.getElementById('com_Texto').value.trim();
-            const usuario  = localStorage.getItem('diagnoSys_user') || 'IND';
-            const idCom    = Date.now() % 1000000;
+            if (!idEstado) { toast('⚠ Selecciona un estado', 'error'); return; }
+
+            const texto  = document.getElementById('com_Texto').value.trim();
+            const idCom  = Date.now() % 1000000;
             const fechaHoy = new Date().toISOString().split('T')[0];
 
-            // Subir archivos si hay y guardar ID del anexo
+            const btn = document.getElementById('btnGuardarCom');
+            btn.disabled = true;
+            btn.textContent = 'Guardando...';
+
+            // Subir anexo si existe
             let idAnexo = null;
             if (archivosSeleccionados.length > 0) {
                 try {
-                    const formData = new FormData();
-                    archivosSeleccionados.forEach(f => formData.append('files', f));
-                    // Asumimos que el backend tiene un endpoint de upload o guardamos el nombre
-                    // Si no hay endpoint de upload, guardamos solo el nombre del primer archivo
                     const nombreAnexo = archivosSeleccionados.map(f => f.name).join(', ');
-                    const idA = Date.now() % 1000000 + 1;
+                    const idA = (Date.now() % 1000000) + 1;
                     const resAnexo = await fetch(API_ANEXO, {
-                        method:  'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body:    JSON.stringify({ IdAnexos: idA, RutaArchivo: nombreAnexo })
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ IdAnexos: idA, RutaArchivo: nombreAnexo })
                     });
                     if (resAnexo.ok) {
                         const anexoCreado = await resAnexo.json().catch(() => ({}));
                         idAnexo = anexoCreado.IdAnexos || idA;
                     }
-                } catch (err) {
-                    console.warn('No se pudo registrar el anexo:', err);
-                }
+                } catch (err) { console.warn('No se pudo registrar el anexo:', err); }
             }
 
             const payload = {
                 IdComentario:    idCom,
                 Comentario:      texto,
                 FechaComentario: fechaHoy,
-                IUsuario:        usuario,
+                IUsuario:        usuarioActual,   // ← string directo
                 Estado:          idEstado,
                 IdDiagnostico:   ordenActual.IdOrden,
-                Anexos:          idAnexo
+                ...(idAnexo && { Anexos: idAnexo })
             };
 
             try {
                 const res = await fetch(API_COM, {
-                    method:  'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body:    JSON.stringify(payload)
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
                 });
                 if (res.ok) {
                     cerrarAgregarComentario();
                     toast('✓ Comentario guardado');
-                    cargarOrdenes();
+                    await cargarOrdenes();
                 } else {
                     const err = await res.json().catch(() => ({}));
                     toast(err.message || 'Error al guardar comentario', 'error');
                 }
             } catch { toast('Error de conexión', 'error'); }
+            finally {
+                btn.disabled = false;
+                btn.textContent = 'Guardar comentario';
+            }
         }
 
-        /* ═══════════════════════════════════════════════
-           MODAL VER COMENTARIOS
-        ═══════════════════════════════════════════════ */
+        /* ═══════════ MODAL VER COMENTARIOS ═══════════ */
         async function abrirLeerComentarios() {
             if (!ordenActual) { toast('Selecciona una orden primero', 'error'); return; }
-
             document.getElementById('verComOrdenLabel').textContent =
-                `Orden #${ordenActual.IdOrden}` + (ordenActual.cliente ? ` — ${ordenActual.cliente.NombreCliente} ${ordenActual.cliente.ApellidoCliente}` : '');
+                `Orden #${ordenActual.IdOrden}` + (ordenActual.cliente
+                    ? ` — ${ordenActual.cliente.NombreCliente} ${ordenActual.cliente.ApellidoCliente}` : '');
             document.getElementById('commentList').innerHTML = '<div class="empty-comments">Cargando...</div>';
             document.getElementById('modalVerCom').classList.add('active');
 
             try {
+                // Usar query param para filtrar por orden directamente en el servidor
                 const res = await fetch(`${API_COM}?idDiagnostico=${ordenActual.IdOrden}`);
                 let comentarios = [];
                 if (res.ok) {
                     const data = await res.json();
-                    // Filtrar solo los de esta orden por si el endpoint retorna todos
-                    comentarios = Array.isArray(data)
-                        ? data.filter(c => String(c.IdDiagnostico) === String(ordenActual.IdOrden))
-                        : [];
+                    comentarios = Array.isArray(data) ? data : [];
                 }
                 renderComentarios(comentarios);
             } catch {
@@ -704,70 +778,105 @@
                 cl.innerHTML = '<div class="empty-comments">No hay comentarios para esta orden.</div>';
                 return;
             }
-            // Ordenar de más reciente a más antiguo
+            // De más reciente a más antiguo
             lista.sort((a, b) => new Date(b.FechaComentario) - new Date(a.FechaComentario));
 
             cl.innerHTML = lista.map(c => {
-                const estadoNombre = estadosData.find(e => e.IdEstado === c.Estado)?.Estado || `Estado ${c.Estado}`;
-                const badgeClass   = (() => {
-                    const map = { 'Recibida':'badge-recibida','Pendiente':'badge-pendiente','En Revicion':'badge-revision','En Espera':'badge-espera','En reparacion':'badge-reparacion','Reparado':'badge-reparado','Entregado':'badge-entregado' };
-                    return map[estadoNombre] || 'badge-recibida';
-                })();
-                const anexoHTML = c.Anexos ? `
-                    <div class="comment-anexo">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        <span>Anexo:</span>
-                        <a href="#" onclick="verAnexo(${c.Anexos}); return false;">Archivo adjunto #${c.Anexos}</a>
-                    </div>` : '';
+                // El estado puede venir como objeto (relación cargada) o como número
+                let estadoNombre = '—';
+                if (c.estado && c.estado.Estado) {
+                    estadoNombre = c.estado.Estado;
+                } else if (c.Estado) {
+                    const match = estadosData.find(e => e.IdEstado === c.Estado);
+                    estadoNombre = match ? match.Estado : `Estado ${c.Estado}`;
+                }
+
+                const badgeMap = {
+                    'Recibida':'badge-recibida','Pendiente':'badge-pendiente',
+                    'En Revicion':'badge-revision','En Espera':'badge-espera',
+                    'En reparacion':'badge-reparacion','Reparado':'badge-reparado','Entregado':'badge-entregado'
+                };
+                const badgeClass = badgeMap[estadoNombre] || 'badge-recibida';
+
+                // Usuario: puede venir como string directo o como relación
+                const usuario = c.IUsuario || (c.usuario && c.usuario.NombreUsuario) || '—';
+
                 return `
                 <div class="comment-item">
                     <div class="comment-item-header">
-                        <span class="comment-user">${c.IUsuario}</span>
+                        <span class="comment-user">${usuario}</span>
                         <span class="comment-date">${formatFecha(c.FechaComentario)}</span>
                     </div>
                     <div class="comment-text">${c.Comentario}</div>
                     <span class="comment-estado badge-estado ${badgeClass}">${estadoNombre}</span>
-                    ${anexoHTML}
                 </div>`;
             }).join('');
         }
 
-        async function verAnexo(idAnexo) {
+        function cerrarLeerComentarios() { document.getElementById('modalVerCom').classList.remove('active'); }
+
+        /* ═══════════ IMPRESIÓN ═══════════ */
+        async function imprimirOrdenActual() {
+            if (!ordenActual) { toast('Selecciona una orden primero', 'error'); return; }
+            const o = ordenActual;
+
+            document.getElementById('tp_NumOrden').textContent  = `#${o.IdOrden}`;
+            document.getElementById('tp_Fecha').textContent     = formatFecha(o.FechaCreacion);
+            document.getElementById('tp_Cliente').textContent   = o.cliente ? `${o.cliente.NombreCliente} ${o.cliente.ApellidoCliente}` : '—';
+            document.getElementById('tp_Equipo').textContent    = o.equipo  ? `${o.equipo.Marca} ${o.equipo.Modelo}` : '—';
+            document.getElementById('tp_Serie').textContent     = o.equipo  ? o.equipo.NumeroSerie : '—';
+            document.getElementById('tp_Prioridad').textContent = o.prioridad?.NivelPrioridad || '—';
+            document.getElementById('tp_Estado').textContent    = o.EstadoActual || 'Recibida';
+            document.getElementById('tp_Descripcion').textContent = o.Descripcion || '—';
+            document.getElementById('tp_Usuario').textContent   = usuarioNombre;
+            document.getElementById('tp_FechaImpresion').textContent = new Date().toLocaleDateString('es-CR', { day:'2-digit', month:'long', year:'numeric' });
+
+            // Cargar comentarios para el ticket
+            let comentariosHtml = '<div style="color:#9898a6;font-size:12px;">Sin seguimiento registrado.</div>';
             try {
-                const res = await fetch(`${API_ANEXO}/${idAnexo}`);
+                const res = await fetch(`${API_COM}?idDiagnostico=${o.IdOrden}`);
                 if (res.ok) {
-                    const data = await res.json();
-                    if (data.RutaArchivo) {
-                        toast(`Anexo: ${data.RutaArchivo}`);
-                        // Si es una URL válida, abrir en nueva pestaña
-                        if (data.RutaArchivo.startsWith('http')) window.open(data.RutaArchivo, '_blank');
+                    const lista = await res.json();
+                    if (Array.isArray(lista) && lista.length > 0) {
+                        lista.sort((a, b) => new Date(a.FechaComentario) - new Date(b.FechaComentario));
+                        comentariosHtml = lista.map(c => {
+                            const estadoNombre = (c.estado && c.estado.Estado)
+                                ? c.estado.Estado
+                                : (estadosData.find(e => e.IdEstado === c.Estado)?.Estado || '—');
+                            const usuario = c.IUsuario || '—';
+                            return `<div style="margin-bottom:8px;padding:8px;border:1px solid #e4e4ea;border-radius:6px;">
+                                <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                                    <strong style="font-size:11px;">${usuario}</strong>
+                                    <span style="font-size:11px;color:#9898a6;">${formatFecha(c.FechaComentario)} · ${estadoNombre}</span>
+                                </div>
+                                <div style="font-size:12px;color:#4a4a52;">${c.Comentario}</div>
+                            </div>`;
+                        }).join('');
                     }
                 }
-            } catch { toast('No se pudo cargar el anexo', 'error'); }
+            } catch { /* silencio */ }
+            document.getElementById('tp_Comentarios').innerHTML = comentariosHtml;
+
+            document.getElementById('ticketImpresion').style.display = 'block';
+            window.print();
+            document.getElementById('ticketImpresion').style.display = 'none';
         }
 
-        function cerrarLeerComentarios() {
-            document.getElementById('modalVerCom').classList.remove('active');
-        }
-
-        // ── Cerrar modales con Escape o click fuera ──
+        // Cerrar con Escape o click fuera
         document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') {
-                cerrarModal();
-                cerrarAgregarComentario();
-                cerrarLeerComentarios();
-            }
+            if (e.key === 'Escape') { cerrarModal(); cerrarAgregarComentario(); cerrarLeerComentarios(); }
         });
         ['modalDetalle','modalAgregarCom','modalVerCom'].forEach(id => {
             document.getElementById(id).addEventListener('click', e => {
-                if (e.target === e.currentTarget) {
-                    cerrarModal(); cerrarAgregarComentario(); cerrarLeerComentarios();
-                }
+                if (e.target === e.currentTarget) { cerrarModal(); cerrarAgregarComentario(); cerrarLeerComentarios(); }
             });
         });
 
-        cargarEstados();
-        cargarOrdenes();
+        // ── Iniciar ──
+        (async () => {
+            await cargarEstados();
+            await cargarOrdenes();
+        })();
     </script>
 </body>
 </html>

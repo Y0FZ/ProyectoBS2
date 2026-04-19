@@ -1,26 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEstadoOrdenDto } from './dto/create-estado-orden.dto';
-import { UpdateEstadoOrdenDto } from './dto/update-estado-orden.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { EstadoOrden } from './entities/estado-orden.entity';
 
 @Injectable()
 export class EstadoOrdenService {
-  create(createEstadoOrdenDto: CreateEstadoOrdenDto) {
-    return 'This action adds a new estadoOrden';
+  constructor(
+    @InjectRepository(EstadoOrden)
+    private readonly estadoRepo: Repository<EstadoOrden>,
+  ) {}
+
+  findAll(): Promise<EstadoOrden[]> {
+    return this.estadoRepo.find({ order: { IdEstado: 'ASC' } });
   }
 
-  findAll() {
-    return `This action returns all estadoOrden`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} estadoOrden`;
-  }
-
-  update(id: number, updateEstadoOrdenDto: UpdateEstadoOrdenDto) {
-    return `This action updates a #${id} estadoOrden`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} estadoOrden`;
+  findOne(id: number): Promise<EstadoOrden | null> {
+    return this.estadoRepo.findOne({ where: { IdEstado: id } });
   }
 }

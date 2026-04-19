@@ -134,6 +134,7 @@
                 if (response.ok) {
                     const usuario = await response.json();
                     localStorage.setItem('diagnoSys_user', usuario.NombreUsuario);
+                    localStorage.setItem('diagnoSys_id', usuario.IdUsuarios);
                     localStorage.setItem('userRole', usuario.IdRol.toString()); 
                     window.location.href = 'webmed.html'; 
                 } else {
