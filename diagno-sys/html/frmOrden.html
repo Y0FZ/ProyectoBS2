@@ -18,251 +18,84 @@
             --line: #e4e4ea;
         }
 
-        body {
-            background: var(--surface);
-            font-family: 'DM Sans', sans-serif;
-            color: var(--ink);
-            min-height: 100vh;
-        }
+        body { background: var(--surface); font-family: 'DM Sans', sans-serif; color: var(--ink); min-height: 100vh; }
 
         /* ── NAVBAR ── */
-        .topbar {
-            background: var(--white);
-            border-bottom: 1px solid var(--line);
-            padding: 0 2rem;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--ink);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .brand-name {
-            font-size: 16px;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-            color: var(--ink);
-        }
-
-        .brand-divider {
-            width: 1px;
-            height: 18px;
-            background: var(--line);
-        }
-
-        .brand-section {
-            font-size: 12px;
-            color: var(--ink-mute);
-            letter-spacing: 0.04em;
-            font-family: 'DM Mono', monospace;
-        }
-
-        .btn-back {
-            background: none;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 6px 14px;
-            font-size: 12px;
-            font-weight: 500;
-            font-family: 'DM Sans', sans-serif;
-            color: var(--ink-soft);
-            cursor: pointer;
-            transition: all 0.18s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-back:hover {
-            background: var(--surface);
-            border-color: #c4c4d0;
-            color: var(--ink);
-        }
+        .topbar { background: var(--white); border-bottom: 1px solid var(--line); padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-icon { width: 32px; height: 32px; background: var(--ink); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .brand-name { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; color: var(--ink); }
+        .brand-divider { width: 1px; height: 18px; background: var(--line); }
+        .brand-section { font-size: 12px; color: var(--ink-mute); letter-spacing: 0.04em; font-family: 'DM Mono', monospace; }
+        .btn-back { background: none; border: 1px solid var(--line); border-radius: 8px; padding: 6px 14px; font-size: 12px; font-weight: 500; font-family: 'DM Sans', sans-serif; color: var(--ink-soft); cursor: pointer; transition: all 0.18s; display: flex; align-items: center; gap: 6px; }
+        .btn-back:hover { background: var(--surface); border-color: #c4c4d0; color: var(--ink); }
 
         /* ── MAIN ── */
-        .main {
-            padding: 2.5rem 2rem;
-            max-width: 760px;
-            margin: 0 auto;
-        }
-
-        .page-title {
-            font-size: 22px;
-            font-weight: 600;
-            letter-spacing: -0.4px;
-            margin-bottom: 4px;
-        }
-
-        .page-sub {
-            font-size: 13px;
-            color: var(--ink-mute);
-            margin-bottom: 2rem;
-        }
+        .main { padding: 2.5rem 2rem; max-width: 760px; margin: 0 auto; }
+        .page-title { font-size: 22px; font-weight: 600; letter-spacing: -0.4px; margin-bottom: 4px; }
+        .page-sub { font-size: 13px; color: var(--ink-mute); margin-bottom: 2rem; }
 
         /* ── FORM CARD ── */
-        .form-card {
-            background: var(--white);
-            border: 1px solid var(--line);
-            border-radius: 16px;
-            padding: 2rem 2rem;
-        }
+        .form-card { background: var(--white); border: 1px solid var(--line); border-radius: 16px; padding: 2rem; }
 
-        .section-label {
-            font-size: 10px;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--ink-mute);
-            font-family: 'DM Mono', monospace;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--line);
-        }
+        .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mute); font-family: 'DM Mono', monospace; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); }
 
         /* ── FIELDS ── */
-        .field {
-            margin-bottom: 1.5rem;
-        }
-
-        .field label {
-            display: block;
-            font-size: 11px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--ink-mute);
-            margin-bottom: 6px;
-            font-family: 'DM Mono', monospace;
-        }
-
-        .field input,
-        .field select,
-        .field textarea {
-            width: 100%;
-            padding: 10px 0;
-            border: none;
-            border-bottom: 1px solid var(--line);
-            outline: none;
-            font-size: 15px;
-            font-family: 'DM Sans', sans-serif;
-            background: transparent;
-            color: var(--ink);
-            transition: border-color 0.2s;
-            border-radius: 0;
-            appearance: none;
-        }
-
-        .field input:focus,
-        .field select:focus,
-        .field textarea:focus {
-            border-bottom-color: var(--ink);
-        }
-
-        .field input[readonly] {
-            color: var(--ink-mute);
-            border-bottom-style: dashed;
-            cursor: not-allowed;
-        }
-
-        .field textarea {
-            resize: none;
-            line-height: 1.6;
-        }
-
-        .field select {
-            cursor: pointer;
-        }
+        .field { margin-bottom: 1.5rem; }
+        .field label { display: block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mute); margin-bottom: 6px; font-family: 'DM Mono', monospace; }
+        .field input, .field select, .field textarea { width: 100%; padding: 10px 0; border: none; border-bottom: 1px solid var(--line); outline: none; font-size: 15px; font-family: 'DM Sans', sans-serif; background: transparent; color: var(--ink); transition: border-color 0.2s; border-radius: 0; appearance: none; }
+        .field input:focus, .field select:focus, .field textarea:focus { border-bottom-color: var(--ink); }
+        .field input[readonly] { color: var(--ink-mute); border-bottom-style: dashed; cursor: not-allowed; }
+        .field textarea { resize: none; line-height: 1.6; }
+        .field select { cursor: pointer; }
 
         /* Input con botón + */
-        .input-with-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .input-with-btn { display: flex; align-items: center; gap: 10px; }
+        .input-with-btn input { flex: 1; }
 
-        .input-with-btn input {
-            flex: 1;
-        }
-
-        .btn-mini {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--ink);
-            color: white;
-            border: none;
-            font-size: 18px;
-            line-height: 1;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-family: 'DM Sans', sans-serif;
-            transition: background 0.18s;
-        }
-
+        .btn-mini { width: 32px; height: 32px; border-radius: 50%; background: var(--ink); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.18s; }
         .btn-mini:hover { background: #333; }
 
-        /* Campo oculto de ID */
-        .field input[type="hidden"],
-        #IdClienteD,
-        #SerieEquipo {
-            display: none;
-        }
+        /* Campos ocultos de ID */
+        #IdClienteD, #SerieEquipo { display: none; }
 
-        /* Separador entre secciones */
-        .field-divider {
-            border: none;
-            border-top: 1px solid var(--line);
-            margin: 2rem 0;
-        }
+        .field-divider { border: none; border-top: 1px solid var(--line); margin: 2rem 0; }
 
         /* ── SUBMIT ── */
-        .btn-save {
-            width: 100%;
-            padding: 14px;
-            background: var(--ink);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            cursor: pointer;
-            margin-top: 0.5rem;
-            transition: all 0.2s;
-        }
+        .btn-save { width: 100%; padding: 14px; background: var(--ink); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; margin-top: 0.5rem; transition: all 0.2s; }
+        .btn-save:hover { background: #2a2a2a; transform: translateY(-1px); }
 
-        .btn-save:hover {
-            background: #2a2a2a;
-            transform: translateY(-1px);
-        }
+        /* ══════════════════════════════════════════════
+           PANEL FLOTANTE — mismo estilo que frmCliente
+        ══════════════════════════════════════════════ */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 300; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: var(--white); border-radius: 16px; border: 1px solid var(--line); padding: 2rem; width: 100%; max-width: 480px; margin: 1rem; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-title { font-size: 16px; font-weight: 600; letter-spacing: -0.2px; }
+        .btn-close-modal { background: none; border: none; cursor: pointer; padding: 4px; color: var(--ink-mute); border-radius: 6px; }
+        .btn-close-modal:hover { background: var(--surface); }
+
+        /* Campos del panel flotante — idénticos a frmCliente */
+        .fp-field { margin-bottom: 1.25rem; }
+        .fp-field label { display: block; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-mute); margin-bottom: 5px; font-family: 'DM Mono', monospace; }
+        .fp-field input, .fp-field select { width: 100%; padding: 9px 0; border: none; border-bottom: 1px solid var(--line); outline: none; font-size: 14px; font-family: 'DM Sans', sans-serif; background: transparent; color: var(--ink); transition: border-color 0.2s; }
+        .fp-field input:focus, .fp-field select:focus { border-bottom-color: var(--ink); }
+
+        .modal-footer { display: flex; gap: 8px; margin-top: 1.75rem; justify-content: flex-end; }
+        .btn-cancel { background: none; border: 1px solid var(--line); border-radius: 8px; padding: 9px 18px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; color: var(--ink-soft); cursor: pointer; }
+        .btn-cancel:hover { background: var(--surface); }
+        .btn-confirm { background: var(--ink); color: white; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+        .btn-confirm:hover { background: #2a2a2a; }
+
+        /* ── TOAST ── */
+        .toast-wrap { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: var(--ink); color: white; border-radius: 10px; padding: 12px 18px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; animation: slideIn 0.2s ease; max-width: 300px; }
+        .toast.error { background: #dc2626; }
+        @keyframes slideIn { from{transform:translateY(12px);opacity:0} to{transform:translateY(0);opacity:1} }
 
         @media (max-width: 576px) {
-            .topbar { padding: 0 1rem; }
-            .main { padding: 1.5rem 1rem; }
+            .topbar { padding: 0 1rem; } .main { padding: 1.5rem 1rem; }
             .form-card { padding: 1.5rem 1.25rem; }
             .brand-section, .brand-divider { display: none; }
         }
@@ -284,7 +117,6 @@
             <div class="brand-divider"></div>
             <span class="brand-section">Nueva orden</span>
         </div>
-
         <button class="btn-back" onclick="window.location.href='webmed.html'">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -301,7 +133,6 @@
         <div class="form-card">
             <form id="formOrden">
 
-                <!-- Sección: Info general -->
                 <div class="section-label">Información general</div>
 
                 <div class="row g-4 mb-2">
@@ -328,14 +159,15 @@
 
                 <hr class="field-divider">
 
-                <!-- Sección: Cliente y equipo -->
                 <div class="section-label">Cliente y equipo</div>
 
                 <div class="field">
                     <label>Cliente (nombre o cédula)</label>
                     <div class="input-with-btn">
                         <input type="text" id="busquedaCliente" list="listaClientes" placeholder="Escriba para filtrar..." required>
-                        <button type="button" onclick="window.location.href='clientes.html'" class="btn-mini">+</button>
+                        <button type="button" class="btn-mini" onclick="abrirPanelCliente()" title="Registrar nuevo cliente">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+                        </button>
                     </div>
                     <datalist id="listaClientes"></datalist>
                     <input type="text" id="IdClienteD">
@@ -345,7 +177,9 @@
                     <label>Equipo / dispositivo</label>
                     <div class="input-with-btn">
                         <input type="text" id="busquedaEquipo" list="listaEquipos" placeholder="Buscar por serie o modelo..." required>
-                        <button type="button" onclick="window.location.href='equipos.html'" class="btn-mini">+</button>
+                        <button type="button" class="btn-mini" onclick="abrirPanelEquipo()" title="Registrar nuevo equipo">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+                        </button>
                     </div>
                     <datalist id="listaEquipos"></datalist>
                     <input type="text" id="SerieEquipo">
@@ -353,7 +187,6 @@
 
                 <hr class="field-divider">
 
-                <!-- Sección: Descripción -->
                 <div class="section-label">Detalles técnicos</div>
 
                 <div class="field">
@@ -372,132 +205,329 @@
         </div>
     </div>
 
+    <!-- ══════════════════════════════════════════
+         PANEL FLOTANTE — NUEVO CLIENTE
+    ══════════════════════════════════════════ -->
+    <div class="modal-overlay" id="panelClienteOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-title">Agregar cliente</span>
+                <button class="btn-close-modal" onclick="cerrarPanelCliente()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+            <form id="formNuevoCliente" onsubmit="guardarNuevoCliente(event)">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="fp-field">
+                            <label>Cédula / ID</label>
+                            <input type="text" id="nc_IdCliente" maxlength="12" required placeholder="Ej: 1-2345-6789">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="fp-field">
+                            <label>Nombre</label>
+                            <input type="text" id="nc_NombreCliente" maxlength="10" required placeholder="Ej: Juan">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="fp-field">
+                            <label>Apellido</label>
+                            <input type="text" id="nc_ApellidoCliente" maxlength="10" required placeholder="Ej: Pérez">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="fp-field">
+                            <label>Teléfono</label>
+                            <input type="number" id="nc_Telefono" required placeholder="Ej: 88887777">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="fp-field">
+                            <label>Correo electrónico</label>
+                            <input type="email" id="nc_Correo" maxlength="20" placeholder="Ej: juan@mail.com">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="fp-field">
+                            <label>Dirección</label>
+                            <input type="text" id="nc_Direccion" maxlength="20" placeholder="Ej: San José">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="cerrarPanelCliente()">Cancelar</button>
+                    <button type="submit" class="btn-confirm">Guardar cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL FLOTANTE — NUEVO EQUIPO
+    ══════════════════════════════════════════ -->
+    <div class="modal-overlay" id="panelEquipoOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-title">Agregar equipo</span>
+                <button class="btn-close-modal" onclick="cerrarPanelEquipo()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </button>
+            </div>
+            <form id="formNuevoEquipo" onsubmit="guardarNuevoEquipo(event)">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="fp-field">
+                            <label>Número de serie</label>
+                            <input type="text" id="ne_NumeroSerie" maxlength="30" required placeholder="Ej: SN-ABC12345">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="fp-field">
+                            <label>Tipo de equipo</label>
+                            <input type="text" id="ne_TipoEquipo" maxlength="15" required placeholder="Ej: Laptop, Celular, Impresora">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="fp-field">
+                            <label>Marca</label>
+                            <input type="text" id="ne_Marca" maxlength="10" required placeholder="Ej: HP, Dell">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="fp-field">
+                            <label>Modelo</label>
+                            <input type="text" id="ne_Modelo" maxlength="15" required placeholder="Ej: Pavilion 15">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="cerrarPanelEquipo()">Cancelar</button>
+                    <button type="submit" class="btn-confirm">Guardar equipo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        if (!localStorage.getItem('diagnoSys_user')) {
-            window.location.href = 'index.html';
+        const API_ORDEN   = 'http://localhost:3000/orden-diagnostico';
+        const API_CLIENTE = 'http://localhost:3000/cliente';
+        const API_EQUIPO  = 'http://localhost:3000/articulo-equipo';
+
+        if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
+
+        // ── Toast ──
+        function toast(msg, tipo = 'ok') {
+            const wrap = document.getElementById('toastWrap');
+            const el   = document.createElement('div');
+            el.className = 'toast' + (tipo === 'error' ? ' error' : '');
+            el.textContent = msg;
+            wrap.appendChild(el);
+            setTimeout(() => el.remove(), 3500);
+        }
+
+        // ── Cargar clientes en datalist ──
+        async function cargarClientes() {
+            try {
+                const res = await fetch(API_CLIENTE);
+                const lista = await res.json();
+                const dl = document.getElementById('listaClientes');
+                dl.innerHTML = '';
+                lista.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = `${c.NombreCliente} ${c.ApellidoCliente} (${c.IdCliente})`;
+                    opt.setAttribute('data-id', c.IdCliente);
+                    dl.appendChild(opt);
+                });
+            } catch (e) { console.error('Error Clientes:', e); }
+        }
+
+        // ── Cargar equipos en datalist ──
+        async function cargarEquipos() {
+            try {
+                const res = await fetch(API_EQUIPO);
+                const lista = await res.json();
+                const dl = document.getElementById('listaEquipos');
+                dl.innerHTML = '';
+                lista.forEach(e => {
+                    const opt = document.createElement('option');
+                    opt.value = `${e.Marca} ${e.Modelo} - S/N: ${e.NumeroSerie}`;
+                    opt.setAttribute('data-id', e.NumeroSerie);
+                    dl.appendChild(opt);
+                });
+            } catch (e) { console.error('Error Equipos:', e); }
         }
 
         async function inicializarFormulario() {
-            const fechaLocal = new Date();
-            const offset = fechaLocal.getTimezoneOffset();
-            const fechaAjustada = new Date(fechaLocal.getTime() - (offset * 60 * 1000));
+            const fechaLocal    = new Date();
+            const fechaAjustada = new Date(fechaLocal.getTime() - fechaLocal.getTimezoneOffset() * 60000);
             document.getElementById('FechaCreacion').value = fechaAjustada.toISOString().split('T')[0];
 
             try {
-                const resId = await fetch('http://localhost:3000/orden-diagnostico/proximo-id');
-                if (resId.ok) {
-                    const siguienteId = await resId.json();
-                    document.getElementById('IdOrden').value = siguienteId;
-                }
-            } catch (error) { console.error("Error al cargar ID:", error); }
+                const resId = await fetch(`${API_ORDEN}/proximo-id`);
+                if (resId.ok) document.getElementById('IdOrden').value = await resId.json();
+            } catch (e) { console.error('Error ID:', e); }
 
             try {
-                const resPrio = await fetch('http://localhost:3000/prioridad');
+                const resPrio    = await fetch('http://localhost:3000/prioridad');
                 const prioridades = await resPrio.json();
-                const selectPrio = document.getElementById('Prioridad');
-                selectPrio.innerHTML = '<option value="" disabled selected>Seleccione...</option>';
+                const sel = document.getElementById('Prioridad');
+                sel.innerHTML = '<option value="" disabled selected>Seleccione...</option>';
                 prioridades.forEach(p => {
                     const opt = document.createElement('option');
                     opt.value = p.IdPrioridad;
                     opt.textContent = p.NivelPrioridad;
-                    selectPrio.appendChild(opt);
+                    sel.appendChild(opt);
                 });
-            } catch (e) { console.error("Error Prioridades:", e); }
+            } catch (e) { console.error('Error Prioridades:', e); }
 
-            try {
-                const resCli = await fetch('http://localhost:3000/cliente');
-                const clientes = await resCli.json();
-                const dl = document.getElementById('listaClientes');
-                clientes.forEach(c => {
-                    const opt = document.createElement('option');
-                    opt.value = `${c.Nombre} ${c.Apellidos} (${c.Cedula})`;
-                    opt.setAttribute('data-id', c.IdCliente || c.Cedula);
-                    dl.appendChild(opt);
-                });
-            } catch (e) { console.error("Error Clientes:", e); }
-
-            try {
-                const resEq = await fetch('http://localhost:3000/articulo-equipo');
-                const equipos = await resEq.json();
-                const dlEq = document.getElementById('listaEquipos');
-                equipos.forEach(e => {
-                    const opt = document.createElement('option');
-                    opt.value = `${e.Marca} ${e.Modelo} - S/N: ${e.NumeroSerie}`;
-                    opt.setAttribute('data-id', e.NumeroSerie);
-                    dlEq.appendChild(opt);
-                });
-            } catch (err) { console.error("Error Equipos:", err); }
+            await cargarClientes();
+            await cargarEquipos();
         }
 
         function configurarBuscadores() {
-            document.getElementById('busquedaCliente').addEventListener('input', (e) => {
-                const val = e.target.value;
-                const options = document.getElementById('listaClientes').options;
-                for (let i = 0; i < options.length; i++) {
-                    if (options[i].value === val) {
-                        document.getElementById('IdClienteD').value = options[i].getAttribute('data-id');
-                        break;
-                    }
+            document.getElementById('busquedaCliente').addEventListener('input', e => {
+                const val  = e.target.value;
+                const opts = document.getElementById('listaClientes').options;
+                document.getElementById('IdClienteD').value = '';
+                for (let i = 0; i < opts.length; i++) {
+                    if (opts[i].value === val) { document.getElementById('IdClienteD').value = opts[i].getAttribute('data-id'); break; }
                 }
             });
 
-            document.getElementById('busquedaEquipo').addEventListener('input', (e) => {
-                const val = e.target.value;
-                const options = document.getElementById('listaEquipos').options;
-                for (let i = 0; i < options.length; i++) {
-                    if (options[i].value === val) {
-                        document.getElementById('SerieEquipo').value = options[i].getAttribute('data-id');
-                        break;
-                    }
+            document.getElementById('busquedaEquipo').addEventListener('input', e => {
+                const val  = e.target.value;
+                const opts = document.getElementById('listaEquipos').options;
+                document.getElementById('SerieEquipo').value = '';
+                for (let i = 0; i < opts.length; i++) {
+                    if (opts[i].value === val) { document.getElementById('SerieEquipo').value = opts[i].getAttribute('data-id'); break; }
                 }
             });
         }
 
-        document.getElementById('formOrden').addEventListener('submit', async (e) => {
+        // ── Submit orden ──
+        document.getElementById('formOrden').addEventListener('submit', async e => {
             e.preventDefault();
-
-            const serie = document.getElementById('SerieEquipo').value;
+            const serie   = document.getElementById('SerieEquipo').value;
             const cliente = document.getElementById('IdClienteD').value;
-
-            if (!serie || serie === "0" || !cliente || cliente === "0") {
-                alert("⚠️ Debes seleccionar un equipo y un cliente de la lista.");
-                return;
-            }
+            if (!serie || !cliente) { toast('⚠ Selecciona equipo y cliente de la lista', 'error'); return; }
 
             const datos = {
-                IdOrden: parseInt(document.getElementById('IdOrden').value),
-                FechaCreacion: document.getElementById('FechaCreacion').value,
-                Descripcion: document.getElementById('Descripcion').value,
-                EstadoRecepcion: document.getElementById('EstadoRecepcion').value || "No especificado",
-                SerieEquipo: serie,
-                IdClienteD: cliente,
-                Prioridad: parseInt(document.getElementById('Prioridad').value)
+                IdOrden:         parseInt(document.getElementById('IdOrden').value),
+                FechaCreacion:   document.getElementById('FechaCreacion').value,
+                Descripcion:     document.getElementById('Descripcion').value,
+                EstadoRecepcion: document.getElementById('EstadoRecepcion').value || 'No especificado',
+                SerieEquipo:     serie,
+                IdClienteD:      cliente,
+                Prioridad:       parseInt(document.getElementById('Prioridad').value)
             };
 
             try {
-                const res = await fetch('http://localhost:3000/orden-diagnostico', {
-                    method: 'POST',
+                const res = await fetch(API_ORDEN, {
+                    method:  'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(datos)
+                    body:    JSON.stringify(datos)
                 });
-
                 if (res.ok) {
-                    alert("✅ Orden #" + datos.IdOrden + " registrada con éxito");
-                    window.location.reload();
+                    toast(`✓ Orden #${datos.IdOrden} registrada`);
+                    setTimeout(() => window.location.reload(), 1200);
                 } else {
-                    const err = await res.json();
-                    alert("❌ Error: " + (err.message || "No se pudo guardar"));
+                    const err = await res.json().catch(() => ({}));
+                    toast(err.message || 'Error al guardar', 'error');
                 }
-            } catch (error) {
-                alert("❌ Error de conexión");
-            }
+            } catch { toast('Error de conexión', 'error'); }
         });
 
-        window.onload = () => {
-            inicializarFormulario();
-            configurarBuscadores();
-        };
+        /* ═══════════════════════════════════════
+           PANEL — CLIENTE
+        ═══════════════════════════════════════ */
+        function abrirPanelCliente() {
+            document.getElementById('formNuevoCliente').reset();
+            document.getElementById('panelClienteOverlay').classList.add('active');
+            setTimeout(() => document.getElementById('nc_IdCliente').focus(), 80);
+        }
+        function cerrarPanelCliente() {
+            document.getElementById('panelClienteOverlay').classList.remove('active');
+        }
+        async function guardarNuevoCliente(e) {
+            e.preventDefault();
+            const datos = {
+                IdCliente:       document.getElementById('nc_IdCliente').value.trim(),
+                NombreCliente:   document.getElementById('nc_NombreCliente').value.trim(),
+                ApellidoCliente: document.getElementById('nc_ApellidoCliente').value.trim(),
+                Telefono:        parseInt(document.getElementById('nc_Telefono').value),
+                Correo:          document.getElementById('nc_Correo').value.trim(),
+                Direccion:       document.getElementById('nc_Direccion').value.trim()
+            };
+            try {
+                const res = await fetch(API_CLIENTE, {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify(datos)
+                });
+                if (res.ok) {
+                    cerrarPanelCliente();
+                    toast('✓ Cliente registrado');
+                    await cargarClientes();
+                    // Auto-seleccionar el cliente recién creado
+                    document.getElementById('busquedaCliente').value = `${datos.NombreCliente} ${datos.ApellidoCliente} (${datos.IdCliente})`;
+                    document.getElementById('IdClienteD').value      = datos.IdCliente;
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    toast(err.message || 'Error al guardar cliente', 'error');
+                }
+            } catch { toast('Error de conexión', 'error'); }
+        }
+        document.getElementById('panelClienteOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) cerrarPanelCliente(); });
+
+        /* ═══════════════════════════════════════
+           PANEL — EQUIPO
+        ═══════════════════════════════════════ */
+        function abrirPanelEquipo() {
+            document.getElementById('formNuevoEquipo').reset();
+            document.getElementById('panelEquipoOverlay').classList.add('active');
+            setTimeout(() => document.getElementById('ne_NumeroSerie').focus(), 80);
+        }
+        function cerrarPanelEquipo() {
+            document.getElementById('panelEquipoOverlay').classList.remove('active');
+        }
+        async function guardarNuevoEquipo(e) {
+            e.preventDefault();
+            const datos = {
+                NumeroSerie: document.getElementById('ne_NumeroSerie').value.trim(),
+                TipoEquipo:  document.getElementById('ne_TipoEquipo').value.trim(),
+                Marca:       document.getElementById('ne_Marca').value.trim(),
+                Modelo:      document.getElementById('ne_Modelo').value.trim()
+            };
+            try {
+                const res = await fetch(API_EQUIPO, {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify(datos)
+                });
+                if (res.ok) {
+                    cerrarPanelEquipo();
+                    toast('✓ Equipo registrado');
+                    await cargarEquipos();
+                    // Auto-seleccionar el equipo recién creado
+                    document.getElementById('busquedaEquipo').value = `${datos.Marca} ${datos.Modelo} - S/N: ${datos.NumeroSerie}`;
+                    document.getElementById('SerieEquipo').value    = datos.NumeroSerie;
+                } else {
+                    const err = await res.json().catch(() => ({}));
+                    toast(err.message || 'Error al guardar equipo', 'error');
+                }
+            } catch { toast('Error de conexión', 'error'); }
+        }
+        document.getElementById('panelEquipoOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) cerrarPanelEquipo(); });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') { cerrarPanelCliente(); cerrarPanelEquipo(); }
+        });
+
+        window.onload = () => { inicializarFormulario(); configurarBuscadores(); };
     </script>
 </body>
 </html>
