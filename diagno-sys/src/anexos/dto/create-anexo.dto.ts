@@ -1,7 +1,9 @@
-import { IsString, IsNumber, IsOptional, MaxLength } from 'class-validator';
+import { IsString, IsInt, IsOptional, MaxLength } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateAnexoDto {
-  @IsNumber()
+  @IsInt()
+  @Type(() => Number)
   IdAnexos!: number;
 
   @IsString()
@@ -18,6 +20,6 @@ export class CreateAnexoDto {
   @MaxLength(100)
   TipoArchivo?: string;
 
-  @IsOptional()
-  FechaSubida?: Date;
+  @IsOptional()          // No llega desde el frontend — el service pone la fecha
+  FechaSubida?: string;
 }

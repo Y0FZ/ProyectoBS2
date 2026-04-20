@@ -11,17 +11,38 @@ export class AnexosService {
     private readonly anexoRepo: Repository<Anexo>,
   ) {}
 
-  async create(createAnexoDto: CreateAnexoDto): Promise<Anexo> {
-    const nuevo = this.anexoRepo.create({
-      IdAnexos:      createAnexoDto.IdAnexos,
-      RutaArchivo:   createAnexoDto.RutaArchivo,
-      NombreArchivo: createAnexoDto.NombreArchivo,
-      TipoArchivo:   createAnexoDto.TipoArchivo,
-      FechaSubida:   createAnexoDto.FechaSubida
-                      ? new Date(createAnexoDto.FechaSubida)
-                      : new Date(),
-    });
-    return this.anexoRepo.save(nuevo);
+  // Devuelve el siguiente IdAnexos disponible (autoincremento manual)
+  async findLastId(): Promise<number> {
+    try {
+      const [row] = await this.anexoRepo.query(
+        `SELECT ISNULL(MAX(IdAnexos), 0) + 1 AS siguiente FROM Anexos`,
+      );
+      return Number(row.siguiente);
+    } catch {
+      return Date.now() % 999999 + 2;
+    }
+  }
+
+  async create(createAnexoDto: CreateAnexoDto): Promise<any> {
+    try {
+      console.log('📥 Anexo recibido:', createAnexoDto);
+
+      await this.anexoRepo.query(
+        `INSERT INTO Anexos (IdAnexos, RutaArchivo)
+         VALUES (@0, @1)`,
+        [
+          createAnexoDto.IdAnexos,
+          createAnexoDto.RutaArchivo,
+        ],
+      );
+
+      console.log('✅ Anexo insertado:', createAnexoDto.IdAnexos);
+      return { IdAnexos: createAnexoDto.IdAnexos, RutaArchivo: createAnexoDto.RutaArchivo };
+
+    } catch (error: any) {
+      console.error('❌ Error en Anexos:', error.message);
+      throw new Error(error.message || 'No se pudo registrar el anexo');
+    }
   }
 
   findAll(): Promise<Anexo[]> {
