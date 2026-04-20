@@ -70,11 +70,13 @@
         .action-bar.visible { display:flex; }
         .action-bar-info { font-size:13px; color:var(--ink-soft); }
         .action-bar-info strong { color:var(--ink); font-weight:600; }
-        .action-bar-btns { display:flex; gap:8px; }
+        .action-bar-btns { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
         .btn-action { border:1px solid var(--line); border-radius:8px; padding:7px 14px; font-size:12px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:6px; background:var(--white); color:var(--ink-soft); }
-        .btn-action:hover { background:var(--surface); border-color:#c4c4d0; color:var(--ink); }
+        .btn-action:hover:not(:disabled) { background:var(--surface); border-color:#c4c4d0; color:var(--ink); }
+        .btn-action:disabled { opacity:0.5; cursor:not-allowed; }
         .btn-action.primary { background:var(--ink); color:white; border-color:var(--ink); }
-        .btn-action.primary:hover { background:#2a2a2a; }
+        .btn-action.primary:hover:not(:disabled) { background:#2a2a2a; }
+
 
         /* MODALES */
         .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:200; align-items:center; justify-content:center; }
@@ -193,6 +195,7 @@
                 Orden seleccionada: <strong id="actionBarOrdenLabel">—</strong>
             </div>
             <div class="action-bar-btns">
+
                 <button class="btn-action" onclick="imprimirOrdenActual()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6 9 6 2 18 2 18 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="6" y="14" width="12" height="8" rx="1" stroke="currentColor" stroke-width="1.7"/></svg>
                     Imprimir
@@ -407,6 +410,23 @@
         const API_ESTADO = 'http://localhost:3000/estado-orden';
         const API_COM    = 'http://localhost:3000/comentarios';   // ← era '/comentario' (sin s)
         const API_ANEXO  = 'http://localhost:3000/anexos';   // ← corregido: era /anexo (sin s)
+        const API_USUARIO = 'http://localhost:3000/usuario';
+
+        // Obtiene el siguiente ID disponible para comentarios y anexos
+        async function getProximoIdComentario() {
+            try {
+                const res = await fetch(`${API_COM}/proximo-id`);
+                if (res.ok) return await res.json();
+            } catch {}
+            return Date.now() % 999999 + 1;
+        }
+        async function getProximoIdAnexo() {
+            try {
+                const res = await fetch(`${API_ANEXO}/proximo-id`);
+                if (res.ok) return await res.json();
+            } catch {}
+            return Date.now() % 999999 + 2;
+        }
 
         if (!localStorage.getItem('diagnoSys_user')) window.location.href = 'index.html';
 
@@ -542,6 +562,9 @@
                 : `#${idOrden}`;
             document.getElementById('actionBarOrdenLabel').textContent = label;
             document.getElementById('actionBar').classList.add('visible');
+
+            // Resetear quick change
+            document.getElementById('btnQuickChange').disabled = true;
         }
 
         // ── Filtros ──
@@ -604,7 +627,7 @@
             btn.textContent = 'Guardando...';
 
             const fechaHoy = new Date().toISOString().split('T')[0];
-            const idCom    = Date.now() % 1000000;
+            const idCom    = await getProximoIdComentario();
 
             const payload = {
                 IdComentario:    idCom,
@@ -695,7 +718,9 @@
             if (!idEstado) { toast('⚠ Selecciona un estado', 'error'); return; }
 
             const texto  = document.getElementById('com_Texto').value.trim();
-            const idCom  = Date.now() % 1000000;
+            if (!texto) { toast('⚠ Escribe un comentario', 'error'); return; }
+            
+            const idCom  = await getProximoIdComentario();
             const fechaHoy = new Date().toISOString().split('T')[0];
 
             const btn = document.getElementById('btnGuardarCom');
@@ -707,7 +732,7 @@
             if (archivosSeleccionados.length > 0) {
                 try {
                     const nombreAnexo = archivosSeleccionados.map(f => f.name).join(', ');
-                    const idA = (Date.now() % 1000000) + 1;
+                    const idA = await getProximoIdAnexo();
                     const resAnexo = await fetch(API_ANEXO, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ IdAnexos: idA, RutaArchivo: nombreAnexo })
@@ -723,26 +748,55 @@
                 IdComentario:    idCom,
                 Comentario:      texto,
                 FechaComentario: fechaHoy,
-                IUsuario:        usuarioActual,   // ← string directo
+                IUsuario:        usuarioActual,
                 Estado:          idEstado,
                 IdDiagnostico:   ordenActual.IdOrden,
                 ...(idAnexo && { Anexos: idAnexo })
             };
 
             try {
+                // 1. Guardar el comentario
                 const res = await fetch(API_COM, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify(payload)
                 });
-                if (res.ok) {
-                    cerrarAgregarComentario();
-                    toast('✓ Comentario guardado');
-                    await cargarOrdenes();
-                } else {
+                
+                if (!res.ok) {
                     const err = await res.json().catch(() => ({}));
-                    toast(err.message || 'Error al guardar comentario', 'error');
+                    throw new Error(err.message || 'Error al guardar comentario');
                 }
-            } catch { toast('Error de conexión', 'error'); }
-            finally {
+
+                // 2. Actualizar el estado de la orden si cambió
+                const estadoObj = estadosData.find(e => e.IdEstado === idEstado);
+                if (estadoObj && estadoObj.Estado !== ordenActual.EstadoActual) {
+                    try {
+                        const resOrden = await fetch(`${API_BASE}/${ordenActual.IdOrden}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                EstadoActual: estadoObj.Estado,
+                                FechaUltimoEstado: fechaHoy,
+                                UsuarioUltimoEstado: usuarioActual
+                            })
+                        });
+                        if (!resOrden.ok) {
+                            console.warn('Comentario guardado pero no se pudo actualizar el estado de la orden');
+                        }
+                    } catch (err) {
+                        console.warn('Error al actualizar estado de la orden:', err);
+                    }
+                }
+
+                // 3. Cerrar modal, limpiar y recargar
+                cerrarAgregarComentario();
+                toast('✓ Comentario guardado correctamente');
+                await cargarOrdenes();
+                
+            } catch (err) {
+                console.error('Error al guardar:', err);
+                toast(err.message || 'Error de conexión', 'error');
+            } finally {
                 btn.disabled = false;
                 btn.textContent = 'Guardar comentario';
             }
@@ -781,34 +835,38 @@
             // De más reciente a más antiguo
             lista.sort((a, b) => new Date(b.FechaComentario) - new Date(a.FechaComentario));
 
+            const badgeMap = {
+                'Recibida':'badge-recibida','Pendiente':'badge-pendiente',
+                'En Revicion':'badge-revision','En Espera':'badge-espera',
+                'En reparacion':'badge-reparacion','Reparado':'badge-reparado','Entregado':'badge-entregado'
+            };
+
             cl.innerHTML = lista.map(c => {
-                // El estado puede venir como objeto (relación cargada) o como número
-                let estadoNombre = '—';
-                if (c.estado && c.estado.Estado) {
-                    estadoNombre = c.estado.Estado;
-                } else if (c.Estado) {
-                    const match = estadosData.find(e => e.IdEstado === c.Estado);
-                    estadoNombre = match ? match.Estado : `Estado ${c.Estado}`;
-                }
+                // Estado — el service ya devuelve EstadoNombre via JOIN
+                const estadoNombre = c.EstadoNombre || c.estado?.Estado || '—';
+                const badgeClass   = badgeMap[estadoNombre] || 'badge-recibida';
 
-                const badgeMap = {
-                    'Recibida':'badge-recibida','Pendiente':'badge-pendiente',
-                    'En Revicion':'badge-revision','En Espera':'badge-espera',
-                    'En reparacion':'badge-reparacion','Reparado':'badge-reparado','Entregado':'badge-entregado'
-                };
-                const badgeClass = badgeMap[estadoNombre] || 'badge-recibida';
+                // Usuario — el service ya devuelve NombreUsuario y NombreRol via JOIN
+                const nombre = c.NombreUsuario || c.IUsuario || '—';
+                const rol    = c.NombreRol    ? `<span style="font-size:10px;color:var(--ink-mute);margin-left:6px;">${c.NombreRol}</span>` : '';
 
-                // Usuario: puede venir como string directo o como relación
-                const usuario = c.IUsuario || (c.usuario && c.usuario.NombreUsuario) || '—';
+                // Anexo — si existe mostrar link/nombre
+                const anexoHtml = c.RutaArchivo
+                    ? `<div style="margin-top:6px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-soft);">
+                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.5"/></svg>
+                           <span title="${c.RutaArchivo}">${c.RutaArchivo.length > 40 ? c.RutaArchivo.slice(-40) : c.RutaArchivo}</span>
+                       </div>`
+                    : '';
 
                 return `
                 <div class="comment-item">
                     <div class="comment-item-header">
-                        <span class="comment-user">${usuario}</span>
+                        <span class="comment-user">${nombre}${rol}</span>
                         <span class="comment-date">${formatFecha(c.FechaComentario)}</span>
                     </div>
                     <div class="comment-text">${c.Comentario}</div>
                     <span class="comment-estado badge-estado ${badgeClass}">${estadoNombre}</span>
+                    ${anexoHtml}
                 </div>`;
             }).join('');
         }
@@ -870,9 +928,7 @@
             document.getElementById(id).addEventListener('click', e => {
                 if (e.target === e.currentTarget) { cerrarModal(); cerrarAgregarComentario(); cerrarLeerComentarios(); }
             });
-        });
-
-        // ── Iniciar ──
+        });        // ── Iniciar ──
         (async () => {
             await cargarEstados();
             await cargarOrdenes();

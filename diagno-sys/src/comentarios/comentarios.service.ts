@@ -11,12 +11,22 @@ export class ComentariosService {
     private readonly comentarioRepo: Repository<Comentario>,
   ) {}
 
+  // Devuelve el siguiente IdComentario disponible (autoincremento manual)
+  async findLastId(): Promise<number> {
+    try {
+      const [row] = await this.comentarioRepo.query(
+        `SELECT ISNULL(MAX(IdComentario), 0) + 1 AS siguiente FROM Comentarios`,
+      );
+      return Number(row.siguiente);
+    } catch {
+      return Date.now() % 999999 + 1;
+    }
+  }
+
   async create(createDto: CreateComentarioDto) {
     try {
       console.log('📥 Comentario recibido:', createDto);
 
-      // INSERT directo con parámetros posicionales — igual que Usuario y Cliente
-      // Evita que TypeORM falle al resolver las FKs con .save()
       if (createDto.Anexos) {
         await this.comentarioRepo.query(
           `INSERT INTO Comentarios
@@ -61,10 +71,13 @@ export class ComentariosService {
     return this.comentarioRepo.query(
       `SELECT c.IdComentario, c.Comentario, c.FechaComentario, c.IUsuario,
               e.IdEstado, e.Estado AS EstadoNombre,
+              u.NombreUsuario, r.NombreRol,
               a.IdAnexos, a.RutaArchivo
        FROM Comentarios c
-       INNER JOIN EstadoOrden e ON e.IdEstado = c.Estado
-       LEFT  JOIN Anexos      a ON a.IdAnexos  = c.Anexos
+       INNER JOIN EstadoOrden e ON e.IdEstado  = c.Estado
+       LEFT  JOIN Usuario     u ON u.IdUsuarios = c.IUsuario
+       LEFT  JOIN Rol         r ON r.IdRol      = u.IdRol
+       LEFT  JOIN Anexos      a ON a.IdAnexos   = c.Anexos
        WHERE c.IdDiagnostico = @0
        ORDER BY c.FechaComentario DESC, c.IdComentario DESC`,
       [idOrden],
@@ -76,10 +89,13 @@ export class ComentariosService {
     return this.comentarioRepo.query(
       `SELECT c.IdComentario, c.Comentario, c.FechaComentario, c.IUsuario,
               e.IdEstado, e.Estado AS EstadoNombre,
+              u.NombreUsuario, r.NombreRol,
               a.IdAnexos, a.RutaArchivo
        FROM Comentarios c
-       INNER JOIN EstadoOrden e ON e.IdEstado = c.Estado
-       LEFT  JOIN Anexos      a ON a.IdAnexos  = c.Anexos
+       INNER JOIN EstadoOrden e ON e.IdEstado  = c.Estado
+       LEFT  JOIN Usuario     u ON u.IdUsuarios = c.IUsuario
+       LEFT  JOIN Rol         r ON r.IdRol      = u.IdRol
+       LEFT  JOIN Anexos      a ON a.IdAnexos   = c.Anexos
        ORDER BY c.FechaComentario DESC, c.IdComentario DESC`,
     );
   }

@@ -11,6 +11,12 @@ export class ComentariosController {
     return this.comentariosService.create(createComentarioDto);
   }
 
+  // GET /comentarios/proximo-id  ← para IDs secuenciales
+  @Get('proximo-id')
+  getProximoId() {
+    return this.comentariosService.findLastId();
+  }
+
   // GET /comentarios  o  GET /comentarios?idDiagnostico=5
   @Get()
   findAll(@Query('idDiagnostico') idDiagnostico?: string) {

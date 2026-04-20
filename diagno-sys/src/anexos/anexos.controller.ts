@@ -11,6 +11,12 @@ export class AnexosController {
     return this.anexosService.create(createAnexoDto);
   }
 
+  // GET /anexos/proximo-id  ← para IDs secuenciales
+  @Get('proximo-id')
+  getProximoId() {
+    return this.anexosService.findLastId();
+  }
+
   @Get()
   findAll() {
     return this.anexosService.findAll();
