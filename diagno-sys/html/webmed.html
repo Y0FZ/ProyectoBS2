@@ -326,6 +326,7 @@
                 </div>
             </a>
 
+            <div id="clientePanel">
             <a href="frmCliente.html" class="nav-card">
                 <div class="card-top">
                     <div class="card-icon-wrap">
@@ -343,6 +344,7 @@
                     <p>Registro y base de datos de usuarios finales.</p>
                 </div>
             </a>
+            </div>
 
             <a href="frmhistorial.html" class="nav-card">
                 <div class="card-top">
@@ -399,6 +401,9 @@
 
             const userRole = localStorage.getItem('userRole');
             if (userRole === "2") document.getElementById('adminPanel').style.display = 'block';
+            // Solo mostrar el módulo Clientes si NO es Técnico (rol 3)
+if (userRole !== "3") document.getElementById('clientePanel').style.display = 'block';
+else document.getElementById('clientePanel').style.display = 'none';
         });
 
         function cerrarSesion() {

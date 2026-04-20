@@ -731,11 +731,25 @@
             let idAnexo = null;
             if (archivosSeleccionados.length > 0) {
                 try {
-                    const nombreAnexo = archivosSeleccionados.map(f => f.name).join(', ');
+                    // 1. Subir el archivo físico al servidor
+                    const formData = new FormData();
+                    formData.append('file', archivosSeleccionados[0]);
+                    const resUpload = await fetch(`${API_ANEXO}/upload`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (!resUpload.ok) throw new Error('Error al subir el archivo');
+                    const uploadData = await resUpload.json();
+
+                    // 2. Registrar el anexo en la BD con la URL real
                     const idA = await getProximoIdAnexo();
                     const resAnexo = await fetch(API_ANEXO, {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ IdAnexos: idA, RutaArchivo: nombreAnexo })
+                        body: JSON.stringify({
+                            IdAnexos: idA,
+                            RutaArchivo: uploadData.url,
+                            NombreArchivo: uploadData.originalName
+                        })
                     });
                     if (resAnexo.ok) {
                         const anexoCreado = await resAnexo.json().catch(() => ({}));
@@ -850,12 +864,27 @@
                 const nombre = c.NombreUsuario || c.IUsuario || '—';
                 const rol    = c.NombreRol    ? `<span style="font-size:10px;color:var(--ink-mute);margin-left:6px;">${c.NombreRol}</span>` : '';
 
-                // Anexo — si existe mostrar link/nombre
+                // Anexo — si existe mostrar link de descarga
                 const anexoHtml = c.RutaArchivo
-                    ? `<div style="margin-top:6px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-soft);">
+                    ? (() => {
+                          // Extraer nombre original: la URL tiene formato .../TIMESTAMP-RANDOM.ext
+                          // El nombre visible lo tomamos del segmento final de la URL
+                          const urlParts = c.RutaArchivo.split('/');
+                          const nombreMostrar = urlParts[urlParts.length - 1] || c.RutaArchivo;
+                          const nombreCorto = nombreMostrar.length > 40 ? '...' + nombreMostrar.slice(-37) : nombreMostrar;
+                          return `<div style="margin-top:6px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-soft);">
                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="1.5"/></svg>
-                           <span title="${c.RutaArchivo}">${c.RutaArchivo.length > 40 ? c.RutaArchivo.slice(-40) : c.RutaArchivo}</span>
-                       </div>`
+                           <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${nombreMostrar}">${nombreCorto}</span>
+                           <a href="${c.RutaArchivo}" download title="Descargar archivo"
+                              style="flex-shrink:0;display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:4px;background:var(--surface-raised,#f0f0f5);color:var(--ink-soft);text-decoration:none;font-size:10px;font-weight:500;border:1px solid var(--border,#e0e0e8);">
+                               <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                                 <path d="M12 3v13M7 11l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                 <path d="M4 20h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                               </svg>
+                               Descargar
+                           </a>
+                       </div>`;
+                      })()
                     : '';
 
                 return `
